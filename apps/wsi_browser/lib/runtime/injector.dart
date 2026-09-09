@@ -47,21 +47,21 @@ class Injector {
       ];
 
   /// Called from onWebViewCreated.
-  Future<void> attach(InAppWebViewController controller, BrowserTab? tab) async {
-    bridge.attach(controller, keyOf(tab, controller));
-    await rebuildUserScripts(controller, tab);
+  Future<void> attach(InAppWebViewController controller, BrowserTab? tab, {Object? key}) async {
+    bridge.attach(controller, key ?? keyOf(tab, controller));
+    await rebuildUserScripts(controller, tab, key: key);
   }
 
-  void detach(InAppWebViewController controller, BrowserTab? tab) {
-    final key = keyOf(tab, controller);
+  void detach(InAppWebViewController controller, BrowserTab? tab, {Object? key}) {
+    key ??= keyOf(tab, controller);
     bridge.revokeForWebView(key);
     _scriptSessions.remove(key);
     _loadSessions.remove(key);
   }
 
   /// (Re)register the document_start / document_end plugin scripts.
-  Future<void> rebuildUserScripts(InAppWebViewController controller, BrowserTab? tab) async {
-    final key = keyOf(tab, controller);
+  Future<void> rebuildUserScripts(InAppWebViewController controller, BrowserTab? tab, {Object? key}) async {
+    key ??= keyOf(tab, controller);
     for (final s in _scriptSessions.remove(key) ?? const <BridgeSession>[]) {
       bridge.revoke(s);
     }
@@ -92,8 +92,8 @@ class Injector {
   }
 
   /// New document: forget last load's idle sessions, record the origin.
-  void onLoadStart(InAppWebViewController controller, BrowserTab? tab, Uri url) {
-    final key = keyOf(tab, controller);
+  void onLoadStart(InAppWebViewController controller, BrowserTab? tab, Uri url, {Object? key}) {
+    key ??= keyOf(tab, controller);
     for (final s in _loadSessions.remove(key) ?? const <BridgeSession>[]) {
       bridge.revoke(s);
     }
@@ -102,23 +102,23 @@ class Injector {
 
   /// Document finished: inject document_idle plugins. Returns the number of
   /// plugins that apply to [url] (all runAt kinds) for the badge.
-  Future<int> onLoadStop(InAppWebViewController controller, BrowserTab? tab, Uri url) async {
-    bridge.setOrigin(keyOf(tab, controller), url);
+  Future<int> onLoadStop(InAppWebViewController controller, BrowserTab? tab, Uri url, {Object? key}) async {
+    key ??= keyOf(tab, controller);
+    bridge.setOrigin(key, url);
     final matched = repository.forUrl(url);
-    final key = keyOf(tab, controller);
     for (final p in matched) {
       if (p.manifest.runAt != 'document_idle') continue;
       // Android fires onUpdateVisitedHistory before onLoadStop: the plugin may already be running
       final already = (_loadSessions[key] ?? const []).any((s) => s.pluginId == p.id);
-      if (!already) await _runIdle(controller, tab, p, url);
+      if (!already) await _runIdle(controller, tab, p, url, key: key);
     }
     return matched.length;
   }
 
   /// SPA navigation (F-03-5): tell the SDK, then run any plugin that now
   /// matches (dedupe inside __wsiRun keeps the rest untouched).
-  Future<int> onUrlChanged(InAppWebViewController controller, BrowserTab? tab, Uri url) async {
-    final key = keyOf(tab, controller);
+  Future<int> onUrlChanged(InAppWebViewController controller, BrowserTab? tab, Uri url, {Object? key, bool loading = false}) async {
+    key ??= keyOf(tab, controller);
     bridge.setOrigin(key, url);
     try {
       await controller.evaluateJavascript(source: "window.dispatchEvent(new CustomEvent('wsi:urlchange'))");
@@ -126,18 +126,18 @@ class Injector {
     final matched = repository.forUrl(url);
     // While the document is still loading this is the initial navigation
     // (Android reports it before onLoadStop); onLoadStop injects then.
-    if (tab?.isLoading == true) return matched.length;
+    if (tab?.isLoading == true || loading) return matched.length;
     for (final p in matched) {
       if (p.manifest.runAt != 'document_idle') continue;
       final already = (_loadSessions[key] ?? const []).any((s) => s.pluginId == p.id);
-      if (!already) await _runIdle(controller, tab, p, url);
+      if (!already) await _runIdle(controller, tab, p, url, key: key);
     }
     return matched.length;
   }
 
-  Future<void> _runIdle(InAppWebViewController controller, BrowserTab? tab, InstalledPlugin p, Uri url) async {
+  Future<void> _runIdle(InAppWebViewController controller, BrowserTab? tab, InstalledPlugin p, Uri url, {Object? key}) async {
     final code = await repository.code(p.id);
-    final key = keyOf(tab, controller);
+    key ??= keyOf(tab, controller);
     final session = bridge.issue(pluginId: p.id, controller: controller, webViewKey: key, context: BridgeContext.page, tab: tab, origin: url);
     (_loadSessions[key] ??= []).add(session);
     try {

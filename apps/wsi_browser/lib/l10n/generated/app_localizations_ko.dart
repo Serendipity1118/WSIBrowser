@@ -400,4 +400,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get permissionDesc_policy => '서버에서 정책 값 가져오기';
+
+  @override
+  String get settingsWorkerTabLimit => '워커 탭 상한';
+
+  @override
+  String get settingsWorkerTabLimitDesc => '플러그인당 동시에 열 수 있는 탭 수 (WSI.tabs)';
 }

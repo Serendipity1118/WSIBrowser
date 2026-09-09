@@ -1,0 +1,15 @@
+{
+  "name": "cruise-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "wsi-plugin validate",
+    "build": "wsi-plugin build",
+    "pack": "wsi-plugin pack",
+    "dev": "wsi-plugin dev-serve"
+  },
+  "devDependencies": {
+    "@wsi/plugin-tools": "*"
+  }
+}

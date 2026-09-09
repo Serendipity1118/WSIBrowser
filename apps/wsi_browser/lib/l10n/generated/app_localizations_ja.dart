@@ -400,4 +400,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get permissionDesc_policy => 'サーバーからのポリシー値取得';
+
+  @override
+  String get settingsWorkerTabLimit => 'ワーカーのタブ上限';
+
+  @override
+  String get settingsWorkerTabLimitDesc => 'プラグインごとに同時に開けるタブ数 (WSI.tabs)';
 }

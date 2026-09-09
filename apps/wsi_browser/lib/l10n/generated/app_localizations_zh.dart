@@ -400,4 +400,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get permissionDesc_policy => '从服务器获取策略值';
+
+  @override
+  String get settingsWorkerTabLimit => 'Worker 标签页上限';
+
+  @override
+  String get settingsWorkerTabLimitDesc => '每个插件可同时打开的标签页数 (WSI.tabs)';
 }

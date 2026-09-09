@@ -231,5 +231,7 @@
   "permissionDesc_pages": "显示自定义界面",
   "permissionDesc_menu": "添加菜单项",
   "permissionDesc_navigation": "拦截页面跳转",
-  "permissionDesc_policy": "从服务器获取策略值"
+  "permissionDesc_policy": "从服务器获取策略值",
+  "settingsWorkerTabLimit": "Worker 标签页上限",
+  "settingsWorkerTabLimitDesc": "每个插件可同时打开的标签页数 (WSI.tabs)"
 }

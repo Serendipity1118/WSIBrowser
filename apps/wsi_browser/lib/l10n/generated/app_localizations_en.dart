@@ -405,4 +405,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionDesc_policy => 'Fetch policy values from a server';
+
+  @override
+  String get settingsWorkerTabLimit => 'Worker tab limit';
+
+  @override
+  String get settingsWorkerTabLimitDesc =>
+      'Tabs a plugin may keep open at once (WSI.tabs)';
 }

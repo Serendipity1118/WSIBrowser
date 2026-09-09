@@ -23,6 +23,19 @@ class PageHost {
     return Uri(scheme: scheme, host: pluginHost, path: '/$pluginId/$clean', queryParameters: params == null || params.isEmpty ? null : params);
   }
 
+  static const workerFile = '__worker.html';
+
+  /// Document of a plugin worker (F-05-1): `wsi://plugin/<id>/__worker.html`
+  static Uri workerUrl(String pluginId) => pageUrl(pluginId, workerFile);
+
+  static bool isWorkerUrl(Uri url, String pluginId) {
+    final p = parse(url);
+    return p != null && p.pluginId == pluginId && p.path == workerFile;
+  }
+
+  static String workerHtml(String pluginId) =>
+      '<!doctype html><html><head><meta charset="utf-8"><title>WSI worker: $pluginId</title></head><body></body></html>';
+
   /// (pluginId, path) for a wsi://plugin URL, or null when it is not one / is unsafe.
   static ({String pluginId, String path})? parse(Uri url) {
     if (url.scheme != scheme || url.host != pluginHost) return null;

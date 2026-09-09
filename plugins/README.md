@@ -7,7 +7,7 @@
 | `_template/` | `wsi-plugin create` の雛形 |
 | `samples/` | Chrome 版 WSI の samples を `tools/sync_wsi_samples.ps1` で取り込んだもの (契約テスト用。手で編集しない) |
 | `banner-demo/` | example.com にバナーを出す。sheet の設定ページ、メニュー (page / toggle / separator / action)、WSI.settings、runtime.sendMessage、自己診断の検証用 (P3) |
-| `cruise-demo/` | (P4) ワーカーと tabs の検証用 |
+| `cruise-demo/` | ワーカーが 3 ページを順に巡回して見出しを集める。tabs / onDialog / suspend-resume / navigation.intercept / 結果ページの検証用 (P4, M2) |
 
 ## プラグインの内部規約
 

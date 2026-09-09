@@ -231,5 +231,7 @@
   "permissionDesc_pages": "Show its own screens",
   "permissionDesc_menu": "Add menu items",
   "permissionDesc_navigation": "Intercept navigation",
-  "permissionDesc_policy": "Fetch policy values from a server"
+  "permissionDesc_policy": "Fetch policy values from a server",
+  "settingsWorkerTabLimit": "Worker tab limit",
+  "settingsWorkerTabLimitDesc": "Tabs a plugin may keep open at once (WSI.tabs)"
 }

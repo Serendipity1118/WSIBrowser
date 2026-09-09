@@ -17,8 +17,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:wsi_browser/app/app.dart';
 import 'package:wsi_browser/app/app_scope.dart';
+import 'package:wsi_browser/browser/navigation_policy.dart';
 import 'package:wsi_browser/browser/tab_manager.dart';
 import 'package:wsi_browser/db/database.dart';
+import 'package:wsi_browser/runtime/log_sink.dart';
 import 'package:wsi_browser/runtime/runtime.dart';
 
 import 'fixtures.dart';
@@ -55,7 +57,12 @@ void main() {
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     base = 'http://127.0.0.1:${server.port}';
     server.listen((req) {
-      final body = req.uri.path.contains('DijAW40') ? kDijaw40Html : kArticleHtml;
+      final cruise = RegExp(r'^/cruise/(\d+)$').firstMatch(req.uri.path);
+      final body = cruise != null
+          ? cruiseHtml(int.parse(cruise.group(1)!))
+          : req.uri.path.contains('DijAW40')
+              ? kDijaw40Html
+              : kArticleHtml;
       req.response.headers.contentType = ContentType('text', 'html', charset: 'utf-8');
       req.response.write(body);
       req.response.close();
@@ -70,6 +77,7 @@ void main() {
     await installSample('hello-world', domains: ['127.0.0.1']);
     await installSample('nipponsteel-dijaw40-csv', domains: ['127.0.0.1']);
     await installSample('banner-demo', domains: ['127.0.0.1']);
+    await installSample('cruise-demo', domains: ['127.0.0.1']);
     for (final id in ['highlighter', 'jisho-popup', 'markdown-copy', 'outline-panel', 'url-expander']) {
       await installSample(id);
     }
@@ -101,6 +109,17 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 250));
     }
     fail('timeout waiting for `$source` == ${jsonEncode(expected)}, last: ${jsonEncode(last)}');
+  }
+
+  /// Poll the log tail until [match] finds an entry.
+  Future<void> waitLogs(WidgetTester tester, bool Function(LogEntry e) match, {Duration timeout = const Duration(seconds: 15)}) async {
+    final deadline = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(deadline)) {
+      if (runtime.logs.tail.any(match)) return;
+      await tester.pump(const Duration(milliseconds: 250));
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+    }
+    fail('log entry not found; tail: ${runtime.logs.tail.map((e) => e.message).toList().reversed.take(10).toList()}');
   }
 
   Future<void> load(WidgetTester tester, String path) async {
@@ -136,8 +155,8 @@ void main() {
       expect(await js("document.querySelectorAll('.wsi-csv-export-btn').length"), 0, reason: 'nipponsteel does not match this path');
       expect(await js('typeof window.WSI'), 'undefined', reason: 'WSI never leaks onto window');
       await waitJs(tester, "typeof globalThis.__wsiEmit", 'function');
-      // badge: 8 = 5 '*' samples + hello-world + nipponsteel + banner-demo (rewritten to 127.0.0.1, no paths)
-      expect(services.tabs.active!.pluginCount, 8);
+      // badge: 9 = 5 '*' samples + hello-world + nipponsteel + banner-demo + cruise-demo (rewritten to 127.0.0.1, no paths)
+      expect(services.tabs.active!.pluginCount, 9);
 
       // ---- banner-demo (P3): settings, menu, wsi:// pages ----
       await waitJs(tester, "document.querySelector('[data-banner-demo]') && document.querySelector('[data-banner-demo]').textContent", 'Hello from banner-demo');
@@ -204,13 +223,63 @@ void main() {
       await load(tester, '/esys969/dij_web/webapp/page/DijAW40');
       await waitJs(tester, "document.querySelectorAll('.ControlHeader .wsi-csv-export-btn').length", 1);
       await waitJs(tester, "document.querySelectorAll('.wsi-floating-button').length", 5); // '*' samples run here too
-      expect(services.tabs.active!.pluginCount, 8);
+      expect(services.tabs.active!.pluginCount, 9);
+
+      // ---- M2: cruise-demo worker drives a hidden tab through 3 pages ----
+      Future<Map<String, Object?>> cruiseState() async =>
+          ((await services.db.getPluginData('cruise-demo', 'cruise')) as Map?)?.cast<String, Object?>() ?? const {};
+      Future<void> waitCruise(bool Function(Map<String, Object?> s) done, {Duration timeout = const Duration(seconds: 60)}) async {
+        final deadline = DateTime.now().add(timeout);
+        while (DateTime.now().isBefore(deadline)) {
+          if (done(await cruiseState())) return;
+          await tester.pump(const Duration(milliseconds: 250));
+          await Future<void>.delayed(const Duration(milliseconds: 250));
+        }
+        fail('cruise did not reach the expected state: ${await cruiseState()}');
+      }
+
+      final deadline = DateTime.now().add(const Duration(seconds: 30));
+      while (runtime.workers.handleOf('cruise-demo')?.startedAt == null && DateTime.now().isBefore(deadline)) {
+        await tester.pump(const Duration(milliseconds: 250));
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      }
+      final worker = runtime.workers.sessionOf('cruise-demo');
+      expect(worker, isNotNull, reason: 'worker started');
+      expect(runtime.menuBus.sections.any((sec) => sec.title == 'Cruise Demo'), isTrue, reason: 'worker-registered menu');
+
+      final urls = [for (var i = 1; i <= 3; i++) '$base/cruise/$i'];
+      final started = await runtime.bridge.emit(worker!, 'runtime.message', {'type': 'start', 'urls': urls});
+      expect(started, {'started': true});
+      await waitCruise((st) => (st['results'] as List?)?.length == 3 && st['running'] == false);
+      var state = await cruiseState();
+      expect((state['results'] as List).map((r) => (r as Map)['heading']).toList(), ['Cruise 1', 'Cruise 2', 'Cruise 3']);
+      expect(runtime.logs.tail.any((e) => e.pluginId == 'cruise-demo' && e.message.contains('alert dialog') && e.message.contains('page 2') && e.message.contains('policy: accept')), isTrue, reason: 'alert answered by the declared policy');
+      await waitLogs(tester, (e) => e.pluginId == 'cruise-demo' && e.message.contains('dialog on') && e.message.contains('page 2'));
+      expect(runtime.tabController.all, isEmpty, reason: 'hidden tab closed when done');
+
+      // suspend in the middle, resume, still completes
+      await runtime.bridge.emit(worker, 'runtime.message', {'type': 'start', 'urls': urls});
+      await waitCruise((st) => (st['index'] as int? ?? 0) >= 1);
+      await runtime.workers.suspendAll();
+      final atSuspend = (await cruiseState())['index'] as int;
+      await Future<void>.delayed(const Duration(seconds: 2));
+      final afterWait = (await cruiseState())['index'] as int;
+      expect(afterWait, lessThanOrEqualTo(atSuspend + 1), reason: 'paused between steps');
+      expect(afterWait, lessThan(3), reason: 'did not finish while suspended');
+      await runtime.workers.resumeAll();
+      await waitCruise((st) => (st['results'] as List?)?.length == 3 && st['running'] == false);
+      state = await cruiseState();
+      expect((state['results'] as List).length, 3);
+
+      // navigation.intercept: the worker denies /blocked
+      expect((await services.navigation.decideAsync(target: Uri.parse('$base/blocked'), current: Uri.parse('$base/article.html'), isLinkClick: true)).action, NavAction.cancel);
+      expect((await services.navigation.decideAsync(target: Uri.parse('$base/ok'), current: Uri.parse('$base/article.html'), isLinkClick: true)).action, NavAction.allow);
 
       // ---- disabling a plugin takes effect on the next load, global switch stops all ----
       await runtime.repository.setEnabled('hello-world', false);
       await load(tester, '/article.html');
       await waitJs(tester, "document.querySelectorAll('.wsi-floating-button').length", 4);
-      expect(services.tabs.active!.pluginCount, 7);
+      expect(services.tabs.active!.pluginCount, 8);
       await services.settings.setWsiEnabled(false);
       await load(tester, '/article.html');
       await Future<void>.delayed(const Duration(seconds: 1));

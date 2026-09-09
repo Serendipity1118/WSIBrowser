@@ -1,0 +1,25 @@
+{
+  "formatVersion": 2,
+  "id": "cruise-demo",
+  "name": "Cruise Demo",
+  "version": "0.1.0",
+  "description": "ワーカーが example.com の 3 ページを順に開いて見出しを集める。tabs / onDialog / suspend-resume / navigation.intercept の検証用 (M2)",
+  "author": "WSI Team",
+  "domains": ["example.com"],
+  "scripts": { "main": "dist/main.js", "runAt": "document_idle" },
+  "background": "dist/worker.js",
+  "pages": {
+    "results": { "file": "pages/results.html", "display": "sheet" }
+  },
+  "menu": [
+    { "id": "start", "label": "巡回を開始", "type": "action" },
+    { "id": "stop", "label": "巡回を停止", "type": "action" },
+    { "type": "separator" },
+    { "id": "results", "label": "巡回結果", "type": "page", "page": "results" }
+  ],
+  "permissions": ["storage", "tabs", "pages", "menu", "navigation"],
+  "config": {
+    "urls": ["https://example.com/", "https://example.com/?page=2", "https://example.com/?page=3"],
+    "stepDelayMs": 300
+  }
+}

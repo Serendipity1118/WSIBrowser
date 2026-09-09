@@ -134,7 +134,7 @@ class _WebViewTabState extends State<WebViewTab> {
     final target = action.request.url?.uriValue;
     if (target == null) return NavigationActionPolicy.CANCEL;
     final isLinkClick = action.navigationType == NavigationType.LINK_ACTIVATED || (action.hasGesture ?? false);
-    final decision = services.navigation.decide(
+    final decision = await services.navigation.decideAsync(
       target: target,
       current: _currentUri,
       isMainFrame: action.isForMainFrame,
@@ -150,7 +150,7 @@ class _WebViewTabState extends State<WebViewTab> {
         await controller.loadUrl(urlRequest: URLRequest(url: WebUri.uri(decision.url!)));
         return NavigationActionPolicy.CANCEL;
       case NavAction.external:
-        await _openExternal(context, decision.url!);
+        if (context.mounted) await _openExternal(context, decision.url!);
         return NavigationActionPolicy.CANCEL;
       case NavAction.app:
         final handled = await widget.hooks.onAppLink?.call(decision.url!) ?? false;

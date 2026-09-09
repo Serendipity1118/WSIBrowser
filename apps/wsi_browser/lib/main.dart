@@ -4,6 +4,7 @@ import 'app/app.dart';
 import 'app/app_links_handler.dart';
 import 'app/app_scope.dart';
 import 'app/bootstrap.dart';
+import 'app/lifecycle.dart';
 import 'db/open_database.dart';
 import 'runtime/runtime.dart';
 import 'ui/plugin_list_page.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   final runtime = PluginRuntime(services);
   services.extras['runtime'] = runtime;
   await runtime.init();
+  WorkerLifecycleObserver(runtime.workers).start();
 
   final navigatorKey = GlobalKey<NavigatorState>();
   final links = AppLinksHandler(navigatorKey: navigatorKey, runtime: runtime, settings: services.settings);

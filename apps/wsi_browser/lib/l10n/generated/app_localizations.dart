@@ -821,6 +821,18 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'サーバーからのポリシー値取得'**
   String get permissionDesc_policy;
+
+  /// No description provided for @settingsWorkerTabLimit.
+  ///
+  /// In ja, this message translates to:
+  /// **'ワーカーのタブ上限'**
+  String get settingsWorkerTabLimit;
+
+  /// No description provided for @settingsWorkerTabLimitDesc.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインごとに同時に開けるタブ数 (WSI.tabs)'**
+  String get settingsWorkerTabLimitDesc;
 }
 
 class _AppLocalizationsDelegate

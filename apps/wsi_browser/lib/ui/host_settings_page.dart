@@ -86,6 +86,23 @@ class HostSettingsPage extends StatelessWidget {
                 onTap: () => _clearCookies(context),
               ),
               _Section(l.settingsSectionPlugins),
+              ListTile(
+                key: const Key('setting-worker-tab-limit'),
+                leading: const Icon(Icons.layers_outlined),
+                title: Text(l.settingsWorkerTabLimit),
+                subtitle: Text('${settings.workerTabLimit}  ${l.settingsWorkerTabLimitDesc}'),
+                trailing: SizedBox(
+                  width: 160,
+                  child: Slider(
+                    value: settings.workerTabLimit.toDouble(),
+                    min: 1,
+                    max: 10,
+                    divisions: 9,
+                    label: '${settings.workerTabLimit}',
+                    onChanged: (v) => settings.setWorkerTabLimit(v.round()),
+                  ),
+                ),
+              ),
               SwitchListTile(
                 key: const Key('setting-update-check'),
                 secondary: const Icon(Icons.update_outlined),

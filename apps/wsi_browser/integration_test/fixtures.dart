@@ -38,3 +38,7 @@ const String kDijaw40Html = r'''
 </body>
 </html>
 ''';
+
+/// `/cruise/<n>`: heading "Cruise n"; page 2 opens an alert (answered by the worker).
+String cruiseHtml(int n) => '''<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>Cruise $n</title></head>
+<body><h1>Cruise $n</h1><p><a id="blocked" href="/blocked">blocked link</a></p>${n == 2 ? "<script>alert('page 2');</script>" : ''}</body></html>''';

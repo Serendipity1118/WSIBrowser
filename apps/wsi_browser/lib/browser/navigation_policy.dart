@@ -35,6 +35,9 @@ class NavigationDecision {
 /// Result of a plugin's WSI.navigation.intercept (P4). null = no opinion.
 typedef NavigationInterceptor = String? Function(Uri url);
 
+/// Async variant used by the runtime (asks workers over the bridge).
+typedef AsyncNavigationInterceptor = Future<String?> Function(Uri url);
+
 class NavigationPolicy {
   NavigationPolicy({
     required ExternalLinkMode Function() externalLinks,
@@ -46,8 +49,29 @@ class NavigationPolicy {
   final ExternalLinkMode Function() _externalLinks;
   final bool Function(String host) _isPluginHost;
   NavigationInterceptor? interceptor;
+  AsyncNavigationInterceptor? asyncInterceptor;
 
   static const _osSchemes = {'mailto', 'tel', 'sms', 'intent', 'market', 'itms', 'itms-apps', 'itms-appss', 'maps', 'geo'};
+
+  /// [decide] plus the async interceptor (WSI.navigation.intercept of workers).
+  Future<NavigationDecision> decideAsync({
+    required Uri target,
+    Uri? current,
+    bool isMainFrame = true,
+    bool isRedirect = false,
+    bool isLinkClick = false,
+  }) async {
+    String? verdict;
+    final scheme = target.scheme.toLowerCase();
+    if (isMainFrame && (scheme == 'http' || scheme == 'https') && asyncInterceptor != null) {
+      try {
+        verdict = await asyncInterceptor!(target);
+      } catch (_) {
+        verdict = null;
+      }
+    }
+    return decide(target: target, current: current, isMainFrame: isMainFrame, isRedirect: isRedirect, isLinkClick: isLinkClick, pluginVerdict: verdict);
+  }
 
   NavigationDecision decide({
     required Uri target,
@@ -55,6 +79,7 @@ class NavigationPolicy {
     bool isMainFrame = true,
     bool isRedirect = false,
     bool isLinkClick = false,
+    String? pluginVerdict,
   }) {
     final scheme = target.scheme.toLowerCase();
 
@@ -75,7 +100,7 @@ class NavigationPolicy {
     if (!isMainFrame) return NavigationDecision.allow;
 
     // rule 6: plugin interceptor
-    final verdict = interceptor?.call(target);
+    final verdict = pluginVerdict ?? interceptor?.call(target);
     if (verdict == 'deny') return NavigationDecision.cancel;
     if (verdict == 'external') return NavigationDecision.external(target);
     if (verdict == 'allow') return NavigationDecision.allow;

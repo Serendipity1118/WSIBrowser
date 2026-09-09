@@ -20,6 +20,9 @@ class HostSettingsKeys {
 
   /// Global kill switch for plugin injection (WSI's wsiEnabled).
   static const wsiEnabled = 'wsiEnabled';
+
+  /// Max concurrent WSI.tabs per plugin (F-06-3).
+  static const workerTabLimit = 'workerTabLimit';
 }
 
 class HostSettings extends ChangeNotifier {
@@ -67,6 +70,12 @@ class HostSettings extends ChangeNotifier {
   bool get updateCheck => _values[HostSettingsKeys.updateCheck] != false;
   bool get wsiEnabled => _values[HostSettingsKeys.wsiEnabled] != false;
 
+  static const defaultWorkerTabLimit = 3;
+  int get workerTabLimit {
+    final v = _values[HostSettingsKeys.workerTabLimit];
+    return v is num ? v.toInt().clamp(1, 10) : defaultWorkerTabLimit;
+  }
+
   // ---- setters -------------------------------------------------------------
 
   Future<void> set(String key, Object? value) async {
@@ -90,4 +99,5 @@ class HostSettings extends ChangeNotifier {
   Future<void> setWebInspector(bool v) => set(HostSettingsKeys.webInspector, v);
   Future<void> setUpdateCheck(bool v) => set(HostSettingsKeys.updateCheck, v);
   Future<void> setWsiEnabled(bool v) => set(HostSettingsKeys.wsiEnabled, v);
+  Future<void> setWorkerTabLimit(int n) => set(HostSettingsKeys.workerTabLimit, n.clamp(1, 10));
 }
