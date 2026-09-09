@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-no-firebase:
+    name: Backend isolation check
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if Firebase / existing-app backend identifiers are referenced
+        shell: pwsh
+        run: ./tools/check_no_firebase.ps1
+
+  sdk-and-tools:
+    name: SDK core + plugin CLI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build SDK bundles
+        run: npm run build:sdk
+      - name: Plugin CLI tests
+        run: npm run test:tools
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+        working-directory: packages/wsi_sdk
+      - name: SDK core contract tests (mock adapter)
+        run: xvfb-run --auto-servernum npx playwright test test/core.spec.js
+        working-directory: packages/wsi_sdk
+      # test/chrome.spec.js needs the WebSystemInjection checkout; it runs locally
+      # (npm run test:sdk) and will move to CI once that repository is a submodule or fetched here.

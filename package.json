@@ -1,0 +1,20 @@
+{
+  "name": "wsibrowser",
+  "private": true,
+  "description": "WSI Browser monorepo: Flutter host, Cloudflare Workers API, SDK core, plugin CLI",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/api"
+  ],
+  "scripts": {
+    "build:sdk": "npm run build -w packages/wsi_sdk",
+    "test:sdk": "npm run test -w packages/wsi_sdk",
+    "test:tools": "npm run test -w packages/wsi_plugin_tools",
+    "sync:samples": "powershell -ExecutionPolicy Bypass -File tools/sync_wsi_samples.ps1",
+    "check:no-firebase": "powershell -ExecutionPolicy Bypass -File tools/check_no_firebase.ps1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

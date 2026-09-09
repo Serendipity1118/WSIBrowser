@@ -1,0 +1,21 @@
+{
+  "name": "@wsi/sdk",
+  "version": "2.0.0",
+  "description": "WSI SDK core shared by the Chrome extension (WebSystemInjection) and WSI Browser (Flutter)",
+  "private": true,
+  "type": "module",
+  "main": "src/core/index.js",
+  "types": "src/adapters/adapter.d.ts",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "sync:wsi": "node build/sync_to_wsi.mjs",
+    "test": "npm run build && playwright test",
+    "test:core": "npm run build && playwright test test/core.spec.js",
+    "test:chrome": "npm run build && playwright test test/chrome.spec.js",
+    "playwright:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "esbuild": "^0.25.0"
+  }
+}

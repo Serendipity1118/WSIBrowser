@@ -1,2 +1,37 @@
-.wrangler/
+# Node
 node_modules/
+*.log
+npm-debug.log*
+
+# Build outputs
+packages/wsi_sdk/dist/
+packages/wsi_plugin_tools/dist/
+plugins/**/dist/
+plugins/**/*.zip
+!plugins/samples/**/*.zip
+
+# Playwright
+packages/wsi_sdk/test-results/
+packages/wsi_sdk/playwright-report/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Flutter (apps/wsi_browser)
+apps/wsi_browser/.dart_tool/
+apps/wsi_browser/.packages
+apps/wsi_browser/build/
+apps/wsi_browser/.flutter-plugins
+apps/wsi_browser/.flutter-plugins-dependencies
+apps/wsi_browser/ios/Pods/
+apps/wsi_browser/ios/.symlinks/
+apps/wsi_browser/ios/Flutter/ephemeral/
+apps/wsi_browser/android/.gradle/
+apps/wsi_browser/android/local.properties
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

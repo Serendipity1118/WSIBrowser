@@ -1,0 +1,32 @@
+{
+  "name": "@wsi/plugin-tools",
+  "version": "0.1.0",
+  "description": "CLI for WSI Browser / WSI plugins: create, validate, build, pack, dev-serve, publish",
+  "type": "module",
+  "bin": {
+    "wsi-plugin": "bin/wsi-plugin.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "template"
+  ],
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "sync:template": "node scripts/sync_template.mjs",
+    "prepack": "node scripts/sync_template.mjs"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.0",
+    "jszip": "^3.10.1",
+    "qrcode-terminal": "^0.12.0",
+    "selfsigned": "^2.4.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

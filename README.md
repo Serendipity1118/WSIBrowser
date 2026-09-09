@@ -4,7 +4,7 @@
 
 Chrome 拡張版 [WebSystemInjection](https://github.com/Serendipity1118/WebSystemInjection) と同じプラグイン形式・SDK を、flutter_inappwebview ベースの自前ブラウザで動かす汎用ホストです。サイト固有の機能はすべてプラグイン (ZIP) として別配布し、アプリ本体はプラグインの種類を知りません。
 
-## 構成 (予定)
+## 構成
 
 | ディレクトリ | 内容 |
 |---|---|
@@ -13,7 +13,22 @@ Chrome 拡張版 [WebSystemInjection](https://github.com/Serendipity1118/WebSyst
 | `packages/wsi_sdk/` | SDK コア (JS)。Chrome 版 WSI と共有 |
 | `packages/wsi_plugin_tools/` | プラグイン開発 CLI |
 | `plugins/` | プラグイン開発ディレクトリ (1 ディレクトリ = 1 プラグイン) |
-| `doc/` | 要件定義、移植プラン |
+| `tools/` | サンプル同期、バックエンド参照検査 |
+| `doc/` | 要件定義、実装プラン |
+
+## 開発
+
+```
+npm install                 # workspaces (packages/*, apps/api)
+npm run build:sdk           # SDK バンドルを生成
+npm run test:sdk            # SDK 契約テスト (Playwright。Chrome 版は ../WebSystemInjection が必要)
+npm run test:tools          # プラグイン CLI のテスト
+npm run sync:samples        # WSI の samples を plugins/samples に取り込む
+npm run check:no-firebase   # Firebase / 既存アプリ参照の検査 (CI でも実行)
+npx wsi-plugin --help       # プラグイン CLI
+```
+
+進捗は [doc/実装プラン.md](doc/実装プラン.md) のフェーズ表を参照。
 
 ## ドキュメント
 
