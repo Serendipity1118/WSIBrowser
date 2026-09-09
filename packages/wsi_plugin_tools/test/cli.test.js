@@ -86,3 +86,12 @@ test('pack refuses an invalid manifest', async () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('publish builds the R2 key and the release SQL', async () => {
+  const { r2KeyFor, releaseInsertSql } = await import('../src/publish.js');
+  assert.equal(r2KeyFor('pokepara', '2.0.0'), 'plugins/pokepara/2.0.0.zip');
+  const sql = releaseInsertSql({ id: 'p', version: '1.0.0', notes: "it's new", key: 'plugins/p/1.0.0.zip' });
+  assert.ok(sql.startsWith('INSERT OR REPLACE INTO plugin_releases'));
+  assert.ok(sql.includes("'it''s new'"), 'quotes are escaped');
+  assert.ok(releaseInsertSql({ id: 'p', version: '1', key: 'k' }).endsWith('NULL);'));
+});

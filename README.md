@@ -26,6 +26,7 @@ npm run test:tools          # プラグイン CLI のテスト
 npm run sync:samples        # WSI の samples を plugins/samples に取り込む
 npm run check:no-firebase   # Firebase / 既存アプリ参照の検査 (CI でも実行)
 npx wsi-plugin --help       # プラグイン CLI
+npm test -w apps/api        # バックエンドのテスト (workerd)
 ```
 
 進捗は [doc/実装プラン.md](doc/実装プラン.md) のフェーズ表を参照。

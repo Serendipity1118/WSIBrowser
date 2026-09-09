@@ -38,3 +38,7 @@ Thumbs.db
 
 # IDE
 *.iml
+
+# Cloudflare Workers
+apps/api/.wrangler/
+apps/api/worker-configuration.d.ts

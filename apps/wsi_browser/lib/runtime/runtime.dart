@@ -11,6 +11,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../app/app_scope.dart';
 import '../bridge_ops/fetch_ops.dart';
 import '../bridge_ops/log_ops.dart';
+import '../bridge_ops/policy_ops.dart';
 import '../bridge_ops/registry.dart';
 import '../bridge_ops/settings_ops.dart';
 import '../bridge_ops/storage_ops.dart';
@@ -22,6 +23,7 @@ import 'dev_reloader.dart';
 import 'importer.dart';
 import 'injector.dart';
 import 'log_sink.dart';
+import 'policy_cache.dart';
 import 'repository.dart';
 import 'update_checker.dart';
 
@@ -35,11 +37,13 @@ class PluginRuntime {
     settingsStore = PluginSettingsStore(services.db);
     updateChecker = UpdateChecker(repository, services.settings);
     devReloader = DevReloader(importer: importer, repository: repository, logs: logs, tabs: services.tabs);
+    policyCache = PolicyStore(services.db, repository, logs);
     registerStorageOps(registry, services.db);
     registerFetchOps(registry, services.cookies);
     registerLogOps(registry, logs);
     registerUiOps(registry, () => services.dialogs.contextProvider());
     registerSettingsOps(registry, settingsStore, bridge);
+    registerPolicyOps(registry, policyCache);
   }
 
   final AppServices services;
@@ -52,6 +56,7 @@ class PluginRuntime {
   late final UpdateChecker updateChecker;
   late final Injector injector;
   late final DevReloader devReloader;
+  late final PolicyStore policyCache;
 
   /// Set by the app layer: called for wsi://install?url=... and wsi://dev?url=...
   Future<bool> Function(Uri url)? onAppLink;
@@ -67,6 +72,7 @@ class PluginRuntime {
     services.isPluginHost = repository.isPluginHost;
     repository.addListener(_onPluginsChanged);
     unawaited(updateChecker.checkAll());
+    unawaited(policyCache.refreshAll());
   }
 
   WebViewTabHooks get hooks => WebViewTabHooks(

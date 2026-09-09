@@ -1,0 +1,25 @@
+{
+  "name": "@wsi/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WSI Browser backend: Cloudflare Workers + D1 + R2 (policy, latest, feedback, plugin ZIP distribution)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 migrations apply wsi-api --local",
+    "migrate:remote": "wrangler d1 migrations apply wsi-api --remote",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "qrcode-svg": "^1.1.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0",
+    "wrangler": "^4.130.0"
+  }
+}

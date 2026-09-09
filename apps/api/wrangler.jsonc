@@ -1,0 +1,39 @@
+// WSI Browser backend (要件定義 F-13). Account: develop@serendipy.jp.
+// Resources were created on 2026-09-10 (doc/実装プラン.md 1.2). The pokeplus
+// resources in the same account are never referenced.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wsi-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "wsi_api",
+      "database_name": "wsi-api",
+      "database_id": "6e14cd65-8b2e-49e7-8be4-39b5f499122a",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "wsi_plugins",
+      "bucket_name": "wsi-plugins"
+    }
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+  "vars": {
+    // Feedback rate limit: max requests per client (hashed IP) per window
+    "FEEDBACK_RATE_LIMIT": "5",
+    "FEEDBACK_RATE_WINDOW_SECONDS": "600",
+    "FEEDBACK_MAX_BODY_BYTES": "4096",
+    // Cache-Control for policy / latest responses
+    "POLICY_CACHE_SECONDS": "300"
+  }
+}

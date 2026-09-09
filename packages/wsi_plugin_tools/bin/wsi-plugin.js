@@ -6,7 +6,7 @@
 //   wsi-plugin build [dir] [--minify] [--sourcemap]
 //   wsi-plugin pack [dir] [--out <file>] [--minify]
 //   wsi-plugin dev-serve [dir] [--port 8443] [--host <ip>] [--no-qr]
-//   wsi-plugin publish [dir]            (added in PB)
+//   wsi-plugin publish [dir] [--notes <text>] [--bucket <r2>] [--database <d1>] [--base-url <url>] [--dry-run]
 import { parseArgs } from 'node:util';
 import { resolve, relative } from 'node:path';
 import { create, validate, build, pack } from '../src/index.js';
@@ -19,7 +19,7 @@ commands:
   build [dir] [--minify] [--sourcemap]          bundle src/main.js (+ src/worker.js) into dist/ with esbuild
   pack [dir] [--out <file>] [--minify]          validate + build + ZIP (dist/<id>-<version>.zip)
   dev-serve [dir] [--port 8443] [--host <ip>]   serve the ZIP over HTTPS for WSI Browser developer mode
-  publish [dir]                                 upload to Cloudflare (not implemented yet: PB-07)
+  publish [dir] [--notes <text>] [--dry-run]    pack, upload the ZIP to R2 and register the release in D1 (wrangler login required)
 `;
 
 function fail(message, code = 1) {
@@ -34,6 +34,11 @@ async function main() {
       dir: { type: 'string' },
       name: { type: 'string' },
       out: { type: 'string' },
+      notes: { type: 'string' },
+      bucket: { type: 'string' },
+      database: { type: 'string' },
+      'base-url': { type: 'string' },
+      'dry-run': { type: 'boolean', default: false },
       port: { type: 'string' },
       host: { type: 'string' },
       minify: { type: 'boolean', default: false },
@@ -87,9 +92,19 @@ async function main() {
       await serve(dir, { port: values.port ? Number(values.port) : undefined, host: values.host, minify: values.minify, noQr: values['no-qr'] });
       return; // keeps running
     }
-    case 'publish':
-      fail('publish is not implemented yet (planned in PB-07)');
+    case 'publish': {
+      const dir = resolve(arg || '.');
+      const { publish } = await import('../src/publish.js');
+      const r = await publish(dir, {
+        notes: values.notes, bucket: values.bucket, database: values.database, baseUrl: values['base-url'],
+        dryRun: values['dry-run'], minify: values.minify,
+      });
+      console.log(`${r.dryRun ? '(dry run) ' : ''}published ${r.id} v${r.version}`);
+      console.log(`  zip:    ${r.zipUrl}`);
+      console.log(`  latest: ${r.latestUrl}`);
+      console.log(`  page:   ${r.pageUrl}`);
       return;
+    }
     default:
       fail(`unknown command: ${command}\n\n${USAGE}`);
   }
