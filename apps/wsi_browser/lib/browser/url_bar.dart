@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/generated/app_localizations.dart';
+import 'app_menu.dart';
 import 'tab_manager.dart';
 
 class UrlBar extends StatefulWidget {
@@ -23,6 +24,7 @@ class UrlBar extends StatefulWidget {
     required this.onSettings,
     required this.onOpenExternal,
     this.onPlugins,
+    this.pluginSections = const [],
   });
 
   final BrowserTab tab;
@@ -39,6 +41,9 @@ class UrlBar extends StatefulWidget {
   final VoidCallback onSettings;
   final VoidCallback onOpenExternal;
   final VoidCallback? onPlugins;
+
+  /// Plugin-provided menu sections (F-08-2), shown after the host items.
+  final List<AppMenuSection> pluginSections;
 
   @override
   State<UrlBar> createState() => _UrlBarState();
@@ -175,8 +180,14 @@ class _UrlBarState extends State<UrlBar> {
                     child: Text('${widget.tabCount}', style: theme.textTheme.labelSmall),
                   ),
                 ),
-                PopupMenuButton<_MenuItem>(
-                  onSelected: (item) => _onMenu(context, item),
+                PopupMenuButton<Object>(
+                  onSelected: (item) {
+                    if (item is _MenuItem) {
+                      _onMenu(context, item);
+                    } else if (item is AppMenuItem) {
+                      item.onSelect?.call(item.type == AppMenuItemType.toggle ? !(item.checked ?? false) : null);
+                    }
+                  },
                   itemBuilder: (ctx) => [
                     PopupMenuItem(value: _MenuItem.newTab, child: ListTile(leading: const Icon(Icons.add), title: Text(l.actionNewTab))),
                     PopupMenuItem(value: _MenuItem.home, child: ListTile(leading: const Icon(Icons.home_outlined), title: Text(l.actionHome))),
@@ -187,6 +198,29 @@ class _UrlBarState extends State<UrlBar> {
                     if (widget.onPlugins != null)
                       PopupMenuItem(value: _MenuItem.plugins, child: ListTile(leading: const Icon(Icons.extension_outlined), title: Text(l.startPagePlugins))),
                     PopupMenuItem(value: _MenuItem.settings, child: ListTile(leading: const Icon(Icons.settings_outlined), title: Text(l.settingsTitle))),
+                    for (final section in widget.pluginSections) ...[
+                      const PopupMenuDivider(),
+                      PopupMenuItem<Object>(
+                        enabled: false,
+                        height: 32,
+                        child: Text(section.title, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.primary)),
+                      ),
+                      for (final item in section.items)
+                        if (item.type == AppMenuItemType.separator)
+                          const PopupMenuDivider()
+                        else
+                          PopupMenuItem<Object>(
+                            value: item,
+                            child: ListTile(
+                              leading: item.type == AppMenuItemType.toggle
+                                  ? Icon(item.checked == true ? Icons.check_box : Icons.check_box_outline_blank)
+                                  : item.icon != null
+                                      ? Text(item.icon!, style: const TextStyle(fontSize: 20))
+                                      : Icon(item.type == AppMenuItemType.page ? Icons.article_outlined : Icons.play_arrow_outlined),
+                              title: Text(item.label),
+                            ),
+                          ),
+                    ],
                   ],
                 ),
               ],

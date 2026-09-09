@@ -38,8 +38,8 @@ class BridgeSession {
     required this.token,
     required this.pluginId,
     required this.context,
-    required this.controller,
     required this.webViewKey,
+    this.controller,
     this.tab,
     this.origin,
   });
@@ -47,7 +47,9 @@ class BridgeSession {
   final String token;
   final String pluginId;
   final BridgeContext context;
-  final InAppWebViewController controller;
+
+  /// Set once the WebView exists (plugin pages issue their token before creation).
+  InAppWebViewController? controller;
 
   /// Identifies the WebView across callbacks (the controller object handed to
   /// each callback is not guaranteed to be the same instance): tab id for

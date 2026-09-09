@@ -8,6 +8,7 @@ import '../app/app_scope.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../ui/host_settings_page.dart';
 import '../ui/start_page.dart';
+import 'app_menu.dart';
 import 'navigation_policy.dart';
 import 'tab_manager.dart';
 import 'tab_switcher.dart';
@@ -15,12 +16,15 @@ import 'url_bar.dart';
 import 'web_view_tab.dart';
 
 class BrowserScreen extends StatefulWidget {
-  const BrowserScreen({super.key, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins});
+  const BrowserScreen({super.key, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins, this.menuSource});
 
   /// Runtime hooks handed to every WebViewTab (P2+).
   final WebViewTabHooks hooks;
   final Widget? pluginSummary;
   final VoidCallback? onPlugins;
+
+  /// Plugin menu sections for the URL bar (P3).
+  final AppMenuSource? menuSource;
 
   @override
   State<BrowserScreen> createState() => _BrowserScreenState();
@@ -39,7 +43,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
     final services = AppScope.of(context);
     final tabs = services.tabs;
     return ListenableBuilder(
-      listenable: tabs,
+      listenable: widget.menuSource == null ? tabs : Listenable.merge([tabs, widget.menuSource!]),
       builder: (context, _) {
         final active = tabs.active;
         if (active == null) return const SizedBox.shrink();
@@ -73,6 +77,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                   onSettings: () => _openSettings(context),
                   onOpenExternal: () => launchUrl(Uri.parse(active.url), mode: LaunchMode.externalApplication),
                   onPlugins: widget.onPlugins,
+                  pluginSections: widget.menuSource?.sections ?? const [],
                 ),
                 Expanded(
                   child: IndexedStack(

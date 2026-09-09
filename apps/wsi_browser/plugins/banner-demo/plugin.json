@@ -1,0 +1,14 @@
+{
+  "formatVersion": 2,
+  "id": "banner-demo",
+  "name": "Banner Demo",
+  "version": "0.1.0",
+  "description": "",
+  "author": "",
+  "domains": ["example.com"],
+  "scripts": { "main": "dist/main.js", "runAt": "document_idle" },
+  "styles": ["style.css"],
+  "permissions": ["storage"],
+  "settingsSchema": [],
+  "config": {}
+}

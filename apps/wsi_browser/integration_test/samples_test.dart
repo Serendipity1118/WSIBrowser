@@ -69,6 +69,7 @@ void main() {
 
     await installSample('hello-world', domains: ['127.0.0.1']);
     await installSample('nipponsteel-dijaw40-csv', domains: ['127.0.0.1']);
+    await installSample('banner-demo', domains: ['127.0.0.1']);
     for (final id in ['highlighter', 'jisho-popup', 'markdown-copy', 'outline-panel', 'url-expander']) {
       await installSample(id);
     }
@@ -135,8 +136,24 @@ void main() {
       expect(await js("document.querySelectorAll('.wsi-csv-export-btn').length"), 0, reason: 'nipponsteel does not match this path');
       expect(await js('typeof window.WSI'), 'undefined', reason: 'WSI never leaks onto window');
       await waitJs(tester, "typeof globalThis.__wsiEmit", 'function');
-      // badge: 7 = 5 '*' samples + hello-world + nipponsteel (rewritten to 127.0.0.1, no paths)
-      expect(services.tabs.active!.pluginCount, 7);
+      // badge: 8 = 5 '*' samples + hello-world + nipponsteel + banner-demo (rewritten to 127.0.0.1, no paths)
+      expect(services.tabs.active!.pluginCount, 8);
+
+      // ---- banner-demo (P3): settings, menu, wsi:// pages ----
+      await waitJs(tester, "document.querySelector('[data-banner-demo]') && document.querySelector('[data-banner-demo]').textContent", 'Hello from banner-demo');
+      final banner = runtime.repository.byId('banner-demo')!;
+      await runtime.settingsStore.set(banner.manifest, 'text', 'Changed by host');
+      await runtime.bridge.broadcast('banner-demo', 'settings.change', {'key': 'text', 'value': 'Changed by host'});
+      await waitJs(tester, "document.querySelector('[data-banner-demo]').textContent", 'Changed by host');
+      final section = runtime.menuBus.sections.where((sec) => sec.title == 'Banner Demo').single;
+      expect(section.items.map((i) => i.type.name).toList(), ['page', 'toggle', 'separator', 'action']);
+      await section.items[1].onSelect!(false); // toggle -> plugin sets visible=false
+      await waitJs(tester, "document.querySelector('[data-banner-demo]').classList.contains('banner-demo--hidden')", true);
+      expect(await runtime.settingsStore.get(banner.manifest, 'visible'), false);
+      final settingsHtml = await runtime.pageHost.resolve(Uri.parse('wsi://plugin/banner-demo/pages/settings.html'));
+      expect(settingsHtml, isNotNull);
+      expect(settingsHtml!.mime, 'text/html');
+      expect(await runtime.pageHost.resolve(Uri.parse('wsi://plugin/hello-world/pages/settings.html'), allowedPluginId: 'banner-demo'), isNull);
 
       // ---- hello-world: button opens alert -> Flutter dialog with the config message ----
       // alert() blocks the page until the Flutter dialog is answered, so do not await the click
@@ -187,13 +204,13 @@ void main() {
       await load(tester, '/esys969/dij_web/webapp/page/DijAW40');
       await waitJs(tester, "document.querySelectorAll('.ControlHeader .wsi-csv-export-btn').length", 1);
       await waitJs(tester, "document.querySelectorAll('.wsi-floating-button').length", 5); // '*' samples run here too
-      expect(services.tabs.active!.pluginCount, 7);
+      expect(services.tabs.active!.pluginCount, 8);
 
       // ---- disabling a plugin takes effect on the next load, global switch stops all ----
       await runtime.repository.setEnabled('hello-world', false);
       await load(tester, '/article.html');
       await waitJs(tester, "document.querySelectorAll('.wsi-floating-button').length", 4);
-      expect(services.tabs.active!.pluginCount, 6);
+      expect(services.tabs.active!.pluginCount, 7);
       await services.settings.setWsiEnabled(false);
       await load(tester, '/article.html');
       await Future<void>.delayed(const Duration(seconds: 1));

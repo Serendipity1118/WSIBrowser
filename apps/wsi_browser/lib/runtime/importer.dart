@@ -130,7 +130,7 @@ class ZipImporter {
         ),
       );
     } on DioException catch (e) {
-      throw ImportException('Download failed: ${e.message ?? e.type.name}');
+      throw ImportException('Download failed: ${e.message ?? e.error ?? e.type.name}');
     }
     final bytes = res.data;
     if (bytes == null || bytes.isEmpty) throw ImportException('Download returned no data');

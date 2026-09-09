@@ -2,16 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../browser/app_menu.dart';
 import '../browser/browser_screen.dart';
 import '../browser/web_view_tab.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'app_scope.dart';
 
 class WsiBrowserApp extends StatelessWidget {
-  const WsiBrowserApp({super.key, required this.services, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins, this.navigatorKey});
+  const WsiBrowserApp({super.key, required this.services, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins, this.navigatorKey, this.menuSource});
 
   final AppServices services;
   final GlobalKey<NavigatorState>? navigatorKey;
+  final AppMenuSource? menuSource;
   final WebViewTabHooks hooks;
   final Widget? pluginSummary;
   final VoidCallback? onPlugins;
@@ -40,7 +42,7 @@ class WsiBrowserApp extends StatelessWidget {
           }
           return const Locale('ja');
         },
-        home: BrowserScreen(hooks: hooks, pluginSummary: pluginSummary, onPlugins: onPlugins),
+        home: BrowserScreen(hooks: hooks, pluginSummary: pluginSummary, onPlugins: onPlugins, menuSource: menuSource),
       ),
     );
   }

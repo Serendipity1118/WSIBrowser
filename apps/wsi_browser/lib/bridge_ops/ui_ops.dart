@@ -1,9 +1,10 @@
-// WSI.toast / WSI.dialog (P2-14). ui.openPage / closePage arrive in P3.
+// WSI.toast / WSI.dialog (P2-14), WSI.ui.openPage / closePage (P3-03).
 import 'package:flutter/material.dart';
 
+import '../runtime/menu_bus.dart';
 import 'registry.dart';
 
-void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider) {
+void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage}) {
   registry.register('toast', (call) async {
     final context = contextProvider();
     if (context == null || !context.mounted) return false;
@@ -39,4 +40,26 @@ void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider
     );
     return result ?? -1;
   });
+
+  registry.register('ui.openPage', permission: 'pages', (call) async {
+    final name = call.requireString('name');
+    final page = call.plugin.manifest.pages.where((p) => p.name == name).firstOrNull;
+    if (page == null) throw OpError('ui.openPage: unknown page "$name"');
+    if (openPage == null) throw OpError('no UI available');
+    final params = call.arg<Map>('params')?.map((k, v) => MapEntry('$k', '$v'));
+    // do not await: the page stays open until the user closes it
+    unawaitedOpen(openPage(call.plugin, page, params));
+    return true;
+  });
+
+  registry.register('ui.closePage', permission: 'pages', (call) async {
+    final context = contextProvider();
+    if (context == null || !context.mounted) return false;
+    closeTopmostPluginPage(context);
+    return true;
+  });
+}
+
+void unawaitedOpen(Future<void> f) {
+  f.catchError((Object e) => debugPrint('openPage failed: $e'));
 }

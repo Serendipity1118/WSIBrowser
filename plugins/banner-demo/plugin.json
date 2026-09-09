@@ -1,0 +1,27 @@
+{
+  "formatVersion": 2,
+  "id": "banner-demo",
+  "name": "Banner Demo",
+  "version": "0.1.0",
+  "description": "example.com にバナーを出す。設定ページ (sheet)、メニュー、WSI.settings、自己診断の検証用",
+  "author": "WSI Team",
+  "domains": ["example.com"],
+  "scripts": { "main": "dist/main.js", "runAt": "document_idle" },
+  "styles": ["style.css"],
+  "pages": {
+    "settings": { "file": "pages/settings.html", "display": "sheet" }
+  },
+  "menu": [
+    { "id": "settings", "label": "バナー設定", "type": "page", "page": "settings" },
+    { "id": "visible", "label": "バナーを表示", "type": "toggle", "checked": true },
+    { "type": "separator" },
+    { "id": "diagnose", "label": "自己診断をログに出す", "type": "action" }
+  ],
+  "permissions": ["storage", "pages", "menu"],
+  "settingsSchema": [
+    { "key": "text", "type": "string", "label": "バナーの文言", "default": "Hello from banner-demo" },
+    { "key": "color", "type": "select", "label": "色", "options": ["blue", "green", "orange"], "default": "blue" },
+    { "key": "visible", "type": "boolean", "label": "表示する", "default": true }
+  ],
+  "config": {}
+}

@@ -105,9 +105,12 @@ class Injector {
   Future<int> onLoadStop(InAppWebViewController controller, BrowserTab? tab, Uri url) async {
     bridge.setOrigin(keyOf(tab, controller), url);
     final matched = repository.forUrl(url);
+    final key = keyOf(tab, controller);
     for (final p in matched) {
       if (p.manifest.runAt != 'document_idle') continue;
-      await _runIdle(controller, tab, p, url);
+      // Android fires onUpdateVisitedHistory before onLoadStop: the plugin may already be running
+      final already = (_loadSessions[key] ?? const []).any((s) => s.pluginId == p.id);
+      if (!already) await _runIdle(controller, tab, p, url);
     }
     return matched.length;
   }
@@ -121,6 +124,9 @@ class Injector {
       await controller.evaluateJavascript(source: "window.dispatchEvent(new CustomEvent('wsi:urlchange'))");
     } catch (_) {}
     final matched = repository.forUrl(url);
+    // While the document is still loading this is the initial navigation
+    // (Android reports it before onLoadStop); onLoadStop injects then.
+    if (tab?.isLoading == true) return matched.length;
     for (final p in matched) {
       if (p.manifest.runAt != 'document_idle') continue;
       final already = (_loadSessions[key] ?? const []).any((s) => s.pluginId == p.id);

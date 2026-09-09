@@ -39,8 +39,8 @@ class Bridge {
 
   BridgeSession issue({
     required String pluginId,
-    required InAppWebViewController controller,
     required Object webViewKey,
+    InAppWebViewController? controller,
     required BridgeContext context,
     BrowserTab? tab,
     Uri? origin,
@@ -53,6 +53,11 @@ class Bridge {
   }
 
   BridgeSession? session(String token) => _sessions[token];
+
+  /// Attach the real controller to a session issued before the WebView existed.
+  void rebind(BridgeSession session, InAppWebViewController controller) {
+    session.controller = controller;
+  }
 
   Iterable<BridgeSession> sessionsFor(Object webViewKey) =>
       _sessions.values.where((s) => s.webViewKey == webViewKey && !s.revoked);
@@ -133,10 +138,11 @@ class Bridge {
 
   /// Host -> plugin event. Resolves with the plugin's reply (reply-style events).
   Future<Object?> emit(BridgeSession session, String event, Object? payload, {Object? sender}) async {
-    if (session.revoked) return null;
+    final controller = session.controller;
+    if (session.revoked || controller == null) return null;
     final js = 'globalThis.__wsiEmit && globalThis.__wsiEmit(${jsonEncode(session.token)}, ${jsonEncode(event)}, ${jsonEncode(payload)}, ${jsonEncode(sender)})';
     try {
-      final result = await session.controller.callAsyncJavaScript(functionBody: 'return await ($js);');
+      final result = await controller.callAsyncJavaScript(functionBody: 'return await ($js);');
       if (result == null) return null;
       if (result.error != null) {
         logs.add(pluginId: session.pluginId, level: 'error', message: 'emit $event: ${result.error}');

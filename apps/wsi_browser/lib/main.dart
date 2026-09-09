@@ -27,6 +27,7 @@ Future<void> main() async {
     services: services,
     navigatorKey: navigatorKey,
     hooks: runtime.hooks,
+    menuSource: runtime.menuBus,
     pluginSummary: const StartPluginSummary(),
     onPlugins: () {
       final context = navigatorKey.currentContext;

@@ -11,18 +11,24 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../app/app_scope.dart';
 import '../bridge_ops/fetch_ops.dart';
 import '../bridge_ops/log_ops.dart';
+import '../bridge_ops/menu_ops.dart';
 import '../bridge_ops/policy_ops.dart';
+import '../bridge_ops/runtime_ops.dart';
 import '../bridge_ops/registry.dart';
 import '../bridge_ops/settings_ops.dart';
 import '../bridge_ops/storage_ops.dart';
 import '../bridge_ops/ui_ops.dart';
 import '../browser/tab_manager.dart';
 import '../browser/web_view_tab.dart';
+import '../ui/plugin_page_view.dart';
 import 'bridge.dart';
 import 'dev_reloader.dart';
 import 'importer.dart';
 import 'injector.dart';
 import 'log_sink.dart';
+import 'manifest.dart';
+import 'menu_bus.dart';
+import 'page_host.dart';
 import 'policy_cache.dart';
 import 'repository.dart';
 import 'update_checker.dart';
@@ -38,12 +44,27 @@ class PluginRuntime {
     updateChecker = UpdateChecker(repository, services.settings);
     devReloader = DevReloader(importer: importer, repository: repository, logs: logs, tabs: services.tabs);
     policyCache = PolicyStore(services.db, repository, logs);
+    pageHost = PageHost(repository);
+    pageStack = PageStack();
+    menuBus = MenuBus(bridge: bridge, repository: repository, openPage: openPage);
     registerStorageOps(registry, services.db);
     registerFetchOps(registry, services.cookies);
     registerLogOps(registry, logs);
-    registerUiOps(registry, () => services.dialogs.contextProvider());
+    registerUiOps(registry, () => services.dialogs.contextProvider(), openPage: openPage);
     registerSettingsOps(registry, settingsStore, bridge);
     registerPolicyOps(registry, policyCache);
+    registerMenuOps(registry, menuBus);
+    registerRuntimeOps(registry, bridge);
+  }
+
+  /// Open a plugin page on the browser screen (menu, WSI.ui.openPage, workers).
+  Future<void> openPage(InstalledPlugin plugin, PluginPage page, Map<String, String>? params) async {
+    final context = services.dialogs.contextProvider();
+    if (context == null || !context.mounted) {
+      logs.add(pluginId: plugin.id, level: 'warn', message: 'openPage(${page.name}): no UI available');
+      return;
+    }
+    await openPluginPage(context, this, plugin, page, params: params);
   }
 
   final AppServices services;
@@ -57,6 +78,9 @@ class PluginRuntime {
   late final Injector injector;
   late final DevReloader devReloader;
   late final PolicyStore policyCache;
+  late final PageHost pageHost;
+  late final PageStack pageStack;
+  late final MenuBus menuBus;
 
   /// Set by the app layer: called for wsi://install?url=... and wsi://dev?url=...
   Future<bool> Function(Uri url)? onAppLink;
@@ -83,9 +107,12 @@ class PluginRuntime {
         },
         onWebViewDisposed: (tab, controller) {
           _controllers.remove(tab.id);
+          menuBus.dropSessions(Injector.keyOf(tab, controller));
           injector.detach(controller, tab);
         },
         onLoadStart: (tab, controller, url) async {
+          // page-registered menu items die with the document (F-08-1)
+          menuBus.dropSessions(Injector.keyOf(tab, controller));
           injector.onLoadStart(controller, tab, url);
           tab.update(pluginCount: repository.forUrl(url).length);
         },
@@ -103,6 +130,9 @@ class PluginRuntime {
   /// Plugins changed (install / enable / delete): rebuild the UserScripts of
   /// every open tab so the next load picks the change up (F-02-4).
   void _onPluginsChanged() {
+    for (final p in repository.all) {
+      if (!p.enabled) menuBus.dropPlugin(p.id);
+    }
     for (final entry in _controllers.entries) {
       final tab = services.tabs.tabs.where((t) => t.id == entry.key).firstOrNull;
       unawaited(injector.rebuildUserScripts(entry.value, tab));
