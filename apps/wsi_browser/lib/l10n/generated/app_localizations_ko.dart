@@ -406,4 +406,39 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsWorkerTabLimitDesc => '플러그인당 동시에 열 수 있는 탭 수 (WSI.tabs)';
+
+  @override
+  String get backupTitle => '백업 및 복원';
+
+  @override
+  String get backupDesc =>
+      '플러그인 데이터와 설정을 암호화된 JSON으로 내보내기 / 가져오기. 로그인 정보는 포함되지 않습니다';
+
+  @override
+  String get backupPassword => '비밀번호';
+
+  @override
+  String get backupPasswordHint => '4자 이상. 복원 시 필요합니다';
+
+  @override
+  String get backupExport => '내보내기 (공유)';
+
+  @override
+  String get backupRestore => '파일을 선택해 복원';
+
+  @override
+  String get backupExported => '백업을 내보냈습니다';
+
+  @override
+  String backupRestored(int count) {
+    return '플러그인 $count개를 복원했습니다';
+  }
+
+  @override
+  String backupFailed(String reason) {
+    return '실패: $reason';
+  }
+
+  @override
+  String get backupRestoreConfirm => '설치된 플러그인의 저장 데이터와 설정을 덮어씁니다. 계속할까요?';
 }

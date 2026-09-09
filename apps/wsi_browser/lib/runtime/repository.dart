@@ -207,7 +207,7 @@ class PluginRepository extends ChangeNotifier {
     _code.remove(id);
     try {
       final all = await _secure.readAll();
-      for (final k in all.keys.where((k) => k.startsWith('credentials/$id/'))) {
+      for (final k in all.keys.where((k) => k.startsWith('credentials/$id/')).toList()) {
         await _secure.delete(key: k);
       }
     } catch (e) {

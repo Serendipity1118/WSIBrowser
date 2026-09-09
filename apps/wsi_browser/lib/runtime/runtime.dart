@@ -4,12 +4,17 @@
 // plugin is; it only forwards WebView events here.
 import 'dart:async';
 
+import 'dart:io' show Platform;
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../app/app_scope.dart';
+import '../bridge_ops/block_resources_ops.dart';
+import '../bridge_ops/credentials_ops.dart';
 import '../bridge_ops/fetch_ops.dart';
+import '../bridge_ops/native_ops.dart';
 import '../bridge_ops/log_ops.dart';
 import '../bridge_ops/menu_ops.dart';
 import '../bridge_ops/policy_ops.dart';
@@ -22,6 +27,7 @@ import '../bridge_ops/ui_ops.dart';
 import '../browser/tab_manager.dart';
 import '../browser/web_view_tab.dart';
 import '../ui/plugin_page_view.dart';
+import 'backup.dart';
 import 'bridge.dart';
 import 'dev_reloader.dart';
 import 'importer.dart';
@@ -32,6 +38,7 @@ import 'menu_bus.dart';
 import 'page_host.dart';
 import 'policy_cache.dart';
 import 'repository.dart';
+import 'resource_blocker.dart';
 import 'tab_controller.dart';
 import 'update_checker.dart';
 import 'worker_manager.dart';
@@ -59,6 +66,18 @@ class PluginRuntime {
     registerPolicyOps(registry, policyCache);
     registerMenuOps(registry, menuBus);
     registerRuntimeOps(registry, bridge);
+    // native features (P5)
+    resourceBlocker = ResourceBlocker(repository);
+    wakeLocks = WakeLockRegistry();
+    backup = BackupService(services.db, repository);
+    registerCredentialsOps(registry);
+    registerDeviceOps(registry);
+    registerShareOps(registry);
+    registerFilesOps(registry);
+    registerClipboardOps(registry);
+    registerWakeLockOps(registry, wakeLocks);
+    registerPipOps(registry, PipChannel());
+    registerBlockResourcesOps(registry, resourceBlocker);
   }
 
   /// WSI.navigation.intercept (F-01-3, P4-08): ask every running worker whose
@@ -101,6 +120,9 @@ class PluginRuntime {
   late final MenuBus menuBus;
   late final WorkerManager workers;
   late final TabController tabController;
+  late final ResourceBlocker resourceBlocker;
+  late final WakeLockRegistry wakeLocks;
+  late final BackupService backup;
 
   /// Set by the app layer: called for wsi://install?url=... and wsi://dev?url=...
   Future<bool> Function(Uri url)? onAppLink;
@@ -173,13 +195,37 @@ class PluginRuntime {
           tab.update(pluginCount: n);
         },
         onAppLink: (url) async => (await onAppLink?.call(url)) ?? false,
+        shouldInterceptRequest: Platform.isAndroid ? _interceptRequest : null,
+        beforeLoad: Platform.isIOS ? _applyContentBlockers : null,
       );
+
+  Future<WebResourceResponse?> _interceptRequest(BrowserTab tab, WebResourceRequest request) async {
+    if (resourceBlocker.rules.isEmpty) return null;
+    final host = Uri.tryParse(tab.url)?.host ?? '';
+    return resourceBlocker.shouldBlock(host, request) ? ResourceBlocker.blockedResponse() : null;
+  }
+
+  Future<void> _applyContentBlockers(BrowserTab tab, InAppWebViewController controller, Uri url) async {
+    final blockers = resourceBlocker.contentBlockersFor(url.host);
+    try {
+      await controller.setSettings(settings: InAppWebViewSettings(contentBlockers: blockers));
+    } catch (e) {
+      logs.add(level: 'warn', message: 'contentBlockers failed: $e');
+    }
+  }
 
   /// Plugins changed (install / enable / delete): rebuild the UserScripts of
   /// every open tab so the next load picks the change up (F-02-4).
   void _onPluginsChanged() {
     for (final p in repository.all) {
-      if (!p.enabled) menuBus.dropPlugin(p.id);
+      if (!p.enabled) {
+        menuBus.dropPlugin(p.id);
+        resourceBlocker.clear(p.id);
+        unawaited(wakeLocks.releaseAll(p.id));
+      }
+    }
+    for (final id in resourceBlocker.rules.keys.toList()) {
+      if (repository.byId(id) == null) resourceBlocker.clear(id);
     }
     unawaited(workers.sync().then((_) => _closeOrphanTabs()));
     for (final entry in _controllers.entries) {

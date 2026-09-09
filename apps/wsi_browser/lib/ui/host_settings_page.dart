@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../app/app_scope.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../settings/host_settings.dart';
+import 'backup_page.dart';
 
 class HostSettingsPage extends StatelessWidget {
   const HostSettingsPage({super.key});
@@ -110,6 +111,14 @@ class HostSettingsPage extends StatelessWidget {
                 subtitle: Text(l.settingsUpdateCheckDesc),
                 value: settings.updateCheck,
                 onChanged: settings.setUpdateCheck,
+              ),
+              ListTile(
+                key: const Key('setting-backup'),
+                leading: const Icon(Icons.backup_outlined),
+                title: Text(l.backupTitle),
+                subtitle: Text(l.backupDesc, maxLines: 2, overflow: TextOverflow.ellipsis),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const BackupPage())),
               ),
               ListTile(
                 key: const Key('setting-log-retention'),

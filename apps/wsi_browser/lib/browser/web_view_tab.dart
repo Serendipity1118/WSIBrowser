@@ -21,6 +21,8 @@ class WebViewTabHooks {
     this.onWebViewCreated,
     this.onWebViewDisposed,
     this.onLoadStart,
+    this.shouldInterceptRequest,
+    this.beforeLoad,
     this.onLoadStop,
     this.onUpdateVisitedHistory,
     this.onAppLink,
@@ -36,6 +38,13 @@ class WebViewTabHooks {
 
   /// wsi:// links (install, dev). Returning false lets the default handling run.
   final Future<bool> Function(Uri url)? onAppLink;
+
+  /// Android: answer a sub-resource request (null = let it load). Needs
+  /// [useShouldInterceptRequest]; the runtime uses it for WSI.blockResources.
+  final Future<WebResourceResponse?> Function(BrowserTab tab, WebResourceRequest request)? shouldInterceptRequest;
+
+  /// Extra settings applied before a main-frame load (iOS content blockers).
+  final Future<void> Function(BrowserTab tab, InAppWebViewController controller, Uri url)? beforeLoad;
 }
 
 class WebViewTab extends StatefulWidget {
@@ -65,10 +74,15 @@ class _WebViewTabState extends State<WebViewTab> {
     final tab = widget.tab;
     final initial = tab.isStartPage ? null : URLRequest(url: WebUri(tab.url));
 
+    final settings = services.cookies.webViewSettings();
+    if (widget.hooks.shouldInterceptRequest != null) settings.useShouldInterceptRequest = true;
     return InAppWebView(
       key: ValueKey('webview-${tab.id}'),
       initialUrlRequest: initial,
-      initialSettings: services.cookies.webViewSettings(),
+      initialSettings: settings,
+      shouldInterceptRequest: widget.hooks.shouldInterceptRequest == null
+          ? null
+          : (controller, request) => widget.hooks.shouldInterceptRequest!(tab, request),
       initialUserScripts: UnmodifiableListView(widget.hooks.userScripts?.call() ?? const <UserScript>[]),
       onWebViewCreated: (controller) {
         _controller = controller;
@@ -79,7 +93,10 @@ class _WebViewTabState extends State<WebViewTab> {
         final uri = url?.uriValue;
         _currentUri = uri;
         tab.update(url: uri?.toString(), loading: true, progress: 0);
-        if (uri != null) await widget.hooks.onLoadStart?.call(tab, controller, uri);
+        if (uri != null) {
+          await widget.hooks.beforeLoad?.call(tab, controller, uri);
+          await widget.hooks.onLoadStart?.call(tab, controller, uri);
+        }
       },
       onProgressChanged: (controller, progress) {
         tab.update(progress: progress / 100);

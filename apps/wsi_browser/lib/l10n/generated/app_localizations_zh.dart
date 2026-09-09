@@ -406,4 +406,38 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsWorkerTabLimitDesc => '每个插件可同时打开的标签页数 (WSI.tabs)';
+
+  @override
+  String get backupTitle => '备份与恢复';
+
+  @override
+  String get backupDesc => '将插件数据和设置导出 / 导入为加密 JSON。不包含登录信息';
+
+  @override
+  String get backupPassword => '密码';
+
+  @override
+  String get backupPasswordHint => '至少 4 个字符。恢复时需要';
+
+  @override
+  String get backupExport => '导出 (分享)';
+
+  @override
+  String get backupRestore => '选择文件并恢复';
+
+  @override
+  String get backupExported => '已导出备份';
+
+  @override
+  String backupRestored(int count) {
+    return '已恢复 $count 个插件';
+  }
+
+  @override
+  String backupFailed(String reason) {
+    return '失败: $reason';
+  }
+
+  @override
+  String get backupRestoreConfirm => '将覆盖已安装插件的保存数据和设置。是否继续?';
 }

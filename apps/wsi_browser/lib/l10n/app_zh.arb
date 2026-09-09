@@ -233,5 +233,29 @@
   "permissionDesc_navigation": "拦截页面跳转",
   "permissionDesc_policy": "从服务器获取策略值",
   "settingsWorkerTabLimit": "Worker 标签页上限",
-  "settingsWorkerTabLimitDesc": "每个插件可同时打开的标签页数 (WSI.tabs)"
+  "settingsWorkerTabLimitDesc": "每个插件可同时打开的标签页数 (WSI.tabs)",
+  "backupTitle": "备份与恢复",
+  "backupDesc": "将插件数据和设置导出 / 导入为加密 JSON。不包含登录信息",
+  "backupPassword": "密码",
+  "backupPasswordHint": "至少 4 个字符。恢复时需要",
+  "backupExport": "导出 (分享)",
+  "backupRestore": "选择文件并恢复",
+  "backupExported": "已导出备份",
+  "backupRestored": "已恢复 {count} 个插件",
+  "@backupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "失败: {reason}",
+  "@backupFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreConfirm": "将覆盖已安装插件的保存数据和设置。是否继续?"
 }

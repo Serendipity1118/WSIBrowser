@@ -233,5 +233,29 @@
   "permissionDesc_navigation": "ページ遷移の横取り",
   "permissionDesc_policy": "サーバーからのポリシー値取得",
   "settingsWorkerTabLimit": "ワーカーのタブ上限",
-  "settingsWorkerTabLimitDesc": "プラグインごとに同時に開けるタブ数 (WSI.tabs)"
+  "settingsWorkerTabLimitDesc": "プラグインごとに同時に開けるタブ数 (WSI.tabs)",
+  "backupTitle": "バックアップと復元",
+  "backupDesc": "プラグインのデータと設定を暗号化 JSON で書き出す / 読み込む。ログイン情報は含まれません",
+  "backupPassword": "パスワード",
+  "backupPasswordHint": "4 文字以上。復元時に必要です",
+  "backupExport": "書き出す (共有)",
+  "backupRestore": "ファイルを選んで復元",
+  "backupExported": "バックアップを書き出しました",
+  "backupRestored": "{count} 件のプラグインを復元しました",
+  "@backupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "失敗しました: {reason}",
+  "@backupFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreConfirm": "インストール済みプラグインの保存データと設定を上書きします。続けますか?"
 }

@@ -833,6 +833,66 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'プラグインごとに同時に開けるタブ数 (WSI.tabs)'**
   String get settingsWorkerTabLimitDesc;
+
+  /// No description provided for @backupTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'バックアップと復元'**
+  String get backupTitle;
+
+  /// No description provided for @backupDesc.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインのデータと設定を暗号化 JSON で書き出す / 読み込む。ログイン情報は含まれません'**
+  String get backupDesc;
+
+  /// No description provided for @backupPassword.
+  ///
+  /// In ja, this message translates to:
+  /// **'パスワード'**
+  String get backupPassword;
+
+  /// No description provided for @backupPasswordHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'4 文字以上。復元時に必要です'**
+  String get backupPasswordHint;
+
+  /// No description provided for @backupExport.
+  ///
+  /// In ja, this message translates to:
+  /// **'書き出す (共有)'**
+  String get backupExport;
+
+  /// No description provided for @backupRestore.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを選んで復元'**
+  String get backupRestore;
+
+  /// No description provided for @backupExported.
+  ///
+  /// In ja, this message translates to:
+  /// **'バックアップを書き出しました'**
+  String get backupExported;
+
+  /// No description provided for @backupRestored.
+  ///
+  /// In ja, this message translates to:
+  /// **'{count} 件のプラグインを復元しました'**
+  String backupRestored(int count);
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'失敗しました: {reason}'**
+  String backupFailed(String reason);
+
+  /// No description provided for @backupRestoreConfirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストール済みプラグインの保存データと設定を上書きします。続けますか?'**
+  String get backupRestoreConfirm;
 }
 
 class _AppLocalizationsDelegate

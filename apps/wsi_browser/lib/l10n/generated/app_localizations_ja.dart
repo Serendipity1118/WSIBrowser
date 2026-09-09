@@ -406,4 +406,38 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsWorkerTabLimitDesc => 'プラグインごとに同時に開けるタブ数 (WSI.tabs)';
+
+  @override
+  String get backupTitle => 'バックアップと復元';
+
+  @override
+  String get backupDesc => 'プラグインのデータと設定を暗号化 JSON で書き出す / 読み込む。ログイン情報は含まれません';
+
+  @override
+  String get backupPassword => 'パスワード';
+
+  @override
+  String get backupPasswordHint => '4 文字以上。復元時に必要です';
+
+  @override
+  String get backupExport => '書き出す (共有)';
+
+  @override
+  String get backupRestore => 'ファイルを選んで復元';
+
+  @override
+  String get backupExported => 'バックアップを書き出しました';
+
+  @override
+  String backupRestored(int count) {
+    return '$count 件のプラグインを復元しました';
+  }
+
+  @override
+  String backupFailed(String reason) {
+    return '失敗しました: $reason';
+  }
+
+  @override
+  String get backupRestoreConfirm => 'インストール済みプラグインの保存データと設定を上書きします。続けますか?';
 }

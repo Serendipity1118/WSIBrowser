@@ -7,7 +7,7 @@ WSI Browser の Flutter ホスト。プラグインの種類を知らない汎�
 - WebView: flutter_inappwebview 6 / DB: drift / HTTP: dio
 - SDK コア: `assets/sdk/wsi-sdk-core.js` は `packages/wsi_sdk` の `dist/wsi-sdk-inappwebview.js` をコピーしたもの (手で編集しない)
 
-## 構成 (P2 時点)
+## 構成 (P5 時点)
 
 ```
 lib/
@@ -17,8 +17,12 @@ lib/
                           navigation_policy, js_dialogs, cookie_store, file_chooser
   runtime/                manifest (検証), importer (ZIP), repository (一覧・照合), domain_matcher,
                           injector (UserScript / 注入), bridge (トークン・op ディスパッチ), log_sink,
-                          update_checker, dev_reloader, runtime (ファサード)
-  bridge_ops/             registry + storage / fetch / log / ui / settings の op。新機能は 1 ファイル追加
+                          update_checker, dev_reloader, policy_cache, page_host (wsi://), menu_bus,
+                          worker_manager (Headless ワーカー), tab_controller (WSI.tabs), resource_blocker,
+                          backup, runtime (ファサード)
+  bridge_ops/             registry + storage / fetch / log / ui / settings / policy / menu / runtime / tabs /
+                          credentials / native (device, share, files, clipboard, wakeLock, pip) / block_resources。
+                          新機能は 1 ファイル追加
   settings/               host_settings.dart
   db/                     database.dart (drift スキーマ v1), open_database.dart
   ui/                     start_page, host_settings_page, plugin_list_page, import_page, log_page,

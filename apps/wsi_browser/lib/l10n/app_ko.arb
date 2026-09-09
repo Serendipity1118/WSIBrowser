@@ -233,5 +233,29 @@
   "permissionDesc_navigation": "페이지 이동 가로채기",
   "permissionDesc_policy": "서버에서 정책 값 가져오기",
   "settingsWorkerTabLimit": "워커 탭 상한",
-  "settingsWorkerTabLimitDesc": "플러그인당 동시에 열 수 있는 탭 수 (WSI.tabs)"
+  "settingsWorkerTabLimitDesc": "플러그인당 동시에 열 수 있는 탭 수 (WSI.tabs)",
+  "backupTitle": "백업 및 복원",
+  "backupDesc": "플러그인 데이터와 설정을 암호화된 JSON으로 내보내기 / 가져오기. 로그인 정보는 포함되지 않습니다",
+  "backupPassword": "비밀번호",
+  "backupPasswordHint": "4자 이상. 복원 시 필요합니다",
+  "backupExport": "내보내기 (공유)",
+  "backupRestore": "파일을 선택해 복원",
+  "backupExported": "백업을 내보냈습니다",
+  "backupRestored": "플러그인 {count}개를 복원했습니다",
+  "@backupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "실패: {reason}",
+  "@backupFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreConfirm": "설치된 플러그인의 저장 데이터와 설정을 덮어씁니다. 계속할까요?"
 }

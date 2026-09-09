@@ -233,5 +233,29 @@
   "permissionDesc_navigation": "Intercept navigation",
   "permissionDesc_policy": "Fetch policy values from a server",
   "settingsWorkerTabLimit": "Worker tab limit",
-  "settingsWorkerTabLimitDesc": "Tabs a plugin may keep open at once (WSI.tabs)"
+  "settingsWorkerTabLimitDesc": "Tabs a plugin may keep open at once (WSI.tabs)",
+  "backupTitle": "Backup and restore",
+  "backupDesc": "Export / import plugin data and settings as an encrypted JSON file. Credentials are not included",
+  "backupPassword": "Password",
+  "backupPasswordHint": "At least 4 characters. Needed to restore",
+  "backupExport": "Export (share)",
+  "backupRestore": "Choose a file and restore",
+  "backupExported": "Backup exported",
+  "backupRestored": "Restored {count} plugin(s)",
+  "@backupRestored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupFailed": "Failed: {reason}",
+  "@backupFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "backupRestoreConfirm": "Stored data and settings of installed plugins will be overwritten. Continue?"
 }

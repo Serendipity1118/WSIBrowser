@@ -412,4 +412,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsWorkerTabLimitDesc =>
       'Tabs a plugin may keep open at once (WSI.tabs)';
+
+  @override
+  String get backupTitle => 'Backup and restore';
+
+  @override
+  String get backupDesc =>
+      'Export / import plugin data and settings as an encrypted JSON file. Credentials are not included';
+
+  @override
+  String get backupPassword => 'Password';
+
+  @override
+  String get backupPasswordHint => 'At least 4 characters. Needed to restore';
+
+  @override
+  String get backupExport => 'Export (share)';
+
+  @override
+  String get backupRestore => 'Choose a file and restore';
+
+  @override
+  String get backupExported => 'Backup exported';
+
+  @override
+  String backupRestored(int count) {
+    return 'Restored $count plugin(s)';
+  }
+
+  @override
+  String backupFailed(String reason) {
+    return 'Failed: $reason';
+  }
+
+  @override
+  String get backupRestoreConfirm =>
+      'Stored data and settings of installed plugins will be overwritten. Continue?';
 }
