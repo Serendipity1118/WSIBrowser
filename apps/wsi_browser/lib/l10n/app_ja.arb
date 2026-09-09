@@ -10,7 +10,13 @@
   "startPageNoPlugins": "プラグインはまだありません",
   "urlBarHint": "URL または検索語",
   "urlBarBadgeTooltip": "{count} 件のプラグインが有効",
-  "@urlBarBadgeTooltip": { "placeholders": { "count": { "type": "int" } } },
+  "@urlBarBadgeTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "actionBack": "戻る",
   "actionForward": "進む",
   "actionReload": "再読み込み",
@@ -24,22 +30,58 @@
   "actionCopyUrl": "URL をコピー",
   "tabsTitle": "タブ",
   "tabsLimitReached": "タブは最大 {limit} 個までです",
-  "@tabsLimitReached": { "placeholders": { "limit": { "type": "int" } } },
+  "@tabsLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "tabUntitled": "(無題)",
   "dialogOk": "OK",
   "dialogCancel": "キャンセル",
   "dialogClose": "閉じる",
   "jsDialogTitle": "{host} からのメッセージ",
-  "@jsDialogTitle": { "placeholders": { "host": { "type": "String" } } },
+  "@jsDialogTitle": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
   "downloadStarted": "ダウンロード中: {name}",
-  "@downloadStarted": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadDone": "保存しました: {name}",
-  "@downloadDone": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadFailed": "ダウンロードに失敗しました: {reason}",
-  "@downloadFailed": { "placeholders": { "reason": { "type": "String" } } },
+  "@downloadFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "externalLinkOpened": "外部ブラウザで開きました",
   "navigationBlocked": "この URL は開けません: {url}",
-  "@navigationBlocked": { "placeholders": { "url": { "type": "String" } } },
+  "@navigationBlocked": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "settingsTitle": "設定",
   "settingsSectionBrowser": "ブラウザ",
   "settingsSectionPlugins": "プラグイン",
@@ -69,5 +111,125 @@
   "settingsEdit": "編集",
   "settingsUseDefault": "既定値",
   "commonError": "エラー: {message}",
-  "@commonError": { "placeholders": { "message": { "type": "String" } } }
+  "@commonError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginsTitle": "プラグイン",
+  "pluginsEmpty": "プラグインはまだありません。ZIP をインポートしてください。",
+  "pluginsGlobalToggle": "プラグインを有効にする",
+  "pluginsGlobalToggleOff": "すべてのプラグインが停止しています",
+  "pluginsImport": "インポート",
+  "pluginsCurrentHost": "このサイト: {host}",
+  "@pluginsCurrentHost": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginVersion": "v{version}",
+  "@pluginVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdateAvailable": "更新あり: v{version}",
+  "@pluginUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdate": "更新",
+  "pluginDelete": "削除",
+  "pluginDeleteConfirm": "{name} を削除しますか? 保存データと設定もすべて消えます。",
+  "@pluginDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginDeleted": "削除しました",
+  "pluginSettings": "設定",
+  "pluginExport": "ZIP を書き出す",
+  "pluginDetails": "詳細",
+  "pluginDomains": "対象ドメイン",
+  "pluginPermissions": "権限",
+  "pluginAuthor": "作者",
+  "pluginInstalledAt": "インストール",
+  "pluginCheckUpdates": "更新を確認",
+  "pluginLogs": "ログ",
+  "importTitle": "プラグインをインポート",
+  "importFromFile": "ファイルを選ぶ",
+  "importFromUrl": "URL から",
+  "importFromQr": "QR コードを読む",
+  "importUrlHint": "https://.../plugin.zip",
+  "importPreviewTitle": "インポートの確認",
+  "importOverwrite": "同じ ID のプラグイン (v{version}) を上書きします。保存データは引き継がれます。",
+  "@importOverwrite": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "importSensitive": "このプラグインは次の権限を要求します",
+  "importConsent": "上記の権限を許可する",
+  "importInstall": "インストール",
+  "importDone": "{name} をインストールしました",
+  "@importDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "importFailed": "インポートできません: {reason}",
+  "@importFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "importDownloading": "ダウンロード中...",
+  "importInsecureUrl": "https 以外の URL は開発者モードでのみ使えます",
+  "qrScanHint": "wsi://install または ZIP の URL の QR を読み取ります",
+  "logsTitle": "ログ",
+  "logsEmpty": "ログはありません",
+  "logsClear": "消去",
+  "logsShare": "書き出す",
+  "logsFilterAll": "すべて",
+  "settingsPluginTitle": "{name} の設定",
+  "@settingsPluginTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsPluginEmpty": "このプラグインに設定項目はありません",
+  "permissionDesc_storage": "データの保存",
+  "permissionDesc_fetch": "ネットワークアクセス",
+  "permissionDesc_credentials": "ログイン情報の保存 (Keychain / Keystore)",
+  "permissionDesc_device": "端末 ID の取得",
+  "permissionDesc_share": "共有シート",
+  "permissionDesc_files": "ファイルの保存と選択",
+  "permissionDesc_clipboard": "クリップボードへの書き込み",
+  "permissionDesc_wakeLock": "画面のスリープ防止",
+  "permissionDesc_pip": "ピクチャ・イン・ピクチャ",
+  "permissionDesc_blockResources": "画像・動画の読み込み抑制",
+  "permissionDesc_tabs": "バックグラウンドでのタブ操作",
+  "permissionDesc_pages": "独自画面の表示",
+  "permissionDesc_menu": "メニューへの項目追加",
+  "permissionDesc_navigation": "ページ遷移の横取り",
+  "permissionDesc_policy": "サーバーからのポリシー値取得"
 }

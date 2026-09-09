@@ -210,4 +210,194 @@ class AppLocalizationsKo extends AppLocalizations {
   String commonError(String message) {
     return '오류: $message';
   }
+
+  @override
+  String get pluginsTitle => '플러그인';
+
+  @override
+  String get pluginsEmpty => '플러그인이 없습니다. ZIP을 가져오세요.';
+
+  @override
+  String get pluginsGlobalToggle => '플러그인 사용';
+
+  @override
+  String get pluginsGlobalToggleOff => '모든 플러그인이 중지되어 있습니다';
+
+  @override
+  String get pluginsImport => '가져오기';
+
+  @override
+  String pluginsCurrentHost(String host) {
+    return '이 사이트: $host';
+  }
+
+  @override
+  String pluginVersion(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String pluginUpdateAvailable(String version) {
+    return '업데이트 있음: v$version';
+  }
+
+  @override
+  String get pluginUpdate => '업데이트';
+
+  @override
+  String get pluginDelete => '삭제';
+
+  @override
+  String pluginDeleteConfirm(String name) {
+    return '$name을(를) 삭제할까요? 저장된 데이터와 설정도 모두 삭제됩니다.';
+  }
+
+  @override
+  String get pluginDeleted => '삭제했습니다';
+
+  @override
+  String get pluginSettings => '설정';
+
+  @override
+  String get pluginExport => 'ZIP 내보내기';
+
+  @override
+  String get pluginDetails => '상세';
+
+  @override
+  String get pluginDomains => '대상 도메인';
+
+  @override
+  String get pluginPermissions => '권한';
+
+  @override
+  String get pluginAuthor => '작성자';
+
+  @override
+  String get pluginInstalledAt => '설치';
+
+  @override
+  String get pluginCheckUpdates => '업데이트 확인';
+
+  @override
+  String get pluginLogs => '로그';
+
+  @override
+  String get importTitle => '플러그인 가져오기';
+
+  @override
+  String get importFromFile => '파일 선택';
+
+  @override
+  String get importFromUrl => 'URL에서';
+
+  @override
+  String get importFromQr => 'QR 코드 스캔';
+
+  @override
+  String get importUrlHint => 'https://.../plugin.zip';
+
+  @override
+  String get importPreviewTitle => '가져오기 확인';
+
+  @override
+  String importOverwrite(String version) {
+    return '같은 ID의 플러그인(v$version)을 덮어씁니다. 저장된 데이터는 유지됩니다.';
+  }
+
+  @override
+  String get importSensitive => '이 플러그인은 다음 권한을 요청합니다';
+
+  @override
+  String get importConsent => '위 권한을 허용';
+
+  @override
+  String get importInstall => '설치';
+
+  @override
+  String importDone(String name) {
+    return '$name을(를) 설치했습니다';
+  }
+
+  @override
+  String importFailed(String reason) {
+    return '가져올 수 없습니다: $reason';
+  }
+
+  @override
+  String get importDownloading => '다운로드 중...';
+
+  @override
+  String get importInsecureUrl => 'https 이외의 URL은 개발자 모드에서만 사용할 수 있습니다';
+
+  @override
+  String get qrScanHint => 'wsi://install 또는 ZIP URL의 QR 코드를 스캔합니다';
+
+  @override
+  String get logsTitle => '로그';
+
+  @override
+  String get logsEmpty => '로그가 없습니다';
+
+  @override
+  String get logsClear => '지우기';
+
+  @override
+  String get logsShare => '내보내기';
+
+  @override
+  String get logsFilterAll => '전체';
+
+  @override
+  String settingsPluginTitle(String name) {
+    return '$name 설정';
+  }
+
+  @override
+  String get settingsPluginEmpty => '이 플러그인에는 설정 항목이 없습니다';
+
+  @override
+  String get permissionDesc_storage => '데이터 저장';
+
+  @override
+  String get permissionDesc_fetch => '네트워크 접근';
+
+  @override
+  String get permissionDesc_credentials => '로그인 정보 저장 (Keychain / Keystore)';
+
+  @override
+  String get permissionDesc_device => '기기 ID 읽기';
+
+  @override
+  String get permissionDesc_share => '공유 시트';
+
+  @override
+  String get permissionDesc_files => '파일 저장 및 선택';
+
+  @override
+  String get permissionDesc_clipboard => '클립보드 쓰기';
+
+  @override
+  String get permissionDesc_wakeLock => '화면 꺼짐 방지';
+
+  @override
+  String get permissionDesc_pip => 'PIP(화면 속 화면)';
+
+  @override
+  String get permissionDesc_blockResources => '이미지·동영상 로드 차단';
+
+  @override
+  String get permissionDesc_tabs => '백그라운드 탭 제어';
+
+  @override
+  String get permissionDesc_pages => '자체 화면 표시';
+
+  @override
+  String get permissionDesc_menu => '메뉴 항목 추가';
+
+  @override
+  String get permissionDesc_navigation => '페이지 이동 가로채기';
+
+  @override
+  String get permissionDesc_policy => '서버에서 정책 값 가져오기';
 }

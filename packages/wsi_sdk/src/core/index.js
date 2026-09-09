@@ -9,6 +9,7 @@
 import { createButton } from './button.js';
 import { createPanel } from './panel.js';
 import { onPageLoad } from './page_load.js';
+import { installV2, createEventBus } from './v2.js';
 
 export { URL_CHANGE_EVENT } from './page_load.js';
 export { BOTTOM_SHEET_MAX_WIDTH } from './panel.js';
@@ -37,7 +38,7 @@ function deepCopy(value) {
  * @param {import('../adapters/adapter').RunSpec} spec
  * @param {import('../adapters/adapter').WSIAdapter} adapter
  */
-export function createWSI(spec, adapter) {
+export function createWSI(spec, adapter, events = createEventBus()) {
   const pluginId = spec.pluginId;
   const config = spec.config || {};
   const context = spec.context || 'page';
@@ -95,6 +96,10 @@ export function createWSI(spec, adapter) {
     },
   };
 
+  if (adapter.v2 === true) {
+    installV2(WSI, adapter, events);
+  }
+
   return WSI;
 }
 
@@ -104,8 +109,8 @@ export function createWSI(spec, adapter) {
  *
  * @returns {import('../adapters/adapter').RunResult}
  */
-export function runPlugin(spec, adapter) {
-  const WSI = createWSI(spec, adapter);
+export function runPlugin(spec, adapter, events) {
+  const WSI = createWSI(spec, adapter, events);
   try {
     const fn = new Function('WSI', spec.code);
     fn(WSI);
@@ -135,6 +140,9 @@ export function installRunner(adapterFactory) {
   const ran = new Set();
   Object.defineProperty(g, RAN_KEY, { value: ran, enumerable: false, configurable: true });
 
+  // token -> event bus, so the host can push events to a specific plugin instance
+  const buses = new Map();
+
   const run = (spec) => {
     if (!spec || typeof spec.pluginId !== 'string' || typeof spec.code !== 'string') {
       return { ok: false, reason: 'invalid spec' };
@@ -148,12 +156,28 @@ export function installRunner(adapterFactory) {
       context: spec.context || 'page',
     });
     ran.add(spec.pluginId);
-    const result = runPlugin(spec, adapter);
-    if (!result.ok) ran.delete(spec.pluginId);
+    const events = createEventBus();
+    if (spec.token) buses.set(spec.token, events);
+    const result = runPlugin(spec, adapter, events);
+    if (!result.ok) {
+      ran.delete(spec.pluginId);
+      if (spec.token) buses.delete(spec.token);
+    }
     return result;
   };
 
+  /**
+   * Host -> plugin event. Returns a Promise of the first listener's reply
+   * (used by reply-style events such as tabs.dialog and navigation.intercept).
+   */
+  const emit = (token, event, payload, sender) => {
+    const bus = buses.get(token);
+    if (!bus) return Promise.resolve(undefined);
+    return bus.emit(event, payload, sender);
+  };
+
   Object.defineProperty(g, '__wsiRun', { value: run, enumerable: false, configurable: true });
+  Object.defineProperty(g, '__wsiEmit', { value: emit, enumerable: false, configurable: true });
   Object.defineProperty(g, '__wsiSdkVersion', { value: SDK_VERSION, enumerable: false, configurable: true });
   return run;
 }

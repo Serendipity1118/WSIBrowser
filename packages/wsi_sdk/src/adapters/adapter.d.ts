@@ -55,6 +55,8 @@ export interface ButtonPosition {
 }
 
 export interface WSIAdapter {
+  /** true when the host implements the v2 ops (WSI Browser). The Chrome adapter leaves it unset so v2 namespaces stay undefined. */
+  v2?: boolean;
   /** Key/value store scoped to the plugin (pluginData_<id> in Chrome, plugin_data table in WSI Browser). */
   storage: {
     get(key: string): Promise<unknown>;

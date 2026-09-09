@@ -10,7 +10,13 @@
   "startPageNoPlugins": "尚未安装插件",
   "urlBarHint": "URL 或搜索词",
   "urlBarBadgeTooltip": "{count} 个插件已启用",
-  "@urlBarBadgeTooltip": { "placeholders": { "count": { "type": "int" } } },
+  "@urlBarBadgeTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "actionBack": "后退",
   "actionForward": "前进",
   "actionReload": "刷新",
@@ -24,22 +30,58 @@
   "actionCopyUrl": "复制 URL",
   "tabsTitle": "标签页",
   "tabsLimitReached": "最多只能打开 {limit} 个标签页",
-  "@tabsLimitReached": { "placeholders": { "limit": { "type": "int" } } },
+  "@tabsLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "tabUntitled": "(无标题)",
   "dialogOk": "确定",
   "dialogCancel": "取消",
   "dialogClose": "关闭",
   "jsDialogTitle": "来自 {host} 的消息",
-  "@jsDialogTitle": { "placeholders": { "host": { "type": "String" } } },
+  "@jsDialogTitle": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
   "downloadStarted": "正在下载: {name}",
-  "@downloadStarted": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadDone": "已保存: {name}",
-  "@downloadDone": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadFailed": "下载失败: {reason}",
-  "@downloadFailed": { "placeholders": { "reason": { "type": "String" } } },
+  "@downloadFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "externalLinkOpened": "已在外部浏览器中打开",
   "navigationBlocked": "无法打开此 URL: {url}",
-  "@navigationBlocked": { "placeholders": { "url": { "type": "String" } } },
+  "@navigationBlocked": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "settingsTitle": "设置",
   "settingsSectionBrowser": "浏览器",
   "settingsSectionPlugins": "插件",
@@ -69,5 +111,125 @@
   "settingsEdit": "编辑",
   "settingsUseDefault": "默认值",
   "commonError": "错误: {message}",
-  "@commonError": { "placeholders": { "message": { "type": "String" } } }
+  "@commonError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginsTitle": "插件",
+  "pluginsEmpty": "尚无插件。请导入 ZIP。",
+  "pluginsGlobalToggle": "启用插件",
+  "pluginsGlobalToggleOff": "所有插件已停止",
+  "pluginsImport": "导入",
+  "pluginsCurrentHost": "当前网站: {host}",
+  "@pluginsCurrentHost": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginVersion": "v{version}",
+  "@pluginVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdateAvailable": "有更新: v{version}",
+  "@pluginUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdate": "更新",
+  "pluginDelete": "删除",
+  "pluginDeleteConfirm": "要删除 {name} 吗? 其保存的数据和设置也会一并删除。",
+  "@pluginDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginDeleted": "已删除",
+  "pluginSettings": "设置",
+  "pluginExport": "导出 ZIP",
+  "pluginDetails": "详情",
+  "pluginDomains": "目标域名",
+  "pluginPermissions": "权限",
+  "pluginAuthor": "作者",
+  "pluginInstalledAt": "安装",
+  "pluginCheckUpdates": "检查更新",
+  "pluginLogs": "日志",
+  "importTitle": "导入插件",
+  "importFromFile": "选择文件",
+  "importFromUrl": "从 URL",
+  "importFromQr": "扫描二维码",
+  "importUrlHint": "https://.../plugin.zip",
+  "importPreviewTitle": "确认导入",
+  "importOverwrite": "将覆盖相同 ID 的插件 (v{version})。已保存的数据会保留。",
+  "@importOverwrite": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "importSensitive": "此插件请求以下权限",
+  "importConsent": "允许上述权限",
+  "importInstall": "安装",
+  "importDone": "已安装 {name}",
+  "@importDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "importFailed": "无法导入: {reason}",
+  "@importFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "importDownloading": "正在下载...",
+  "importInsecureUrl": "非 https 的 URL 仅在开发者模式下可用",
+  "qrScanHint": "扫描包含 wsi://install 或 ZIP URL 的二维码",
+  "logsTitle": "日志",
+  "logsEmpty": "没有日志",
+  "logsClear": "清除",
+  "logsShare": "导出",
+  "logsFilterAll": "全部",
+  "settingsPluginTitle": "{name} 的设置",
+  "@settingsPluginTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsPluginEmpty": "此插件没有设置项",
+  "permissionDesc_storage": "保存数据",
+  "permissionDesc_fetch": "网络访问",
+  "permissionDesc_credentials": "保存登录信息 (Keychain / Keystore)",
+  "permissionDesc_device": "读取设备 ID",
+  "permissionDesc_share": "分享面板",
+  "permissionDesc_files": "保存和选择文件",
+  "permissionDesc_clipboard": "写入剪贴板",
+  "permissionDesc_wakeLock": "防止屏幕休眠",
+  "permissionDesc_pip": "画中画",
+  "permissionDesc_blockResources": "阻止加载图片和媒体",
+  "permissionDesc_tabs": "在后台控制标签页",
+  "permissionDesc_pages": "显示自定义界面",
+  "permissionDesc_menu": "添加菜单项",
+  "permissionDesc_navigation": "拦截页面跳转",
+  "permissionDesc_policy": "从服务器获取策略值"
 }

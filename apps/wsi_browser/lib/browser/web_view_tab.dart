@@ -17,16 +17,19 @@ import 'tab_manager.dart';
 /// Runtime hooks (P2+). All optional.
 class WebViewTabHooks {
   const WebViewTabHooks({
-    this.initialUserScripts,
+    this.userScripts,
     this.onWebViewCreated,
+    this.onWebViewDisposed,
     this.onLoadStart,
     this.onLoadStop,
     this.onUpdateVisitedHistory,
     this.onAppLink,
   });
 
-  final List<UserScript>? initialUserScripts;
+  /// UserScripts registered at WebView creation (the SDK core, P2).
+  final List<UserScript> Function()? userScripts;
   final void Function(BrowserTab tab, InAppWebViewController controller)? onWebViewCreated;
+  final void Function(BrowserTab tab, InAppWebViewController controller)? onWebViewDisposed;
   final Future<void> Function(BrowserTab tab, InAppWebViewController controller, Uri url)? onLoadStart;
   final Future<void> Function(BrowserTab tab, InAppWebViewController controller, Uri url)? onLoadStop;
   final Future<void> Function(BrowserTab tab, InAppWebViewController controller, Uri url)? onUpdateVisitedHistory;
@@ -47,6 +50,14 @@ class WebViewTab extends StatefulWidget {
 
 class _WebViewTabState extends State<WebViewTab> {
   Uri? _currentUri;
+  InAppWebViewController? _controller;
+
+  @override
+  void dispose() {
+    final c = _controller;
+    if (c != null) widget.hooks.onWebViewDisposed?.call(widget.tab, c);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +69,9 @@ class _WebViewTabState extends State<WebViewTab> {
       key: ValueKey('webview-${tab.id}'),
       initialUrlRequest: initial,
       initialSettings: services.cookies.webViewSettings(),
-      initialUserScripts: UnmodifiableListView(widget.hooks.initialUserScripts ?? const []),
+      initialUserScripts: UnmodifiableListView(widget.hooks.userScripts?.call() ?? const <UserScript>[]),
       onWebViewCreated: (controller) {
+        _controller = controller;
         tab.controller = controller;
         widget.hooks.onWebViewCreated?.call(tab, controller);
       },

@@ -212,4 +212,197 @@ class AppLocalizationsEn extends AppLocalizations {
   String commonError(String message) {
     return 'Error: $message';
   }
+
+  @override
+  String get pluginsTitle => 'Plugins';
+
+  @override
+  String get pluginsEmpty => 'No plugins yet. Import a ZIP.';
+
+  @override
+  String get pluginsGlobalToggle => 'Enable plugins';
+
+  @override
+  String get pluginsGlobalToggleOff => 'All plugins are stopped';
+
+  @override
+  String get pluginsImport => 'Import';
+
+  @override
+  String pluginsCurrentHost(String host) {
+    return 'This site: $host';
+  }
+
+  @override
+  String pluginVersion(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String pluginUpdateAvailable(String version) {
+    return 'Update available: v$version';
+  }
+
+  @override
+  String get pluginUpdate => 'Update';
+
+  @override
+  String get pluginDelete => 'Delete';
+
+  @override
+  String pluginDeleteConfirm(String name) {
+    return 'Delete $name? Its stored data and settings will be removed too.';
+  }
+
+  @override
+  String get pluginDeleted => 'Deleted';
+
+  @override
+  String get pluginSettings => 'Settings';
+
+  @override
+  String get pluginExport => 'Export ZIP';
+
+  @override
+  String get pluginDetails => 'Details';
+
+  @override
+  String get pluginDomains => 'Domains';
+
+  @override
+  String get pluginPermissions => 'Permissions';
+
+  @override
+  String get pluginAuthor => 'Author';
+
+  @override
+  String get pluginInstalledAt => 'Installed';
+
+  @override
+  String get pluginCheckUpdates => 'Check for updates';
+
+  @override
+  String get pluginLogs => 'Logs';
+
+  @override
+  String get importTitle => 'Import plugin';
+
+  @override
+  String get importFromFile => 'Choose a file';
+
+  @override
+  String get importFromUrl => 'From URL';
+
+  @override
+  String get importFromQr => 'Scan QR code';
+
+  @override
+  String get importUrlHint => 'https://.../plugin.zip';
+
+  @override
+  String get importPreviewTitle => 'Confirm import';
+
+  @override
+  String importOverwrite(String version) {
+    return 'A plugin with the same ID (v$version) will be overwritten. Stored data is kept.';
+  }
+
+  @override
+  String get importSensitive =>
+      'This plugin requests the following permissions';
+
+  @override
+  String get importConsent => 'Allow these permissions';
+
+  @override
+  String get importInstall => 'Install';
+
+  @override
+  String importDone(String name) {
+    return 'Installed $name';
+  }
+
+  @override
+  String importFailed(String reason) {
+    return 'Cannot import: $reason';
+  }
+
+  @override
+  String get importDownloading => 'Downloading...';
+
+  @override
+  String get importInsecureUrl =>
+      'Non-https URLs are only allowed in developer mode';
+
+  @override
+  String get qrScanHint => 'Scan a QR code with a wsi://install or ZIP URL';
+
+  @override
+  String get logsTitle => 'Logs';
+
+  @override
+  String get logsEmpty => 'No log entries';
+
+  @override
+  String get logsClear => 'Clear';
+
+  @override
+  String get logsShare => 'Export';
+
+  @override
+  String get logsFilterAll => 'All';
+
+  @override
+  String settingsPluginTitle(String name) {
+    return '$name settings';
+  }
+
+  @override
+  String get settingsPluginEmpty => 'This plugin has no settings';
+
+  @override
+  String get permissionDesc_storage => 'Store data';
+
+  @override
+  String get permissionDesc_fetch => 'Network access';
+
+  @override
+  String get permissionDesc_credentials =>
+      'Save login credentials (Keychain / Keystore)';
+
+  @override
+  String get permissionDesc_device => 'Read the device ID';
+
+  @override
+  String get permissionDesc_share => 'Share sheet';
+
+  @override
+  String get permissionDesc_files => 'Save and pick files';
+
+  @override
+  String get permissionDesc_clipboard => 'Write to the clipboard';
+
+  @override
+  String get permissionDesc_wakeLock => 'Keep the screen awake';
+
+  @override
+  String get permissionDesc_pip => 'Picture in picture';
+
+  @override
+  String get permissionDesc_blockResources => 'Block images and media';
+
+  @override
+  String get permissionDesc_tabs => 'Control tabs in the background';
+
+  @override
+  String get permissionDesc_pages => 'Show its own screens';
+
+  @override
+  String get permissionDesc_menu => 'Add menu items';
+
+  @override
+  String get permissionDesc_navigation => 'Intercept navigation';
+
+  @override
+  String get permissionDesc_policy => 'Fetch policy values from a server';
 }

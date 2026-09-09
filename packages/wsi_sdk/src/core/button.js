@@ -76,7 +76,7 @@ export function createButton(host, buttonIndex, options = {}) {
 
   // Restore persisted position (clamped so it never ends up off-screen).
   host.adapter.buttonPos.get(buttonIndex).then((saved) => {
-    if (!saved) return;
+    if (!saved || typeof saved !== 'object' || typeof saved.left !== 'string' || typeof saved.top !== 'string') return;
     const { left, top } = clampToViewport(
       btn,
       parseInt(saved.left, 10) || 0,

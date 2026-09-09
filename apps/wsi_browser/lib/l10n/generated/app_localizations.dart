@@ -473,6 +473,354 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'エラー: {message}'**
   String commonError(String message);
+
+  /// No description provided for @pluginsTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグイン'**
+  String get pluginsTitle;
+
+  /// No description provided for @pluginsEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインはまだありません。ZIP をインポートしてください。'**
+  String get pluginsEmpty;
+
+  /// No description provided for @pluginsGlobalToggle.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインを有効にする'**
+  String get pluginsGlobalToggle;
+
+  /// No description provided for @pluginsGlobalToggleOff.
+  ///
+  /// In ja, this message translates to:
+  /// **'すべてのプラグインが停止しています'**
+  String get pluginsGlobalToggleOff;
+
+  /// No description provided for @pluginsImport.
+  ///
+  /// In ja, this message translates to:
+  /// **'インポート'**
+  String get pluginsImport;
+
+  /// No description provided for @pluginsCurrentHost.
+  ///
+  /// In ja, this message translates to:
+  /// **'このサイト: {host}'**
+  String pluginsCurrentHost(String host);
+
+  /// No description provided for @pluginVersion.
+  ///
+  /// In ja, this message translates to:
+  /// **'v{version}'**
+  String pluginVersion(String version);
+
+  /// No description provided for @pluginUpdateAvailable.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新あり: v{version}'**
+  String pluginUpdateAvailable(String version);
+
+  /// No description provided for @pluginUpdate.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新'**
+  String get pluginUpdate;
+
+  /// No description provided for @pluginDelete.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除'**
+  String get pluginDelete;
+
+  /// No description provided for @pluginDeleteConfirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'{name} を削除しますか? 保存データと設定もすべて消えます。'**
+  String pluginDeleteConfirm(String name);
+
+  /// No description provided for @pluginDeleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除しました'**
+  String get pluginDeleted;
+
+  /// No description provided for @pluginSettings.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定'**
+  String get pluginSettings;
+
+  /// No description provided for @pluginExport.
+  ///
+  /// In ja, this message translates to:
+  /// **'ZIP を書き出す'**
+  String get pluginExport;
+
+  /// No description provided for @pluginDetails.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細'**
+  String get pluginDetails;
+
+  /// No description provided for @pluginDomains.
+  ///
+  /// In ja, this message translates to:
+  /// **'対象ドメイン'**
+  String get pluginDomains;
+
+  /// No description provided for @pluginPermissions.
+  ///
+  /// In ja, this message translates to:
+  /// **'権限'**
+  String get pluginPermissions;
+
+  /// No description provided for @pluginAuthor.
+  ///
+  /// In ja, this message translates to:
+  /// **'作者'**
+  String get pluginAuthor;
+
+  /// No description provided for @pluginInstalledAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストール'**
+  String get pluginInstalledAt;
+
+  /// No description provided for @pluginCheckUpdates.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新を確認'**
+  String get pluginCheckUpdates;
+
+  /// No description provided for @pluginLogs.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログ'**
+  String get pluginLogs;
+
+  /// No description provided for @importTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'プラグインをインポート'**
+  String get importTitle;
+
+  /// No description provided for @importFromFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを選ぶ'**
+  String get importFromFile;
+
+  /// No description provided for @importFromUrl.
+  ///
+  /// In ja, this message translates to:
+  /// **'URL から'**
+  String get importFromUrl;
+
+  /// No description provided for @importFromQr.
+  ///
+  /// In ja, this message translates to:
+  /// **'QR コードを読む'**
+  String get importFromQr;
+
+  /// No description provided for @importUrlHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'https://.../plugin.zip'**
+  String get importUrlHint;
+
+  /// No description provided for @importPreviewTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'インポートの確認'**
+  String get importPreviewTitle;
+
+  /// No description provided for @importOverwrite.
+  ///
+  /// In ja, this message translates to:
+  /// **'同じ ID のプラグイン (v{version}) を上書きします。保存データは引き継がれます。'**
+  String importOverwrite(String version);
+
+  /// No description provided for @importSensitive.
+  ///
+  /// In ja, this message translates to:
+  /// **'このプラグインは次の権限を要求します'**
+  String get importSensitive;
+
+  /// No description provided for @importConsent.
+  ///
+  /// In ja, this message translates to:
+  /// **'上記の権限を許可する'**
+  String get importConsent;
+
+  /// No description provided for @importInstall.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストール'**
+  String get importInstall;
+
+  /// No description provided for @importDone.
+  ///
+  /// In ja, this message translates to:
+  /// **'{name} をインストールしました'**
+  String importDone(String name);
+
+  /// No description provided for @importFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'インポートできません: {reason}'**
+  String importFailed(String reason);
+
+  /// No description provided for @importDownloading.
+  ///
+  /// In ja, this message translates to:
+  /// **'ダウンロード中...'**
+  String get importDownloading;
+
+  /// No description provided for @importInsecureUrl.
+  ///
+  /// In ja, this message translates to:
+  /// **'https 以外の URL は開発者モードでのみ使えます'**
+  String get importInsecureUrl;
+
+  /// No description provided for @qrScanHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'wsi://install または ZIP の URL の QR を読み取ります'**
+  String get qrScanHint;
+
+  /// No description provided for @logsTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログ'**
+  String get logsTitle;
+
+  /// No description provided for @logsEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログはありません'**
+  String get logsEmpty;
+
+  /// No description provided for @logsClear.
+  ///
+  /// In ja, this message translates to:
+  /// **'消去'**
+  String get logsClear;
+
+  /// No description provided for @logsShare.
+  ///
+  /// In ja, this message translates to:
+  /// **'書き出す'**
+  String get logsShare;
+
+  /// No description provided for @logsFilterAll.
+  ///
+  /// In ja, this message translates to:
+  /// **'すべて'**
+  String get logsFilterAll;
+
+  /// No description provided for @settingsPluginTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'{name} の設定'**
+  String settingsPluginTitle(String name);
+
+  /// No description provided for @settingsPluginEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'このプラグインに設定項目はありません'**
+  String get settingsPluginEmpty;
+
+  /// No description provided for @permissionDesc_storage.
+  ///
+  /// In ja, this message translates to:
+  /// **'データの保存'**
+  String get permissionDesc_storage;
+
+  /// No description provided for @permissionDesc_fetch.
+  ///
+  /// In ja, this message translates to:
+  /// **'ネットワークアクセス'**
+  String get permissionDesc_fetch;
+
+  /// No description provided for @permissionDesc_credentials.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログイン情報の保存 (Keychain / Keystore)'**
+  String get permissionDesc_credentials;
+
+  /// No description provided for @permissionDesc_device.
+  ///
+  /// In ja, this message translates to:
+  /// **'端末 ID の取得'**
+  String get permissionDesc_device;
+
+  /// No description provided for @permissionDesc_share.
+  ///
+  /// In ja, this message translates to:
+  /// **'共有シート'**
+  String get permissionDesc_share;
+
+  /// No description provided for @permissionDesc_files.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルの保存と選択'**
+  String get permissionDesc_files;
+
+  /// No description provided for @permissionDesc_clipboard.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリップボードへの書き込み'**
+  String get permissionDesc_clipboard;
+
+  /// No description provided for @permissionDesc_wakeLock.
+  ///
+  /// In ja, this message translates to:
+  /// **'画面のスリープ防止'**
+  String get permissionDesc_wakeLock;
+
+  /// No description provided for @permissionDesc_pip.
+  ///
+  /// In ja, this message translates to:
+  /// **'ピクチャ・イン・ピクチャ'**
+  String get permissionDesc_pip;
+
+  /// No description provided for @permissionDesc_blockResources.
+  ///
+  /// In ja, this message translates to:
+  /// **'画像・動画の読み込み抑制'**
+  String get permissionDesc_blockResources;
+
+  /// No description provided for @permissionDesc_tabs.
+  ///
+  /// In ja, this message translates to:
+  /// **'バックグラウンドでのタブ操作'**
+  String get permissionDesc_tabs;
+
+  /// No description provided for @permissionDesc_pages.
+  ///
+  /// In ja, this message translates to:
+  /// **'独自画面の表示'**
+  String get permissionDesc_pages;
+
+  /// No description provided for @permissionDesc_menu.
+  ///
+  /// In ja, this message translates to:
+  /// **'メニューへの項目追加'**
+  String get permissionDesc_menu;
+
+  /// No description provided for @permissionDesc_navigation.
+  ///
+  /// In ja, this message translates to:
+  /// **'ページ遷移の横取り'**
+  String get permissionDesc_navigation;
+
+  /// No description provided for @permissionDesc_policy.
+  ///
+  /// In ja, this message translates to:
+  /// **'サーバーからのポリシー値取得'**
+  String get permissionDesc_policy;
 }
 
 class _AppLocalizationsDelegate

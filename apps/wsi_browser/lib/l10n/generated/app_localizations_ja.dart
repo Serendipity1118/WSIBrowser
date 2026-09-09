@@ -210,4 +210,194 @@ class AppLocalizationsJa extends AppLocalizations {
   String commonError(String message) {
     return 'エラー: $message';
   }
+
+  @override
+  String get pluginsTitle => 'プラグイン';
+
+  @override
+  String get pluginsEmpty => 'プラグインはまだありません。ZIP をインポートしてください。';
+
+  @override
+  String get pluginsGlobalToggle => 'プラグインを有効にする';
+
+  @override
+  String get pluginsGlobalToggleOff => 'すべてのプラグインが停止しています';
+
+  @override
+  String get pluginsImport => 'インポート';
+
+  @override
+  String pluginsCurrentHost(String host) {
+    return 'このサイト: $host';
+  }
+
+  @override
+  String pluginVersion(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String pluginUpdateAvailable(String version) {
+    return '更新あり: v$version';
+  }
+
+  @override
+  String get pluginUpdate => '更新';
+
+  @override
+  String get pluginDelete => '削除';
+
+  @override
+  String pluginDeleteConfirm(String name) {
+    return '$name を削除しますか? 保存データと設定もすべて消えます。';
+  }
+
+  @override
+  String get pluginDeleted => '削除しました';
+
+  @override
+  String get pluginSettings => '設定';
+
+  @override
+  String get pluginExport => 'ZIP を書き出す';
+
+  @override
+  String get pluginDetails => '詳細';
+
+  @override
+  String get pluginDomains => '対象ドメイン';
+
+  @override
+  String get pluginPermissions => '権限';
+
+  @override
+  String get pluginAuthor => '作者';
+
+  @override
+  String get pluginInstalledAt => 'インストール';
+
+  @override
+  String get pluginCheckUpdates => '更新を確認';
+
+  @override
+  String get pluginLogs => 'ログ';
+
+  @override
+  String get importTitle => 'プラグインをインポート';
+
+  @override
+  String get importFromFile => 'ファイルを選ぶ';
+
+  @override
+  String get importFromUrl => 'URL から';
+
+  @override
+  String get importFromQr => 'QR コードを読む';
+
+  @override
+  String get importUrlHint => 'https://.../plugin.zip';
+
+  @override
+  String get importPreviewTitle => 'インポートの確認';
+
+  @override
+  String importOverwrite(String version) {
+    return '同じ ID のプラグイン (v$version) を上書きします。保存データは引き継がれます。';
+  }
+
+  @override
+  String get importSensitive => 'このプラグインは次の権限を要求します';
+
+  @override
+  String get importConsent => '上記の権限を許可する';
+
+  @override
+  String get importInstall => 'インストール';
+
+  @override
+  String importDone(String name) {
+    return '$name をインストールしました';
+  }
+
+  @override
+  String importFailed(String reason) {
+    return 'インポートできません: $reason';
+  }
+
+  @override
+  String get importDownloading => 'ダウンロード中...';
+
+  @override
+  String get importInsecureUrl => 'https 以外の URL は開発者モードでのみ使えます';
+
+  @override
+  String get qrScanHint => 'wsi://install または ZIP の URL の QR を読み取ります';
+
+  @override
+  String get logsTitle => 'ログ';
+
+  @override
+  String get logsEmpty => 'ログはありません';
+
+  @override
+  String get logsClear => '消去';
+
+  @override
+  String get logsShare => '書き出す';
+
+  @override
+  String get logsFilterAll => 'すべて';
+
+  @override
+  String settingsPluginTitle(String name) {
+    return '$name の設定';
+  }
+
+  @override
+  String get settingsPluginEmpty => 'このプラグインに設定項目はありません';
+
+  @override
+  String get permissionDesc_storage => 'データの保存';
+
+  @override
+  String get permissionDesc_fetch => 'ネットワークアクセス';
+
+  @override
+  String get permissionDesc_credentials => 'ログイン情報の保存 (Keychain / Keystore)';
+
+  @override
+  String get permissionDesc_device => '端末 ID の取得';
+
+  @override
+  String get permissionDesc_share => '共有シート';
+
+  @override
+  String get permissionDesc_files => 'ファイルの保存と選択';
+
+  @override
+  String get permissionDesc_clipboard => 'クリップボードへの書き込み';
+
+  @override
+  String get permissionDesc_wakeLock => '画面のスリープ防止';
+
+  @override
+  String get permissionDesc_pip => 'ピクチャ・イン・ピクチャ';
+
+  @override
+  String get permissionDesc_blockResources => '画像・動画の読み込み抑制';
+
+  @override
+  String get permissionDesc_tabs => 'バックグラウンドでのタブ操作';
+
+  @override
+  String get permissionDesc_pages => '独自画面の表示';
+
+  @override
+  String get permissionDesc_menu => 'メニューへの項目追加';
+
+  @override
+  String get permissionDesc_navigation => 'ページ遷移の横取り';
+
+  @override
+  String get permissionDesc_policy => 'サーバーからのポリシー値取得';
 }

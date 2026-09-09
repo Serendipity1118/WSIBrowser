@@ -10,7 +10,13 @@
   "startPageNoPlugins": "No plugins installed yet",
   "urlBarHint": "URL or search",
   "urlBarBadgeTooltip": "{count} plugin(s) active",
-  "@urlBarBadgeTooltip": { "placeholders": { "count": { "type": "int" } } },
+  "@urlBarBadgeTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "actionBack": "Back",
   "actionForward": "Forward",
   "actionReload": "Reload",
@@ -24,22 +30,58 @@
   "actionCopyUrl": "Copy URL",
   "tabsTitle": "Tabs",
   "tabsLimitReached": "You can open at most {limit} tabs",
-  "@tabsLimitReached": { "placeholders": { "limit": { "type": "int" } } },
+  "@tabsLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "tabUntitled": "(untitled)",
   "dialogOk": "OK",
   "dialogCancel": "Cancel",
   "dialogClose": "Close",
   "jsDialogTitle": "Message from {host}",
-  "@jsDialogTitle": { "placeholders": { "host": { "type": "String" } } },
+  "@jsDialogTitle": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
   "downloadStarted": "Downloading: {name}",
-  "@downloadStarted": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadDone": "Saved: {name}",
-  "@downloadDone": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadFailed": "Download failed: {reason}",
-  "@downloadFailed": { "placeholders": { "reason": { "type": "String" } } },
+  "@downloadFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "externalLinkOpened": "Opened in the external browser",
   "navigationBlocked": "Cannot open this URL: {url}",
-  "@navigationBlocked": { "placeholders": { "url": { "type": "String" } } },
+  "@navigationBlocked": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "settingsTitle": "Settings",
   "settingsSectionBrowser": "Browser",
   "settingsSectionPlugins": "Plugins",
@@ -69,5 +111,125 @@
   "settingsEdit": "Edit",
   "settingsUseDefault": "Default",
   "commonError": "Error: {message}",
-  "@commonError": { "placeholders": { "message": { "type": "String" } } }
+  "@commonError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginsTitle": "Plugins",
+  "pluginsEmpty": "No plugins yet. Import a ZIP.",
+  "pluginsGlobalToggle": "Enable plugins",
+  "pluginsGlobalToggleOff": "All plugins are stopped",
+  "pluginsImport": "Import",
+  "pluginsCurrentHost": "This site: {host}",
+  "@pluginsCurrentHost": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginVersion": "v{version}",
+  "@pluginVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdateAvailable": "Update available: v{version}",
+  "@pluginUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdate": "Update",
+  "pluginDelete": "Delete",
+  "pluginDeleteConfirm": "Delete {name}? Its stored data and settings will be removed too.",
+  "@pluginDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginDeleted": "Deleted",
+  "pluginSettings": "Settings",
+  "pluginExport": "Export ZIP",
+  "pluginDetails": "Details",
+  "pluginDomains": "Domains",
+  "pluginPermissions": "Permissions",
+  "pluginAuthor": "Author",
+  "pluginInstalledAt": "Installed",
+  "pluginCheckUpdates": "Check for updates",
+  "pluginLogs": "Logs",
+  "importTitle": "Import plugin",
+  "importFromFile": "Choose a file",
+  "importFromUrl": "From URL",
+  "importFromQr": "Scan QR code",
+  "importUrlHint": "https://.../plugin.zip",
+  "importPreviewTitle": "Confirm import",
+  "importOverwrite": "A plugin with the same ID (v{version}) will be overwritten. Stored data is kept.",
+  "@importOverwrite": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "importSensitive": "This plugin requests the following permissions",
+  "importConsent": "Allow these permissions",
+  "importInstall": "Install",
+  "importDone": "Installed {name}",
+  "@importDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "importFailed": "Cannot import: {reason}",
+  "@importFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "importDownloading": "Downloading...",
+  "importInsecureUrl": "Non-https URLs are only allowed in developer mode",
+  "qrScanHint": "Scan a QR code with a wsi://install or ZIP URL",
+  "logsTitle": "Logs",
+  "logsEmpty": "No log entries",
+  "logsClear": "Clear",
+  "logsShare": "Export",
+  "logsFilterAll": "All",
+  "settingsPluginTitle": "{name} settings",
+  "@settingsPluginTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsPluginEmpty": "This plugin has no settings",
+  "permissionDesc_storage": "Store data",
+  "permissionDesc_fetch": "Network access",
+  "permissionDesc_credentials": "Save login credentials (Keychain / Keystore)",
+  "permissionDesc_device": "Read the device ID",
+  "permissionDesc_share": "Share sheet",
+  "permissionDesc_files": "Save and pick files",
+  "permissionDesc_clipboard": "Write to the clipboard",
+  "permissionDesc_wakeLock": "Keep the screen awake",
+  "permissionDesc_pip": "Picture in picture",
+  "permissionDesc_blockResources": "Block images and media",
+  "permissionDesc_tabs": "Control tabs in the background",
+  "permissionDesc_pages": "Show its own screens",
+  "permissionDesc_menu": "Add menu items",
+  "permissionDesc_navigation": "Intercept navigation",
+  "permissionDesc_policy": "Fetch policy values from a server"
 }

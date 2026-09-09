@@ -43,6 +43,7 @@ export function createInAppWebViewAdapter({ token }) {
   };
 
   return {
+    v2: true,
     storage: {
       get: (key) => call('storage.get', { key }),
       set: (key, value) => call('storage.set', { key, value }),

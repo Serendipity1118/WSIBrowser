@@ -210,4 +210,194 @@ class AppLocalizationsZh extends AppLocalizations {
   String commonError(String message) {
     return '错误: $message';
   }
+
+  @override
+  String get pluginsTitle => '插件';
+
+  @override
+  String get pluginsEmpty => '尚无插件。请导入 ZIP。';
+
+  @override
+  String get pluginsGlobalToggle => '启用插件';
+
+  @override
+  String get pluginsGlobalToggleOff => '所有插件已停止';
+
+  @override
+  String get pluginsImport => '导入';
+
+  @override
+  String pluginsCurrentHost(String host) {
+    return '当前网站: $host';
+  }
+
+  @override
+  String pluginVersion(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String pluginUpdateAvailable(String version) {
+    return '有更新: v$version';
+  }
+
+  @override
+  String get pluginUpdate => '更新';
+
+  @override
+  String get pluginDelete => '删除';
+
+  @override
+  String pluginDeleteConfirm(String name) {
+    return '要删除 $name 吗? 其保存的数据和设置也会一并删除。';
+  }
+
+  @override
+  String get pluginDeleted => '已删除';
+
+  @override
+  String get pluginSettings => '设置';
+
+  @override
+  String get pluginExport => '导出 ZIP';
+
+  @override
+  String get pluginDetails => '详情';
+
+  @override
+  String get pluginDomains => '目标域名';
+
+  @override
+  String get pluginPermissions => '权限';
+
+  @override
+  String get pluginAuthor => '作者';
+
+  @override
+  String get pluginInstalledAt => '安装';
+
+  @override
+  String get pluginCheckUpdates => '检查更新';
+
+  @override
+  String get pluginLogs => '日志';
+
+  @override
+  String get importTitle => '导入插件';
+
+  @override
+  String get importFromFile => '选择文件';
+
+  @override
+  String get importFromUrl => '从 URL';
+
+  @override
+  String get importFromQr => '扫描二维码';
+
+  @override
+  String get importUrlHint => 'https://.../plugin.zip';
+
+  @override
+  String get importPreviewTitle => '确认导入';
+
+  @override
+  String importOverwrite(String version) {
+    return '将覆盖相同 ID 的插件 (v$version)。已保存的数据会保留。';
+  }
+
+  @override
+  String get importSensitive => '此插件请求以下权限';
+
+  @override
+  String get importConsent => '允许上述权限';
+
+  @override
+  String get importInstall => '安装';
+
+  @override
+  String importDone(String name) {
+    return '已安装 $name';
+  }
+
+  @override
+  String importFailed(String reason) {
+    return '无法导入: $reason';
+  }
+
+  @override
+  String get importDownloading => '正在下载...';
+
+  @override
+  String get importInsecureUrl => '非 https 的 URL 仅在开发者模式下可用';
+
+  @override
+  String get qrScanHint => '扫描包含 wsi://install 或 ZIP URL 的二维码';
+
+  @override
+  String get logsTitle => '日志';
+
+  @override
+  String get logsEmpty => '没有日志';
+
+  @override
+  String get logsClear => '清除';
+
+  @override
+  String get logsShare => '导出';
+
+  @override
+  String get logsFilterAll => '全部';
+
+  @override
+  String settingsPluginTitle(String name) {
+    return '$name 的设置';
+  }
+
+  @override
+  String get settingsPluginEmpty => '此插件没有设置项';
+
+  @override
+  String get permissionDesc_storage => '保存数据';
+
+  @override
+  String get permissionDesc_fetch => '网络访问';
+
+  @override
+  String get permissionDesc_credentials => '保存登录信息 (Keychain / Keystore)';
+
+  @override
+  String get permissionDesc_device => '读取设备 ID';
+
+  @override
+  String get permissionDesc_share => '分享面板';
+
+  @override
+  String get permissionDesc_files => '保存和选择文件';
+
+  @override
+  String get permissionDesc_clipboard => '写入剪贴板';
+
+  @override
+  String get permissionDesc_wakeLock => '防止屏幕休眠';
+
+  @override
+  String get permissionDesc_pip => '画中画';
+
+  @override
+  String get permissionDesc_blockResources => '阻止加载图片和媒体';
+
+  @override
+  String get permissionDesc_tabs => '在后台控制标签页';
+
+  @override
+  String get permissionDesc_pages => '显示自定义界面';
+
+  @override
+  String get permissionDesc_menu => '添加菜单项';
+
+  @override
+  String get permissionDesc_navigation => '拦截页面跳转';
+
+  @override
+  String get permissionDesc_policy => '从服务器获取策略值';
 }

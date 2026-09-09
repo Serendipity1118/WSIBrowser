@@ -33,6 +33,10 @@ class AppServices {
   /// Plugins active on [host]. P2 replaces this with the runtime's matcher.
   bool Function(String host) isPluginHost = (_) => true;
 
+  /// Services added by later phases (P2: 'runtime'). Keeps this class free of
+  /// runtime imports so the browser layer stays plugin-agnostic.
+  final Map<String, Object> extras = {};
+
   static AppServices create(AppDatabase db) {
     final settings = HostSettings(db);
     final cookies = CookieStore(settings);

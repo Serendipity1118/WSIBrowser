@@ -8,9 +8,10 @@ import '../l10n/generated/app_localizations.dart';
 import 'app_scope.dart';
 
 class WsiBrowserApp extends StatelessWidget {
-  const WsiBrowserApp({super.key, required this.services, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins});
+  const WsiBrowserApp({super.key, required this.services, this.hooks = const WebViewTabHooks(), this.pluginSummary, this.onPlugins, this.navigatorKey});
 
   final AppServices services;
+  final GlobalKey<NavigatorState>? navigatorKey;
   final WebViewTabHooks hooks;
   final Widget? pluginSummary;
   final VoidCallback? onPlugins;
@@ -20,6 +21,7 @@ class WsiBrowserApp extends StatelessWidget {
     return AppScope(
       services: services,
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         theme: ThemeData(colorSchemeSeed: const Color(0xFF4688F1), useMaterial3: true),
         darkTheme: ThemeData(colorSchemeSeed: const Color(0xFF4688F1), brightness: Brightness.dark, useMaterial3: true),

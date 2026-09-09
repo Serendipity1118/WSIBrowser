@@ -8,6 +8,8 @@ src/core/        ホスト非依存の SDK 本体
   button.js        WSI.addButton  (Pointer Events、44px タップ領域、safe area)
   panel.js         WSI.addPanel   (600px 未満はボトムシート)
   page_load.js     WSI.onPageLoad (wsi:urlchange イベント + popstate + MutationObserver)
+  v2.js            v2 API (toast / dialog / settings / policy / menu / runtime / tabs / ネイティブ機能)。
+                   アダプタが v2: true のときだけ生える。Chrome では未定義のまま
 src/adapters/    ホストごとの特権操作
   adapter.d.ts     アダプタ契約 (storage / fetch / buttonPos / call / log)
   chrome.js        window.postMessage -> content script (WSI 1.x と同じメッセージ形式、再送あり)
@@ -37,6 +39,7 @@ npm test               # 両方
 3. `WSI` は `new Function('WSI', code)` の引数として渡し、`window` には置かない
 4. SPA 遷移をホストが検知したら `window.dispatchEvent(new CustomEvent('wsi:urlchange'))` を発火する (WSI Browser は `onUpdateVisitedHistory` から)
 5. `permissions` 未指定 (形式 v1) は `storage` + `fetch` とみなす
+6. v2 の API は `adapter.call(op, payload)` に集約され、ホストは `{error}` で拒否を返す。ホストからプラグインへのイベントは `globalThis.__wsiEmit(token, event, payload)` で届き、`settings.change` / `runtime.message` / `tabs.dialog` / `navigation.intercept` などは対応するリスナーに配られる (返答が必要なイベントは最初のリスナーの戻り値を返す)
 
 `WSI.addButton` / `WSI.addPanel` はサンプルプラグインが CSS と DOM 構造 (`panel.children[1]` など) に依存しているため、Shadow DOM ではなく light DOM に描画する。ホストが描く v2 の UI (toast / dialog) は Shadow DOM を使う。
 

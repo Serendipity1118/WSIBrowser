@@ -227,3 +227,74 @@ test.describe('contexts', () => {
     expect(await page.evaluate(() => window.__s)).toBe(true);
   });
 });
+
+test.describe('v2 API (WSI Browser hosts only)', () => {
+  test('namespaces exist only when the adapter declares v2', async ({ page }) => {
+    await loadCore(page);
+    await run(page, { pluginId: 'v2', token: 't1', permissions: ['tabs'], code: 'window.__has = [typeof WSI.toast, typeof WSI.settings, typeof WSI.tabs, typeof WSI.policy, typeof WSI.runtime]' });
+    expect(await page.evaluate(() => window.__has)).toEqual(['function', 'object', 'object', 'object', 'object']);
+    await page.evaluate(() => { globalThis.__wsiMock.v2 = false; });
+    await run(page, { pluginId: 'v1host', code: 'window.__none = [typeof WSI.toast, typeof WSI.settings, typeof WSI.tabs]' });
+    expect(await page.evaluate(() => window.__none)).toEqual(['undefined', 'undefined', 'undefined']);
+  });
+
+  test('calls go through adapter.call with dotted op names and unwrap host errors', async ({ page }) => {
+    await loadCore(page);
+    await page.evaluate(() => {
+      globalThis.__wsiMock.callResponses['settings.get'] = 3;
+      globalThis.__wsiMock.callResponses['policy.get'] = { error: 'permission denied' };
+      globalThis.__wsiMock.callResponses['dialog'] = 1;
+    });
+    await run(page, {
+      pluginId: 'ops', token: 't2', permissions: ['policy'],
+      code: `
+        WSI.toast('hi', { duration: 1000 });
+        window.__s = WSI.settings.get('n');
+        window.__d = WSI.dialog({ title: 'T', message: 'M', buttons: ['OK', 'Cancel'] });
+        window.__p = WSI.policy.get('x').catch(e => 'err:' + e.message);
+        window.__c = WSI.credentials.set('main', { id: 'u', password: 'p' });
+      `,
+    });
+    expect(await page.evaluate(() => window.__s)).toBe(3);
+    expect(await page.evaluate(() => window.__d)).toBe(1);
+    expect(await page.evaluate(() => window.__p)).toBe('err:permission denied');
+    expect(await page.evaluate(() => window.__c)).toEqual({ ok: true });
+    const state = await mock(page);
+    const ops = state.calls.map((c) => c.op);
+    expect(ops).toEqual(expect.arrayContaining(['toast', 'settings.get', 'dialog', 'policy.get', 'credentials.set']));
+    expect(state.calls.find((c) => c.op === 'toast').payload).toEqual({ message: 'hi', duration: 1000 });
+  });
+
+  test('host events reach the right plugin instance through __wsiEmit and reply-style listeners answer', async ({ page }) => {
+    await loadCore(page);
+    await run(page, { pluginId: 'a', token: 'tokA', code: 'window.__a = []; WSI.settings.onChange((c) => window.__a.push(c)); WSI.runtime.onMessage((m, s) => { window.__a.push([m, s]); return "reply-from-a"; });' });
+    await run(page, { pluginId: 'b', token: 'tokB', permissions: ['tabs'], code: 'window.__b = []; WSI.settings.onChange((c) => window.__b.push(c)); WSI.tabs.onDialog((d) => ({ action: d.type === "confirm" ? "accept" : "show" })); WSI.navigation.intercept((url) => url.includes("deny") ? "deny" : undefined);' });
+
+    const r1 = await page.evaluate(() => globalThis.__wsiEmit('tokA', 'settings.change', { key: 'k', value: 1 }));
+    await page.evaluate(() => globalThis.__wsiEmit('tokA', 'runtime.message', { hello: 1 }, { context: 'worker' }));
+    expect(await page.evaluate(() => window.__a)).toEqual([{ key: 'k', value: 1 }, [{ hello: 1 }, { context: 'worker' }]]);
+    expect(await page.evaluate(() => window.__b)).toEqual([]);
+    expect(r1).toBeUndefined();
+
+    expect(await page.evaluate(() => globalThis.__wsiEmit('tokB', 'tabs.dialog', { type: 'confirm', message: 'x' }))).toEqual({ action: 'accept' });
+    expect(await page.evaluate(() => globalThis.__wsiEmit('tokB', 'tabs.dialog', { type: 'alert', message: 'x' }))).toEqual({ action: 'show' });
+    expect(await page.evaluate(() => globalThis.__wsiEmit('tokB', 'navigation.intercept', 'https://deny.me/'))).toBe('deny');
+    expect(await page.evaluate(() => globalThis.__wsiEmit('tokB', 'navigation.intercept', 'https://ok/'))).toBeUndefined();
+    expect(await page.evaluate(() => globalThis.__wsiEmit('unknown', 'settings.change', {}))).toBeUndefined();
+  });
+
+  test('menu.register keeps callbacks in the page and sends only ids to the host', async ({ page }) => {
+    await loadCore(page);
+    await run(page, { pluginId: 'm', token: 'tokM', permissions: ['menu'], code: 'window.__sel = []; WSI.menu.register([{ id: "s", label: "Settings", type: "page", page: "settings", onSelect: () => window.__sel.push("s") }, { type: "separator" }, { id: "t", label: "Toggle", type: "toggle", checked: true, onChange: (v) => window.__sel.push(v) }]);' });
+    const state = await mock(page);
+    const reg = state.calls.find((c) => c.op === 'menu.register');
+    expect(reg.payload.items).toEqual([
+      { id: 's', label: 'Settings', type: 'page', page: 'settings' },
+      { type: 'separator' },
+      { id: 't', label: 'Toggle', type: 'toggle', checked: true },
+    ]);
+    await page.evaluate(() => globalThis.__wsiEmit('tokM', 'menu.select:s', {}));
+    await page.evaluate(() => globalThis.__wsiEmit('tokM', 'menu.change:t', false));
+    expect(await page.evaluate(() => window.__sel)).toEqual(['s', false]);
+  });
+});

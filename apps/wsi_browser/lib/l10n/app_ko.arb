@@ -10,7 +10,13 @@
   "startPageNoPlugins": "설치된 플러그인이 없습니다",
   "urlBarHint": "URL 또는 검색어",
   "urlBarBadgeTooltip": "플러그인 {count}개 활성",
-  "@urlBarBadgeTooltip": { "placeholders": { "count": { "type": "int" } } },
+  "@urlBarBadgeTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "actionBack": "뒤로",
   "actionForward": "앞으로",
   "actionReload": "새로고침",
@@ -24,22 +30,58 @@
   "actionCopyUrl": "URL 복사",
   "tabsTitle": "탭",
   "tabsLimitReached": "탭은 최대 {limit}개까지 열 수 있습니다",
-  "@tabsLimitReached": { "placeholders": { "limit": { "type": "int" } } },
+  "@tabsLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "tabUntitled": "(제목 없음)",
   "dialogOk": "확인",
   "dialogCancel": "취소",
   "dialogClose": "닫기",
   "jsDialogTitle": "{host}의 메시지",
-  "@jsDialogTitle": { "placeholders": { "host": { "type": "String" } } },
+  "@jsDialogTitle": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
   "downloadStarted": "다운로드 중: {name}",
-  "@downloadStarted": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadDone": "저장했습니다: {name}",
-  "@downloadDone": { "placeholders": { "name": { "type": "String" } } },
+  "@downloadDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "downloadFailed": "다운로드 실패: {reason}",
-  "@downloadFailed": { "placeholders": { "reason": { "type": "String" } } },
+  "@downloadFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "externalLinkOpened": "외부 브라우저에서 열었습니다",
   "navigationBlocked": "이 URL은 열 수 없습니다: {url}",
-  "@navigationBlocked": { "placeholders": { "url": { "type": "String" } } },
+  "@navigationBlocked": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "settingsTitle": "설정",
   "settingsSectionBrowser": "브라우저",
   "settingsSectionPlugins": "플러그인",
@@ -69,5 +111,125 @@
   "settingsEdit": "편집",
   "settingsUseDefault": "기본값",
   "commonError": "오류: {message}",
-  "@commonError": { "placeholders": { "message": { "type": "String" } } }
+  "@commonError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginsTitle": "플러그인",
+  "pluginsEmpty": "플러그인이 없습니다. ZIP을 가져오세요.",
+  "pluginsGlobalToggle": "플러그인 사용",
+  "pluginsGlobalToggleOff": "모든 플러그인이 중지되어 있습니다",
+  "pluginsImport": "가져오기",
+  "pluginsCurrentHost": "이 사이트: {host}",
+  "@pluginsCurrentHost": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginVersion": "v{version}",
+  "@pluginVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdateAvailable": "업데이트 있음: v{version}",
+  "@pluginUpdateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginUpdate": "업데이트",
+  "pluginDelete": "삭제",
+  "pluginDeleteConfirm": "{name}을(를) 삭제할까요? 저장된 데이터와 설정도 모두 삭제됩니다.",
+  "@pluginDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pluginDeleted": "삭제했습니다",
+  "pluginSettings": "설정",
+  "pluginExport": "ZIP 내보내기",
+  "pluginDetails": "상세",
+  "pluginDomains": "대상 도메인",
+  "pluginPermissions": "권한",
+  "pluginAuthor": "작성자",
+  "pluginInstalledAt": "설치",
+  "pluginCheckUpdates": "업데이트 확인",
+  "pluginLogs": "로그",
+  "importTitle": "플러그인 가져오기",
+  "importFromFile": "파일 선택",
+  "importFromUrl": "URL에서",
+  "importFromQr": "QR 코드 스캔",
+  "importUrlHint": "https://.../plugin.zip",
+  "importPreviewTitle": "가져오기 확인",
+  "importOverwrite": "같은 ID의 플러그인(v{version})을 덮어씁니다. 저장된 데이터는 유지됩니다.",
+  "@importOverwrite": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "importSensitive": "이 플러그인은 다음 권한을 요청합니다",
+  "importConsent": "위 권한을 허용",
+  "importInstall": "설치",
+  "importDone": "{name}을(를) 설치했습니다",
+  "@importDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "importFailed": "가져올 수 없습니다: {reason}",
+  "@importFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "importDownloading": "다운로드 중...",
+  "importInsecureUrl": "https 이외의 URL은 개발자 모드에서만 사용할 수 있습니다",
+  "qrScanHint": "wsi://install 또는 ZIP URL의 QR 코드를 스캔합니다",
+  "logsTitle": "로그",
+  "logsEmpty": "로그가 없습니다",
+  "logsClear": "지우기",
+  "logsShare": "내보내기",
+  "logsFilterAll": "전체",
+  "settingsPluginTitle": "{name} 설정",
+  "@settingsPluginTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsPluginEmpty": "이 플러그인에는 설정 항목이 없습니다",
+  "permissionDesc_storage": "데이터 저장",
+  "permissionDesc_fetch": "네트워크 접근",
+  "permissionDesc_credentials": "로그인 정보 저장 (Keychain / Keystore)",
+  "permissionDesc_device": "기기 ID 읽기",
+  "permissionDesc_share": "공유 시트",
+  "permissionDesc_files": "파일 저장 및 선택",
+  "permissionDesc_clipboard": "클립보드 쓰기",
+  "permissionDesc_wakeLock": "화면 꺼짐 방지",
+  "permissionDesc_pip": "PIP(화면 속 화면)",
+  "permissionDesc_blockResources": "이미지·동영상 로드 차단",
+  "permissionDesc_tabs": "백그라운드 탭 제어",
+  "permissionDesc_pages": "자체 화면 표시",
+  "permissionDesc_menu": "메뉴 항목 추가",
+  "permissionDesc_navigation": "페이지 이동 가로채기",
+  "permissionDesc_policy": "서버에서 정책 값 가져오기"
 }

@@ -12,6 +12,8 @@ export function getMockState() {
       fetchResponses: [], // queue of results returned by fetch()
       fetchCalls: [],     // [{ url, options }]
       calls: [],          // [{ op, payload }]
+      callResponses: {},  // op -> result returned by call()
+      v2: true,           // set false to emulate a v1-only host (Chrome)
       logs: [],           // [{ pluginId, level, message }]
       runs: [],           // pluginIds that ran
     };
@@ -25,6 +27,7 @@ export function createMockAdapter({ pluginId }) {
   const store = () => (state.storage[pluginId] ||= {});
 
   return {
+    v2: state.v2 !== false,
     storage: {
       get: async (key) => store()[key],
       set: async (key, value) => { store()[key] = value; return true; },
@@ -45,7 +48,7 @@ export function createMockAdapter({ pluginId }) {
 
     call: async (op, payload) => {
       state.calls.push({ op, payload });
-      return { ok: true };
+      return op in state.callResponses ? state.callResponses[op] : { ok: true };
     },
 
     log: (level, message) => { state.logs.push({ pluginId, level, message }); },
