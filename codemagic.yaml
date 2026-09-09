@@ -1,0 +1,116 @@
+# Codemagic workflows for WSI Browser (apps/wsi_browser).
+#
+# iOS cannot be built on the Windows development machine, so every iOS build
+# runs here. The Flutter version is pinned to the one used on the development
+# machine; bump it only after verifying locally.
+#
+#   ios-unsigned    : unsigned .ipa for smoke checks (no signing needed)
+#   ios-appstore    : signed build uploaded to TestFlight (App Store Connect
+#                     integration "Codemagic", automatic signing for
+#                     jp.serendipy.wsibrowser)
+#   android-debug   : debug APK for sideloading on test devices
+definitions:
+  env_versions: &env_versions
+    flutter: 3.41.4
+    xcode: latest
+    cocoapods: default
+  scripts:
+    - &pub_get
+      name: Flutter pub get
+      script: |
+        cd apps/wsi_browser
+        flutter pub get
+    - &gen
+      name: Generate localizations and drift code
+      script: |
+        cd apps/wsi_browser
+        flutter gen-l10n
+        dart run build_runner build --delete-conflicting-outputs
+    - &test
+      name: Flutter unit tests
+      script: |
+        cd apps/wsi_browser
+        flutter test
+
+workflows:
+  ios-unsigned:
+    name: iOS Unsigned Build
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      <<: *env_versions
+    scripts:
+      - *pub_get
+      - *gen
+      - *test
+      - name: Install CocoaPods
+        script: |
+          cd apps/wsi_browser/ios && pod install
+      - name: Build unsigned iOS app
+        script: |
+          cd apps/wsi_browser
+          flutter build ios --release --no-codesign
+      - name: Package IPA
+        script: |
+          cd apps/wsi_browser/build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r /tmp/WSIBrowser-unsigned.ipa Payload/
+    artifacts:
+      - /tmp/WSIBrowser-unsigned.ipa
+
+  ios-appstore:
+    name: iOS App Store Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Codemagic
+    environment:
+      <<: *env_versions
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: jp.serendipy.wsibrowser
+      vars:
+        APP_ID: jp.serendipy.wsibrowser
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          cd apps/wsi_browser
+          xcode-project use-profiles
+      - *pub_get
+      - *gen
+      - *test
+      - name: Install pods
+        script: |
+          cd apps/wsi_browser/ios && pod install --repo-update
+      - name: Flutter build ipa
+        script: |
+          cd apps/wsi_browser
+          flutter build ipa --release \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - apps/wsi_browser/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  android-debug:
+    name: Android Debug APK
+    max_build_duration: 30
+    instance_type: linux_x2
+    environment:
+      flutter: 3.41.4
+      java: 17
+    scripts:
+      - *pub_get
+      - *gen
+      - *test
+      - name: Build debug APK
+        script: |
+          cd apps/wsi_browser
+          flutter build apk --debug
+    artifacts:
+      - apps/wsi_browser/build/app/outputs/flutter-apk/app-debug.apk

@@ -35,3 +35,6 @@ apps/wsi_browser/android/local.properties
 Thumbs.db
 .idea/
 .vscode/
+
+# IDE
+*.iml
