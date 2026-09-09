@@ -97,7 +97,7 @@ class _ImportPageState extends State<ImportPage> {
   }
 
   Future<void> _fromUrl() async {
-    final text = _url.text.trim();
+    final text = cleanUrlInput(_url.text);
     if (text.isEmpty) return;
     final uri = Uri.tryParse(text);
     if (uri == null) return;
@@ -266,4 +266,19 @@ class _QrScanPageState extends State<_QrScanPage> {
       ),
     );
   }
+}
+
+/// Pasted URLs often carry surrounding punctuation from chat / docs
+/// ("(wsi://install?url=...)", "URL。"): strip it before parsing.
+String cleanUrlInput(String raw) {
+  var t = raw.trim();
+  const closers = [')', '）', ']', '］', '。', '、', ',', '.', '>', '」', '』'];
+  while (t.isNotEmpty && closers.contains(t[t.length - 1])) {
+    t = t.substring(0, t.length - 1).trimRight();
+  }
+  const openers = ['(', '（', '[', '［', '<', '「', '『'];
+  while (t.isNotEmpty && openers.contains(t[0])) {
+    t = t.substring(1).trimLeft();
+  }
+  return t;
 }

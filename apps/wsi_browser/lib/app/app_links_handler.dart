@@ -43,7 +43,7 @@ class AppLinksHandler {
         case 'install':
           final url = uri.queryParameters['url'];
           if (url == null) return false;
-          await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (_) => ImportPage(initialUrl: url)));
+          await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (_) => ImportPage(initialUrl: cleanUrlInput(url))));
           return true;
         case 'dev':
           final url = uri.queryParameters['url'];
