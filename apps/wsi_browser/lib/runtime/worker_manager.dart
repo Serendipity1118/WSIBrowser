@@ -38,6 +38,9 @@ class WorkerHandle {
   bool stopping = false;
   bool suspended = false;
   DateTime? startedAt;
+  /// updatedAt of the plugin whose code this worker runs; a newer install
+  /// (update / reinstall, dev reload) restarts the worker in [WorkerManager.sync].
+  DateTime? codeUpdatedAt;
 }
 
 class WorkerManager extends ChangeNotifier {
@@ -84,7 +87,16 @@ class WorkerManager extends ChangeNotifier {
       if (!wanted.contains(id)) await stop(id);
     }
     for (final id in wanted) {
-      if (!_workers.containsKey(id)) await start(id);
+      final running = _workers[id];
+      if (running == null) {
+        await start(id);
+        continue;
+      }
+      final installed = repository.byId(id);
+      if (installed != null && running.codeUpdatedAt != null && installed.updatedAt != running.codeUpdatedAt) {
+        logs.add(pluginId: id, level: 'info', message: 'plugin updated, restarting worker');
+        await restart(id);
+      }
     }
   }
 
@@ -96,6 +108,7 @@ class WorkerManager extends ChangeNotifier {
 
     final handle = existing ?? WorkerHandle(pluginId: pluginId, key: keyFor(pluginId));
     handle.stopping = false;
+    handle.codeUpdatedAt = plugin.updatedAt;
     _workers[pluginId] = handle;
 
     final code = await repository.code(pluginId);

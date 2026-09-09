@@ -67,9 +67,9 @@ export function run(WSI, ctx) {
 | `domains` | 完全一致、`*.example.com` (サブドメイン含む)、`*` (全サイト) |
 | `paths` | glob。`*` は 1 セグメント、`**` は複数。`/x/**` は `/x` も含む。省略で全パス |
 | `scripts.runAt` | `document_start` / `document_end` (UserScript として注入) / `document_idle` (既定、読み込み完了後) |
-| `background` | ワーカー。アプリ起動時と有効化時に Headless WebView で起動する |
+| `background` | ワーカー。アプリ起動時と有効化時に Headless WebView で起動し、同じ ID のプラグインを上書きインストールすると再起動する |
 | `pages` | `wsi://plugin/<id>/<file>` で表示する画面。`fullscreen` か `sheet` |
-| `menu` | ホストのメニューに出す項目。`page` / `action` / `toggle` / `separator`。`page` は `pages` に存在すること。`menu` 権限が必要 |
+| `menu` | メニュー項目の宣言 (検証用)。実際の表示は `WSI.menu.register` で行う。ページからの登録はそのページの間だけ、ワーカーからの登録はナビゲーションをまたいで残るので、常設の項目はワーカーで登録する。`page` は `pages` に存在すること。`menu` 権限が必要 |
 | `permissions` | 下の一覧。`storage` は常に許可。`formatVersion` 1 (または未指定) は Chrome 版互換で `storage` + `fetch` |
 | `settingsSchema` | ホストが設定画面を自動生成する。`string` / `number` / `boolean` / `select` (`options`) |
 | `policy` | サーバー配信の値。取得失敗時は前回値 → `defaults` |
