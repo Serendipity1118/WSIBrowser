@@ -114,3 +114,29 @@ workflows:
           flutter build apk --debug
     artifacts:
       - apps/wsi_browser/build/app/outputs/flutter-apk/app-debug.apk
+
+  # M1 / M2 integration test on an Android emulator (unverified on Codemagic; runs locally with
+  # `flutter test integration_test/samples_test.dart -d emulator-5554`). Trigger manually.
+  android-integration:
+    name: Android Integration Test (emulator)
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: 3.41.4
+      java: 17
+    scripts:
+      - *pub_get
+      - *gen
+      - name: Start an emulator
+        script: |
+          cd $HOME/programs/android-sdk-macosx 2>/dev/null || true
+          sdkmanager --install "system-images;android-34;google_apis;x86_64" || true
+          echo no | avdmanager create avd -n wsi -k "system-images;android-34;google_apis;x86_64" --force
+          $ANDROID_SDK_ROOT/emulator/emulator -avd wsi -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect &
+          adb wait-for-device
+          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 2; done'
+      - name: Integration test
+        script: |
+          cd apps/wsi_browser
+          flutter test integration_test/samples_test.dart -d emulator-5554
+

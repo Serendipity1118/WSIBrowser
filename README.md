@@ -34,7 +34,8 @@ npm test -w apps/api        # バックエンドのテスト (workerd)
 ## ドキュメント
 
 - [doc/要件定義.md](doc/要件定義.md) — 機能要件、プラグイン形式 v2、SDK API、バックエンド
-- [doc/実装プラン.md](doc/実装プラン.md) — Flutter 実装のフェーズ別タスク
+- [doc/実装プラン.md](doc/実装プラン.md) — Flutter 実装のフェーズ別タスクと完了記録
+- [doc/plugin-guide.md](doc/plugin-guide.md) — プラグイン開発ガイド (雛形から公開まで、SDK リファレンス)
 
 ## 絶対条件
 
