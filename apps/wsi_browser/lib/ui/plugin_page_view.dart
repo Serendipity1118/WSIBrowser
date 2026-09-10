@@ -57,12 +57,23 @@ class _PluginPageViewState extends State<PluginPageView> {
   static int _counter = 0;
   late final Object _key = 'plugin-page:${widget.plugin.id}:${_counter++}';
   BridgeSession? _session;
+  PluginRuntime? _runtime;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // dispose() must not look up inherited widgets (the element is already
+    // deactivated when the route is popped with the back key), so keep it.
+    _runtime = runtimeOf(context);
+  }
 
   @override
   void dispose() {
-    final runtime = runtimeOf(context);
-    runtime.bridge.revokeForWebView(_key);
-    runtime.menuBus.dropSessions(_key);
+    final runtime = _runtime;
+    if (runtime != null) {
+      runtime.bridge.revokeForWebView(_key);
+      runtime.menuBus.dropSessions(_key);
+    }
     super.dispose();
   }
 

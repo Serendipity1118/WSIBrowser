@@ -1,6 +1,9 @@
 // WSI.toast / WSI.dialog (P2-14), WSI.ui.openPage / closePage (P3-03),
 // WSI.ui.openUrl (plugin pages open a site URL in a browser tab).
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../app/app.dart' show appScaffoldMessengerKey;
 import '../browser/tab_manager.dart';
@@ -15,15 +18,31 @@ void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider
       content: Text(message),
       duration: Duration(milliseconds: duration is num && duration > 0 ? duration.toInt() : 3000),
     );
-    final messenger = appScaffoldMessengerKey.currentState;
-    if (messenger != null) {
-      messenger.showSnackBar(bar);
-      return true;
-    }
-    final context = contextProvider();
-    if (context == null || !context.mounted) return false;
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(bar);
-    return true;
+    // Show after the current frame: a toast sent while a plugin page is
+    // closing would otherwise touch that page's deactivated Scaffold.
+    final done = Completer<bool>();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      try {
+        final messenger = appScaffoldMessengerKey.currentState;
+        if (messenger != null) {
+          messenger.showSnackBar(bar);
+          done.complete(true);
+          return;
+        }
+        final context = contextProvider();
+        if (context == null || !context.mounted) {
+          done.complete(false);
+          return;
+        }
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(bar);
+        done.complete(true);
+      } catch (e) {
+        debugPrint('toast skipped: $e');
+        done.complete(false);
+      }
+    });
+    SchedulerBinding.instance.ensureVisualUpdate();
+    return done.future;
   });
 
   registry.register('dialog', (call) async {
