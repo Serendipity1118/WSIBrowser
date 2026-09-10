@@ -65,6 +65,7 @@ Deploy the API from `apps/api` with `npm run migrate:remote` and `npm run deploy
 - `WSI.addButton` / `WSI.addPanel` stay in the light DOM (samples style them with page CSS); host-drawn v2 UI uses Flutter widgets.
 - `flutter test integration_test` and `adb install` can reset the app's database (developer mode goes back to OFF) before manual dev-serve imports.
 - Bash heredocs with long JS / Dart or Japanese content sometimes fail in this environment; write files with the Write tool instead.
+- Do not dispose a dialog's `TextEditingController` right after `showDialog` returns, and do not look up inherited widgets in `dispose()`: both end in the red `'_dependents.isEmpty'` screen. Use `ui/text_prompt_dialog.dart` for text input dialogs.
 
 ## Conventions
 
