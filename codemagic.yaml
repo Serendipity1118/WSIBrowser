@@ -181,13 +181,11 @@ workflows:
       - apps/wsi_browser/build/app/outputs/bundle/release/*.aab
       - apps/wsi_browser/build/app/outputs/flutter-apk/*.apk
       - apps/wsi_browser/build/app/outputs/mapping/release/mapping.txt
-    # Enable only after the first .aab has been uploaded to Play by hand and the
-    # service account has been granted access to this app (see doc/codemagic-android.md).
-    # publishing:
-    #   google_play:
-    #     credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-    #     track: internal
-    #     submit_as_draft: false
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false
 
   # M1 / M2 integration test on an Android emulator (unverified on Codemagic; runs locally with
   # `flutter test integration_test/samples_test.dart -d emulator-5554`). Trigger manually.

@@ -176,9 +176,9 @@ apps/wsi_browser/android/key.properties
         submit_as_draft: false
 ```
 
-初回は Play にアプリもビルドも無いので、**まず `publishing:` ブロックを外した状態で
-ビルドし、AAB を手でアップロードする** (手順 5、6)。SA の権限が通ってから
-`publishing:` を有効にする。
+初回は Play にアプリもビルドも無いので、まず `publishing:` ブロックをコメントアウトした
+状態でビルドし、AAB を手でアップロードした (手順 5、6)。SA の権限を付けたあと
+(手順 7) に `publishing:` を有効にしてある。
 
 ### 5. Play Console にアプリを作成する (手動)
 
@@ -223,7 +223,7 @@ SA の JSON 自体は変更不要。Codemagic の `google_play` 変数グルー�
   `flutter build apk --debug` で確認 (成功)
 - 使い捨て keystore を置いて `gradlew :app:signingReport` を実行し、release バリアントが
   release 署名設定 (指定した keystore と alias) を使うことを確認
-- `codemagic.yaml` に `android-release` を追加済み。`publishing:` はコメントアウトしてある
+- `codemagic.yaml` に `android-release` を追加済み
 - **注意**: このワークツリーはパスに日本語 (`codemagic対応-Andoroid`) を含むため、Windows では
   Gradle が `Your project path contains non-ASCII characters` で止まり、release の AOT ビルドも
   `Unable to read file: ... app.dill` で失敗する。ローカルで release APK を作る場合は
@@ -244,3 +244,16 @@ SA の JSON 自体は変更不要。Codemagic の `google_play` 変数グルー�
   `$ANDROID_SDK_ROOT/cmdline-tools/*/bin/sdkmanager` を glob で探してから実行する
 - **ステップが失敗を見逃す**: Codemagic の script は途中のコマンドが失敗しても止まらず、
   最後のコマンドの終了コードで判定される。複数コマンドを並べるステップには `set -e` を入れる
+
+## 完了状況 (2026-09-10)
+
+| 手順 | 状態 |
+| --- | --- |
+| 1. upload keystore 作成 | 完了 (`C:\Users\takayanagi\keys\wsibrowser_upload.jks`、PKCS12、alias `wsibrowser`) |
+| 2. Codemagic に登録 | 完了 (reference name `wsibrowser_upload`) |
+| 3. Gradle のリリース署名 | 完了 |
+| 4. android-release ワークフロー | 完了 |
+| 5. Play Console にアプリ作成 | 完了 (`jp.serendipy.wsibrowser`) |
+| 6. 初回 AAB を手動アップロード | 完了 (versionCode 1 / 0.1.0、内部テストに保存) |
+| 7. SA にアプリ権限を付与 | 完了 (アプリ情報の閲覧 + テスト版リリースの管理) |
+| 8. publishing を有効化 | 完了 |
