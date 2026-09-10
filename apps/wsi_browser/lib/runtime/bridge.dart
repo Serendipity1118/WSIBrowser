@@ -150,7 +150,9 @@ class Bridge {
       }
       return result.value;
     } catch (e) {
-      logs.add(pluginId: session.pluginId, level: 'error', message: 'emit $event failed: $e');
+      // a page that is closing while a broadcast is in flight is not an error worth showing
+      final gone = '$e'.contains('disposed');
+      logs.add(pluginId: session.pluginId, level: gone ? 'info' : 'error', message: 'emit $event ${gone ? 'skipped (WebView gone)' : 'failed: $e'}');
       return null;
     }
   }

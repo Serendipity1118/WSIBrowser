@@ -6,7 +6,7 @@ import '../browser/tab_manager.dart';
 import '../runtime/menu_bus.dart';
 import 'registry.dart';
 
-void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage, TabManager? tabs}) {
+void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage, TabManager? tabs, PageStack? pageStack}) {
   registry.register('toast', (call) async {
     final context = contextProvider();
     if (context == null || !context.mounted) return false;
@@ -63,7 +63,13 @@ void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider
     if (tabs == null) throw OpError('no UI available');
     final newTab = call.arg<bool>('newTab') ?? false;
     final context = contextProvider();
-    if (context != null && context.mounted && call.session.context == BridgeContext.pluginPage) closeTopmostPluginPage(context);
+    if (context != null && context.mounted) {
+      if (pageStack != null) {
+        closeAllPluginPages(context, pageStack, call.pluginId);
+      } else if (call.session.context == BridgeContext.pluginPage) {
+        closeTopmostPluginPage(context);
+      }
+    }
     if (newTab || tabs.active == null) {
       final t = tabs.open(url.toString());
       if (t == null) throw OpError('ui.openUrl: tab limit reached');

@@ -165,3 +165,12 @@ void closeTopmostPluginPage(BuildContext context) {
   final nav = Navigator.of(context, rootNavigator: true);
   if (nav.canPop()) nav.pop();
 }
+
+/// Pops every open plugin page of [pluginId] (ui.openUrl hands over to the site).
+void closeAllPluginPages(BuildContext context, PageStack stack, String pluginId) {
+  final nav = Navigator.of(context, rootNavigator: true);
+  var n = stack.open.where((e) => e.pluginId == pluginId).length;
+  while (n-- > 0 && nav.canPop()) {
+    nav.pop();
+  }
+}
