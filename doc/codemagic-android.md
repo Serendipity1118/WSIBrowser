@@ -146,9 +146,19 @@ apps/wsi_browser/android/key.properties
           echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
       - name: Install the Android SDK platform for compileSdk
         script: |
-          sdkmanager --install "platforms;android-37" \
-            || sdkmanager --install "platforms;android-37.0" \
-            || true
+          set -e
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/share/android-sdk}}"
+          SDKMANAGER=$(ls "$SDK_ROOT"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -n 1)
+          if [ -z "$SDKMANAGER" ]; then
+            SDKMANAGER=$(command -v sdkmanager || true)
+          fi
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found under $SDK_ROOT" >&2
+            exit 1
+          fi
+          echo "y" | "$SDKMANAGER" --install "platforms;android-37" \
+            || echo "y" | "$SDKMANAGER" --install "platforms;android-37.0"
+          ls "$SDK_ROOT/platforms"
       - name: Build AAB and APK
         script: |
           set -e
@@ -226,7 +236,11 @@ SA の JSON 自体は変更不要。Codemagic の `google_play` 変数グルー�
   Application access で WSIBrowser を on にする。新しいアプリはここが全部 off のままになる
 - **compileSdk 37 のプラットフォーム未インストール**: Linux イメージに platform 37 が無く、
   最初の `bundleRelease` が `Failed to find target with hash string 'android-37'` で落ちる。
-  SDK はその失敗中に入るので、続けて走る `assembleRelease` は成功してしまう。
+  Gradle が自分でダウンロードしても、SDK の索引を読んだ後に届くので同じ実行では間に合わない。
+  その失敗中に入った SDK のおかげで、続けて走る `assembleRelease` だけ成功してしまう。
   対策としてビルド前に `sdkmanager --install` するステップを入れた
+- **sdkmanager は PATH に無い**: Codemagic の Linux イメージでは `sdkmanager: command not found`
+  になる。さらに cmdline-tools が `latest` ではなく `latest-2` に入っていることがあるので、
+  `$ANDROID_SDK_ROOT/cmdline-tools/*/bin/sdkmanager` を glob で探してから実行する
 - **ステップが失敗を見逃す**: Codemagic の script は途中のコマンドが失敗しても止まらず、
   最後のコマンドの終了コードで判定される。複数コマンドを並べるステップには `set -e` を入れる

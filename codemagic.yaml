@@ -153,12 +153,24 @@ workflows:
           echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
       - name: Install the Android SDK platform for compileSdk
         script: |
-          # The Linux image does not ship platform 37. Without this the first Gradle run
-          # fails with "Failed to find target with hash string 'android-37'" while the SDK
-          # is still being downloaded, and only the second run succeeds.
-          sdkmanager --install "platforms;android-37" \
-            || sdkmanager --install "platforms;android-37.0" \
-            || true
+          # The Linux image does not ship platform 37. If Gradle downloads it itself the
+          # run still fails with "Failed to find target with hash string 'android-37'",
+          # because the platform arrives after the SDK index has been read. Installing it
+          # up front avoids that. sdkmanager is not on PATH, and cmdline-tools is not
+          # always under "latest", so look the binary up.
+          set -e
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/share/android-sdk}}"
+          SDKMANAGER=$(ls "$SDK_ROOT"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -n 1)
+          if [ -z "$SDKMANAGER" ]; then
+            SDKMANAGER=$(command -v sdkmanager || true)
+          fi
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found under $SDK_ROOT" >&2
+            exit 1
+          fi
+          echo "y" | "$SDKMANAGER" --install "platforms;android-37" \
+            || echo "y" | "$SDKMANAGER" --install "platforms;android-37.0"
+          ls "$SDK_ROOT/platforms"
       - name: Build AAB and APK
         script: |
           set -e
