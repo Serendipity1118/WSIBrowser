@@ -42,3 +42,4 @@ Thumbs.db
 # Cloudflare Workers
 apps/api/.wrangler/
 apps/api/worker-configuration.d.ts
+.wsi-extension/

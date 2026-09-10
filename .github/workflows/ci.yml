@@ -32,16 +32,22 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
         working-directory: packages/wsi_sdk
-      - name: Check out WebSystemInjection (Chrome extension) next to this repo
+      # actions/checkout cannot leave the workspace, so the extension goes into
+      # a sub-directory and WSI_REPO points the sync / tests at it.
+      - name: Check out WebSystemInjection (Chrome extension)
         uses: actions/checkout@v4
         with:
           repository: Serendipity1118/WebSystemInjection
-          path: ../WebSystemInjection
+          path: .wsi-extension
       - name: Sync the generated SDK bundle into the extension checkout
         run: npm run sync:wsi -w packages/wsi_sdk
+        env:
+          WSI_REPO: ${{ github.workspace }}/.wsi-extension
       - name: SDK contract tests (mock adapter + Chrome extension with the 7 samples)
         run: xvfb-run --auto-servernum npx playwright test
         working-directory: packages/wsi_sdk
+        env:
+          WSI_REPO: ${{ github.workspace }}/.wsi-extension
 
   api:
     name: Backend (Workers + D1 + R2 on workerd)
@@ -53,6 +59,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Generate worker-configuration.d.ts (gitignored, from wrangler.jsonc)
+        run: npm run types -w apps/api
       - run: npm run typecheck -w apps/api
       - run: npm test -w apps/api
 
