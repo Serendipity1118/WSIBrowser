@@ -2,20 +2,27 @@
 // WSI.ui.openUrl (plugin pages open a site URL in a browser tab).
 import 'package:flutter/material.dart';
 
+import '../app/app.dart' show appScaffoldMessengerKey;
 import '../browser/tab_manager.dart';
 import '../runtime/menu_bus.dart';
 import 'registry.dart';
 
 void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage, TabManager? tabs, PageStack? pageStack}) {
   registry.register('toast', (call) async {
-    final context = contextProvider();
-    if (context == null || !context.mounted) return false;
     final message = '${call.payload['message'] ?? ''}';
     final duration = call.payload['duration'];
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(
+    final bar = SnackBar(
       content: Text(message),
       duration: Duration(milliseconds: duration is num && duration > 0 ? duration.toInt() : 3000),
-    ));
+    );
+    final messenger = appScaffoldMessengerKey.currentState;
+    if (messenger != null) {
+      messenger.showSnackBar(bar);
+      return true;
+    }
+    final context = contextProvider();
+    if (context == null || !context.mounted) return false;
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(bar);
     return true;
   });
 
