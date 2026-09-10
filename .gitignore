@@ -29,6 +29,9 @@ apps/wsi_browser/ios/.symlinks/
 apps/wsi_browser/ios/Flutter/ephemeral/
 apps/wsi_browser/android/.gradle/
 apps/wsi_browser/android/local.properties
+apps/wsi_browser/android/key.properties
+*.jks
+*.keystore
 
 # OS / editor
 .DS_Store

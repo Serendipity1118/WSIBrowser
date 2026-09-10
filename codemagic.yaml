@@ -9,6 +9,7 @@
 #                     integration "Codemagic", automatic signing for
 #                     jp.serendipy.wsibrowser)
 #   android-debug   : debug APK for sideloading on test devices
+#   android-release : signed AAB + APK (upload key wsibrowser_upload, Play internal track)
 definitions:
   env_versions: &env_versions
     flutter: 3.41.4
@@ -114,6 +115,58 @@ workflows:
           flutter build apk --debug
     artifacts:
       - apps/wsi_browser/build/app/outputs/flutter-apk/app-debug.apk
+
+  android-release:
+    name: Android Release (AAB + APK)
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: 3.41.4
+      java: 17
+      groups:
+        - google_play          # GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      android_signing:
+        - wsibrowser_upload
+      vars:
+        PACKAGE_NAME: jp.serendipy.wsibrowser
+    scripts:
+      - name: Set up key.properties
+        script: |
+          cat > apps/wsi_browser/android/key.properties <<EOF
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          storeFile=$CM_KEYSTORE_PATH
+          EOF
+      - *pub_get
+      - *gen
+      - *test
+      - name: Determine build number
+        script: |
+          # The first build runs before the app exists on Google Play, so fall back to 0.
+          LATEST=$(google-play get-latest-build-number \
+            --package-name "$PACKAGE_NAME" \
+            --credentials @env:GCLOUD_SERVICE_ACCOUNT_CREDENTIALS 2>/dev/null || true)
+          case "$LATEST" in
+            ''|*[!0-9]*) LATEST=0 ;;
+          esac
+          echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
+      - name: Build AAB and APK
+        script: |
+          cd apps/wsi_browser
+          flutter build appbundle --release --build-number=$BUILD_NUMBER
+          flutter build apk --release --build-number=$BUILD_NUMBER
+    artifacts:
+      - apps/wsi_browser/build/app/outputs/bundle/release/*.aab
+      - apps/wsi_browser/build/app/outputs/flutter-apk/*.apk
+      - apps/wsi_browser/build/app/outputs/mapping/release/mapping.txt
+    # Enable only after the first .aab has been uploaded to Play by hand and the
+    # service account has been granted access to this app (see doc/codemagic-android.md).
+    # publishing:
+    #   google_play:
+    #     credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+    #     track: internal
+    #     submit_as_draft: false
 
   # M1 / M2 integration test on an Android emulator (unverified on Codemagic; runs locally with
   # `flutter test integration_test/samples_test.dart -d emulator-5554`). Trigger manually.
