@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- WSI Browser logo: a browser window with a puzzle piece (plugins) plugged into it. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4E95FF"/>
+      <stop offset="1" stop-color="#2A56C6"/>
+    </linearGradient>
+    <linearGradient id="piece" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E3ECFF"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0B2A6B" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <!-- browser window -->
+  <g filter="url(#shadow)">
+    <rect x="152" y="212" width="720" height="600" rx="56" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="26"/>
+    <rect x="152" y="212" width="720" height="118" rx="56" fill="#FFFFFF" fill-opacity="0.9"/>
+    <rect x="152" y="290" width="720" height="40" fill="#FFFFFF" fill-opacity="0.9"/>
+    <circle cx="232" cy="271" r="22" fill="#2A56C6"/>
+    <circle cx="302" cy="271" r="22" fill="#4E95FF"/>
+    <circle cx="372" cy="271" r="22" fill="#9DBEFF"/>
+    <rect x="430" y="249" width="380" height="44" rx="22" fill="#2A56C6" fill-opacity="0.18"/>
+  </g>
+  <!-- puzzle piece plugged into the page -->
+  <path fill="url(#piece)" filter="url(#shadow)" d="
+    M 430 430
+    h 80
+    a 52 52 0 1 1 104 0
+    h 80
+    a 22 22 0 0 1 22 22
+    v 80
+    a 52 52 0 1 0 0 104
+    v 80
+    a 22 22 0 0 1 -22 22
+    h -80
+    a 52 52 0 1 1 -104 0
+    h -80
+    a 22 22 0 0 1 -22 -22
+    v -80
+    a 52 52 0 1 1 0 -104
+    v -80
+    a 22 22 0 0 1 22 -22
+    z"/>
+</svg>
