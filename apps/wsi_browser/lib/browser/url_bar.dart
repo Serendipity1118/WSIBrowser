@@ -24,7 +24,7 @@ class UrlBar extends StatefulWidget {
     required this.onSettings,
     required this.onOpenExternal,
     this.onPlugins,
-    this.pluginSections = const [],
+    this.pluginSections = _noSections,
   });
 
   final BrowserTab tab;
@@ -43,7 +43,9 @@ class UrlBar extends StatefulWidget {
   final VoidCallback? onPlugins;
 
   /// Plugin-provided menu sections (F-08-2), shown after the host items.
-  final List<AppMenuSection> pluginSections;
+  /// Read when the menu opens so registrations dropped while the screen was
+  /// not rebuilt (a tab closing) never show stale items.
+  final List<AppMenuSection> Function() pluginSections;
 
   @override
   State<UrlBar> createState() => _UrlBarState();
@@ -198,7 +200,7 @@ class _UrlBarState extends State<UrlBar> {
                     if (widget.onPlugins != null)
                       PopupMenuItem(value: _MenuItem.plugins, child: ListTile(leading: const Icon(Icons.extension_outlined), title: Text(l.startPagePlugins))),
                     PopupMenuItem(value: _MenuItem.settings, child: ListTile(leading: const Icon(Icons.settings_outlined), title: Text(l.settingsTitle))),
-                    for (final section in widget.pluginSections) ...[
+                    for (final section in widget.pluginSections()) ...[
                       const PopupMenuDivider(),
                       PopupMenuItem<Object>(
                         enabled: false,
@@ -254,3 +256,5 @@ class _UrlBarState extends State<UrlBar> {
 }
 
 enum _MenuItem { newTab, home, share, copy, external, plugins, settings }
+
+List<AppMenuSection> _noSections() => const [];

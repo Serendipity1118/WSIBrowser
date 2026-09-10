@@ -77,7 +77,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                   onSettings: () => _openSettings(context),
                   onOpenExternal: () => launchUrl(Uri.parse(active.url), mode: LaunchMode.externalApplication),
                   onPlugins: widget.onPlugins,
-                  pluginSections: widget.menuSource?.sections ?? const [],
+                  pluginSections: () => widget.menuSource?.sections ?? const [],
                 ),
                 Expanded(
                   child: IndexedStack(
