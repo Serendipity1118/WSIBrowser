@@ -4,12 +4,30 @@
 // Requires the WebSystemInjection checkout (WSI_REPO) with src/sdk/wsi-sdk.js in
 // sync with dist/wsi-sdk-chrome.js (`npm run sync:wsi`).
 import { test as base, expect, chromium } from '@playwright/test';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve, sep } from 'node:path';
 import { EXTENSION_PATH, WSI_REPO, loadSamplePlugin, sampleIds, routeFixtures, DIJAW40_URL } from './helpers.js';
 
 const ALL_IDS = sampleIds();
 const PAGE_BUTTON_PLUGINS = ['hello-world', 'highlighter', 'jisho-popup', 'markdown-copy', 'outline-panel'];
+
+function launchExtension(profileDir) {
+  return chromium.launchPersistentContext(profileDir, {
+    channel: 'chromium',
+    headless: false,
+    args: [
+      `--disable-extensions-except=${EXTENSION_PATH}`,
+      `--load-extension=${EXTENSION_PATH}`,
+    ],
+  });
+}
+
+async function getServiceWorker(context) {
+  let [serviceWorker] = context.serviceWorkers();
+  if (!serviceWorker) serviceWorker = await context.waitForEvent('serviceworker');
+  return serviceWorker;
+}
 
 const test = base.extend({
   context: async ({}, use) => {
@@ -19,17 +37,34 @@ const test = base.extend({
     if (!existsSync(join(EXTENSION_PATH, 'sdk', 'wsi-sdk.js'))) {
       throw new Error('src/sdk/wsi-sdk.js is missing in the WSI repo. Run `npm run sync:wsi -w packages/wsi_sdk`.');
     }
-    const context = await chromium.launchPersistentContext('', {
-      channel: 'chromium',
-      headless: false,
-      args: [
-        `--disable-extensions-except=${EXTENSION_PATH}`,
-        `--load-extension=${EXTENSION_PATH}`,
-      ],
-    });
+    const profileDir = mkdtempSync(join(tmpdir(), 'wsi-sdk-playwright-'));
+    let context = await launchExtension(profileDir);
+    const serviceWorker = await getServiceWorker(context);
+    const extensionId = serviceWorker.url().split('/')[2];
+    const settingsPage = await context.newPage();
+    await settingsPage.goto(`chrome://extensions/?id=${extensionId}`);
+    const userScriptsToggle = settingsPage.locator('extensions-detail-view #allow-user-scripts');
+    await userScriptsToggle.waitFor();
+    if (!(await userScriptsToggle.evaluate((toggle) => toggle.checked))) {
+      await userScriptsToggle.click();
+      await context.close();
+      context = await launchExtension(profileDir);
+      await getServiceWorker(context);
+    } else {
+      await settingsPage.close();
+    }
     await routeFixtures(context);
-    await use(context);
-    await context.close();
+    try {
+      await use(context);
+    } finally {
+      await context.close();
+      const resolvedProfile = resolve(profileDir);
+      const resolvedTemp = resolve(tmpdir()) + sep;
+      if (!resolvedProfile.startsWith(resolvedTemp)) {
+        throw new Error(`Refusing to remove profile outside temp: ${resolvedProfile}`);
+      }
+      rmSync(resolvedProfile, { recursive: true, force: true });
+    }
   },
 
   serviceWorker: async ({ context }, use) => {
@@ -199,7 +234,10 @@ test.describe('SDK behaviour inside the extension', () => {
     await expect(btn).toHaveCount(1);
 
     // running the same plugin again is refused by the runner
-    const again = await page.evaluate(() => globalThis.__wsiRun({ pluginId: 'hello-world', code: 'WSI.addButton({text: "dup"})' }));
+    const again = await page.evaluate(() => globalThis.__wsiRun(
+      { pluginId: 'hello-world' },
+      (WSI) => WSI.addButton({ text: 'dup' }),
+    ));
     expect(again).toEqual({ ok: false, reason: 'already-ran' });
     await expect(btn).toHaveCount(1);
 
@@ -227,10 +265,12 @@ test.describe('SDK behaviour inside the extension', () => {
     await page.goto('https://example.com/');
     await page.locator('.wsi-floating-button').waitFor();
     const result = await page.evaluate(() => new Promise((resolve) => {
-      globalThis.__wsiRun({
-        pluginId: 'fetch-probe',
-        code: 'WSI.fetch("https://example.com/data.json", { method: "GET", responseType: "json", timeoutMs: 5000 }).then(r => window.__resolve(r))',
-      });
+      globalThis.__wsiRun(
+        { pluginId: 'fetch-probe' },
+        (WSI) => WSI.fetch('https://example.com/data.json', {
+          method: 'GET', responseType: 'json', timeoutMs: 5000,
+        }).then((r) => window.__resolve(r)),
+      );
       window.__resolve = resolve;
     }).catch(() => null));
     // the route only serves HTML, so the JSON parse fails inside the service worker and is reported as an error

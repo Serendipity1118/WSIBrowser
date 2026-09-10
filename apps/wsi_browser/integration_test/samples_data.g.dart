@@ -4,9 +4,10 @@
 const Map<String, Map<String, String>> kSampleFiles = {
   'hello-world': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "hello-world",
   "name": "Hello World",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "動作確認用のサンプルプラグイン",
   "author": "WSI Team",
   "domains": ["example.com"],
@@ -15,6 +16,7 @@ const Map<String, Map<String, String>> kSampleFiles = {
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage"],
   "config": {
     "message": "Hello from WSI!"
   }
@@ -52,9 +54,10 @@ WSI.log("Hello World プラグインが読み込まれました");
   },
   'nipponsteel-dijaw40-csv': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "nipponsteel-dijaw40-csv",
   "name": "DijAW40 CSV Export",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "明細登録可能商談一覧をCSV出力するプラグイン",
   "author": "WSI Team",
   "domains": ["nipponsteel.com", "*.nipponsteel.com"],
@@ -63,6 +66,7 @@ WSI.log("Hello World プラグインが読み込まれました");
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage"],
   "config": {
     "targetPath": "/esys969/dij_web/webapp/page/DijAW40",
     "controlId": "DijAW40100201KomokuListUserControl",
@@ -308,9 +312,10 @@ WSI.log("Hello World プラグインが読み込まれました");
   },
   'highlighter': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "highlighter",
   "name": "Highlighter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ページのテキストをハイライトしてURL別に永続化するプラグイン",
   "author": "WSI Team",
   "domains": ["*"],
@@ -319,6 +324,7 @@ WSI.log("Hello World プラグインが読み込まれました");
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage"],
   "config": {
     "color": "#fff59d",
     "buttonPosition": "bottom-left"
@@ -560,9 +566,10 @@ WSI.log('Highlighter loaded');
   },
   'jisho-popup': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "jisho-popup",
   "name": "Jisho Popup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "日本語テキストを選択すると Jisho.org API で辞書検索するプラグイン",
   "author": "WSI Team",
   "domains": ["*"],
@@ -571,6 +578,7 @@ WSI.log('Highlighter loaded');
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage", "fetch"],
   "config": {
     "buttonPosition": "bottom-left",
     "panelPosition": "right",
@@ -837,9 +845,10 @@ WSI.log('Jisho Popup loaded');
   },
   'markdown-copy': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "markdown-copy",
   "name": "Markdown Copy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "選択したテキストをMarkdown形式でクリップボードにコピーするプラグイン",
   "author": "WSI Team",
   "domains": ["*"],
@@ -848,6 +857,7 @@ WSI.log('Jisho Popup loaded');
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage"],
   "config": {
     "includeCitation": true,
     "buttonPosition": "bottom-right"
@@ -1004,9 +1014,10 @@ WSI.log('Markdown Copy loaded');
   },
   'outline-panel': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "outline-panel",
   "name": "Outline Panel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ページの見出しから目次を生成してサイドパネルに表示するプラグイン",
   "author": "WSI Team",
   "domains": ["*"],
@@ -1015,6 +1026,7 @@ WSI.log('Markdown Copy loaded');
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage"],
   "config": {
     "buttonPosition": "top-left",
     "panelPosition": "right",
@@ -1226,9 +1238,10 @@ WSI.log('Outline Panel loaded');
   },
   'url-expander': {
     'plugin.json': r'''{
+  "formatVersion": 2,
   "id": "url-expander",
   "name": "URL Expander",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "短縮URLにホバーするとリダイレクト先を表示するプラグイン",
   "author": "WSI Team",
   "domains": ["*"],
@@ -1237,6 +1250,7 @@ WSI.log('Outline Panel loaded');
     "runAt": "document_idle"
   },
   "styles": ["style.css"],
+  "permissions": ["storage", "fetch"],
   "config": {
     "shorteners": [
       "bit.ly",
@@ -1519,7 +1533,8 @@ WSI.log(`URL Expander loaded (${shorteners.length} shortener domains)`);
 </body>
 </html>
 ''',
-    'pages/settings.js': r'''// Settings page: reads / writes WSI.settings; the banner on the site page
+    'pages/settings.js':
+        r'''// Settings page: reads / writes WSI.settings; the banner on the site page
 // updates live through settings.onChange. `WSI` is on window here (plugin page).
 (async function () {
   const $ = (id) => document.getElementById(id);
@@ -1543,7 +1558,8 @@ WSI.log(`URL Expander loaded (${shorteners.length} shortener domains)`);
   WSI.log('settings page opened');
 })();
 ''',
-    'pages/settings.css': r'''body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; color: #222; background: transparent; }
+    'pages/settings.css':
+        r'''body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; color: #222; background: transparent; }
 main { padding: 16px 20px 32px; }
 h1 { font-size: 18px; margin: 0 0 16px; }
 label { display: block; margin: 12px 0; font-size: 14px; }
@@ -1757,7 +1773,8 @@ button { flex: 1; min-height: 44px; border: none; border-radius: 999px; backgrou
 </body>
 </html>
 ''',
-    'pages/results.js': r'''// Results page: reads the worker's state from WSI.storage (same plugin, same store).
+    'pages/results.js':
+        r'''// Results page: reads the worker's state from WSI.storage (same plugin, same store).
 (async function () {
   const $ = (id) => document.getElementById(id);
   async function render() {

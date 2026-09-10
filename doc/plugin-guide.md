@@ -169,7 +169,7 @@ npx wrangler d1 execute wsi-api --remote --command "INSERT OR REPLACE INTO plugi
 
 ## 7. サンプル
 
-- `plugins/samples/*`: Chrome 版 WSI の 7 サンプル (v1 API のみ)
+- `plugins/samples/*`: Chrome 版 WSIから同期した形式v2の7サンプル（Chrome共通APIのみ）
 - `plugins/banner-demo`: 設定ページ (sheet)、メニュー、`WSI.settings`、`runtime.sendMessage`、自己診断
 - `plugins/cruise-demo`: ワーカー、`WSI.tabs`、`onDialog`、suspend / resume、`navigation.intercept`、結果ページ
 
