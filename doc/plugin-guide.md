@@ -75,7 +75,7 @@ export function run(WSI, ctx) {
 | `policy` | サーバー配信の値。取得失敗時は前回値 → `defaults` |
 | `updateUrl` | 更新チェック先。`{ version, zipUrl, notes }` を返す URL |
 
-権限: `storage` `fetch` `credentials` `device` `share` `files` `clipboard` `wakeLock` `pip` `blockResources` `tabs` `pages` `menu` `navigation` `policy`。`credentials` `files` `device` `clipboard` `tabs` `navigation` はインポート時に利用者の同意チェックが必要。
+権限: `storage` `fetch` `credentials` `device` `share` `files` `clipboard` `wakeLock` `pip` `blockResources` `tabs` `pages` `menu` `navigation` `policy` `siteData`。`credentials` `files` `device` `clipboard` `tabs` `navigation` `siteData` はインポート時に利用者の同意チェックが必要。
 
 `npx wsi-plugin validate` が要件定義の検証表どおりに検査する。
 
@@ -119,6 +119,7 @@ WSI.credentials.set(profile, { id, password }) / get / remove / list
 WSI.device.id() / info();  WSI.share({ text, url, files });  WSI.files.save(name, data, { encoding: 'base64', share: true }) / pick({ accept })
 WSI.clipboard.write(text) / read();  WSI.wakeLock.acquire() / release();  WSI.pip.enter() / exit() / isSupported()
 WSI.blockResources({ images: true, media: true, urls: ['/ads/'] })
+await WSI.siteData.clear({ cookies: true, storage: true })   // 自分の domains の Cookie とサイトデータだけ消す (アカウント切替用)
 ```
 
 注意点:

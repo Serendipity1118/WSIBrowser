@@ -822,6 +822,12 @@ abstract class AppLocalizations {
   /// **'サーバーからのポリシー値取得'**
   String get permissionDesc_policy;
 
+  /// No description provided for @permissionDesc_siteData.
+  ///
+  /// In ja, this message translates to:
+  /// **'対象サイトの Cookie とサイトデータの消去'**
+  String get permissionDesc_siteData;
+
   /// No description provided for @settingsWorkerTabLimit.
   ///
   /// In ja, this message translates to:

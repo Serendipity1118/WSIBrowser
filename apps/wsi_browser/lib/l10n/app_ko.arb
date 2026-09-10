@@ -232,6 +232,7 @@
   "permissionDesc_menu": "메뉴 항목 추가",
   "permissionDesc_navigation": "페이지 이동 가로채기",
   "permissionDesc_policy": "서버에서 정책 값 가져오기",
+  "permissionDesc_siteData": "대상 사이트의 쿠키와 사이트 데이터 삭제",
   "settingsWorkerTabLimit": "워커 탭 상한",
   "settingsWorkerTabLimitDesc": "플러그인당 동시에 열 수 있는 탭 수 (WSI.tabs)",
   "backupTitle": "백업 및 복원",

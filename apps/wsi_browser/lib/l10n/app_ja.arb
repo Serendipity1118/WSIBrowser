@@ -232,6 +232,7 @@
   "permissionDesc_menu": "メニューへの項目追加",
   "permissionDesc_navigation": "ページ遷移の横取り",
   "permissionDesc_policy": "サーバーからのポリシー値取得",
+  "permissionDesc_siteData": "対象サイトの Cookie とサイトデータの消去",
   "settingsWorkerTabLimit": "ワーカーのタブ上限",
   "settingsWorkerTabLimitDesc": "プラグインごとに同時に開けるタブ数 (WSI.tabs)",
   "backupTitle": "バックアップと復元",

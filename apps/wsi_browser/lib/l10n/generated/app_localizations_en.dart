@@ -407,6 +407,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permissionDesc_policy => 'Fetch policy values from a server';
 
   @override
+  String get permissionDesc_siteData =>
+      'Clear cookies and site data of its sites';
+
+  @override
   String get settingsWorkerTabLimit => 'Worker tab limit';
 
   @override

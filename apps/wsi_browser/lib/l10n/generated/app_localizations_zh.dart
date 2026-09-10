@@ -402,6 +402,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get permissionDesc_policy => '从服务器获取策略值';
 
   @override
+  String get permissionDesc_siteData => '清除目标站点的 Cookie 和站点数据';
+
+  @override
   String get settingsWorkerTabLimit => 'Worker 标签页上限';
 
   @override

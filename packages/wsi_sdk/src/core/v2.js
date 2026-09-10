@@ -113,6 +113,7 @@ export function installV2(WSI, adapter, events) {
   WSI.wakeLock = { acquire: () => unwrap('wakeLock.acquire', {}), release: () => unwrap('wakeLock.release', {}) };
   WSI.pip = { enter: () => unwrap('pip.enter', {}), exit: () => unwrap('pip.exit', {}), isSupported: () => unwrap('pip.isSupported', {}) };
   WSI.blockResources = (options) => unwrap('blockResources', options || {});
+  WSI.siteData = { clear: (options) => unwrap('siteData.clear', options || {}) };
   WSI.navigation = {
     intercept: (cb) => events.on('navigation.intercept', cb, { reply: true }),
   };

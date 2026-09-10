@@ -4,11 +4,11 @@
 
 const List<String> kAllPermissions = [
   'storage', 'fetch', 'credentials', 'device', 'share', 'files', 'clipboard',
-  'wakeLock', 'pip', 'blockResources', 'tabs', 'pages', 'menu', 'navigation', 'policy',
+  'wakeLock', 'pip', 'blockResources', 'tabs', 'pages', 'menu', 'navigation', 'policy', 'siteData',
 ];
 
 /// Permissions that need explicit user consent at import (F-02-2).
-const List<String> kSensitivePermissions = ['credentials', 'files', 'device', 'clipboard', 'tabs', 'navigation'];
+const List<String> kSensitivePermissions = ['credentials', 'files', 'device', 'clipboard', 'tabs', 'navigation', 'siteData'];
 
 const List<String> kRunAt = ['document_start', 'document_end', 'document_idle'];
 const List<String> kPageDisplay = ['fullscreen', 'sheet'];

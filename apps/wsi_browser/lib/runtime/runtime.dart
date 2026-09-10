@@ -12,6 +12,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../app/app_scope.dart';
 import '../bridge_ops/block_resources_ops.dart';
+import '../bridge_ops/site_data_ops.dart';
 import '../bridge_ops/credentials_ops.dart';
 import '../bridge_ops/fetch_ops.dart';
 import '../bridge_ops/native_ops.dart';
@@ -78,6 +79,7 @@ class PluginRuntime {
     registerWakeLockOps(registry, wakeLocks);
     registerPipOps(registry, PipChannel());
     registerBlockResourcesOps(registry, resourceBlocker);
+    registerSiteDataOps(registry);
   }
 
   /// WSI.navigation.intercept (F-01-3, P4-08): ask every running worker whose

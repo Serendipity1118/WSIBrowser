@@ -402,6 +402,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get permissionDesc_policy => 'サーバーからのポリシー値取得';
 
   @override
+  String get permissionDesc_siteData => '対象サイトの Cookie とサイトデータの消去';
+
+  @override
   String get settingsWorkerTabLimit => 'ワーカーのタブ上限';
 
   @override

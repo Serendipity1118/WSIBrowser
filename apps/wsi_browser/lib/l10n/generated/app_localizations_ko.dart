@@ -402,6 +402,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get permissionDesc_policy => '서버에서 정책 값 가져오기';
 
   @override
+  String get permissionDesc_siteData => '대상 사이트의 쿠키와 사이트 데이터 삭제';
+
+  @override
   String get settingsWorkerTabLimit => '워커 탭 상한';
 
   @override

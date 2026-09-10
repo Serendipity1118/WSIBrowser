@@ -232,6 +232,7 @@
   "permissionDesc_menu": "Add menu items",
   "permissionDesc_navigation": "Intercept navigation",
   "permissionDesc_policy": "Fetch policy values from a server",
+  "permissionDesc_siteData": "Clear cookies and site data of its sites",
   "settingsWorkerTabLimit": "Worker tab limit",
   "settingsWorkerTabLimitDesc": "Tabs a plugin may keep open at once (WSI.tabs)",
   "backupTitle": "Backup and restore",

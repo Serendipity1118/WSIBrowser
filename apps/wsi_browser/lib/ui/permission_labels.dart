@@ -32,6 +32,8 @@ String permissionLabel(AppLocalizations l, String permission) {
       return l.permissionDesc_navigation;
     case 'policy':
       return l.permissionDesc_policy;
+    case 'siteData':
+      return l.permissionDesc_siteData;
     default:
       return permission;
   }
