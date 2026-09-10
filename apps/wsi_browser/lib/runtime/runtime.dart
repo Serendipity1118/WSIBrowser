@@ -62,7 +62,7 @@ class PluginRuntime {
     registerStorageOps(registry, services.db);
     registerFetchOps(registry, services.cookies);
     registerLogOps(registry, logs);
-    registerUiOps(registry, () => services.dialogs.contextProvider(), openPage: openPage);
+    registerUiOps(registry, () => services.dialogs.contextProvider(), openPage: openPage, tabs: services.tabs);
     registerSettingsOps(registry, settingsStore, bridge);
     registerPolicyOps(registry, policyCache);
     registerMenuOps(registry, menuBus);

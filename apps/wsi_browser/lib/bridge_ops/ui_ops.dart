@@ -1,10 +1,12 @@
-// WSI.toast / WSI.dialog (P2-14), WSI.ui.openPage / closePage (P3-03).
+// WSI.toast / WSI.dialog (P2-14), WSI.ui.openPage / closePage (P3-03),
+// WSI.ui.openUrl (plugin pages open a site URL in a browser tab).
 import 'package:flutter/material.dart';
 
+import '../browser/tab_manager.dart';
 import '../runtime/menu_bus.dart';
 import 'registry.dart';
 
-void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage}) {
+void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider, {OpenPage? openPage, TabManager? tabs}) {
   registry.register('toast', (call) async {
     final context = contextProvider();
     if (context == null || !context.mounted) return false;
@@ -49,6 +51,25 @@ void registerUiOps(OpRegistry registry, BuildContext? Function() contextProvider
     final params = call.arg<Map>('params')?.map((k, v) => MapEntry('$k', '$v'));
     // do not await: the page stays open until the user closes it
     unawaitedOpen(openPage(call.plugin, page, params));
+    return true;
+  });
+
+  // Open an http(s) URL in the active browser tab (newTab: true opens a new one)
+  // and close the plugin page that asked, so a bookmarks / results page can
+  // hand the user over to the site.
+  registry.register('ui.openUrl', permission: 'pages', (call) async {
+    final url = Uri.tryParse(call.requireString('url'));
+    if (url == null || !(url.scheme == 'https' || url.scheme == 'http')) throw OpError('ui.openUrl: invalid url');
+    if (tabs == null) throw OpError('no UI available');
+    final newTab = call.arg<bool>('newTab') ?? false;
+    final context = contextProvider();
+    if (context != null && context.mounted && call.session.context == BridgeContext.pluginPage) closeTopmostPluginPage(context);
+    if (newTab || tabs.active == null) {
+      final t = tabs.open(url.toString());
+      if (t == null) throw OpError('ui.openUrl: tab limit reached');
+    } else {
+      await tabs.active!.load(url.toString());
+    }
     return true;
   });
 

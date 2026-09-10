@@ -27,6 +27,7 @@ export function installV2(WSI, adapter, events) {
   WSI.dialog = (options) => unwrap('dialog', options || {});
   WSI.ui = {
     openPage: (name, params) => unwrap('ui.openPage', { name, params: params || {} }),
+    openUrl: (url, options) => unwrap('ui.openUrl', { url: String(url), ...(options || {}) }),
     closePage: () => { call('ui.closePage', {}); },
   };
 

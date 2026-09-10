@@ -100,7 +100,7 @@ Chrome 版では v2 の API は `undefined` になるので、`WSI.permissions.h
 ```js
 WSI.toast(msg, { duration })
 await WSI.dialog({ title, message, buttons: ['OK', 'キャンセル'] })   // 押されたボタンの index
-await WSI.ui.openPage('settings', params);  WSI.ui.closePage()
+await WSI.ui.openPage('settings', params);  WSI.ui.closePage();  await WSI.ui.openUrl('https://example.com/x', { newTab: false })   // プラグインページからサイトを開く (ページは閉じる)
 WSI.settings.get / set / getAll;  WSI.settings.onChange(({ key, value }) => {})
 await WSI.policy.get(key) / getAll() / refresh()
 WSI.menu.register([{ id, label, type: 'page'|'action'|'toggle'|'separator', page, checked, onSelect, onChange }])
