@@ -151,8 +151,17 @@ workflows:
             ''|*[!0-9]*) LATEST=0 ;;
           esac
           echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
+      - name: Install the Android SDK platform for compileSdk
+        script: |
+          # The Linux image does not ship platform 37. Without this the first Gradle run
+          # fails with "Failed to find target with hash string 'android-37'" while the SDK
+          # is still being downloaded, and only the second run succeeds.
+          sdkmanager --install "platforms;android-37" \
+            || sdkmanager --install "platforms;android-37.0" \
+            || true
       - name: Build AAB and APK
         script: |
+          set -e
           cd apps/wsi_browser
           flutter build appbundle --release --build-number=$BUILD_NUMBER
           flutter build apk --release --build-number=$BUILD_NUMBER

@@ -144,8 +144,14 @@ apps/wsi_browser/android/key.properties
             ''|*[!0-9]*) LATEST=0 ;;
           esac
           echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
+      - name: Install the Android SDK platform for compileSdk
+        script: |
+          sdkmanager --install "platforms;android-37" \
+            || sdkmanager --install "platforms;android-37.0" \
+            || true
       - name: Build AAB and APK
         script: |
+          set -e
           cd apps/wsi_browser
           flutter build appbundle --release --build-number=$BUILD_NUMBER
           flutter build apk --release --build-number=$BUILD_NUMBER
@@ -212,3 +218,15 @@ SA の JSON 自体は変更不要。Codemagic の `google_play` 変数グルー�
   Gradle が `Your project path contains non-ASCII characters` で止まり、release の AOT ビルドも
   `Unable to read file: ... app.dill` で失敗する。ローカルで release APK を作る場合は
   ASCII のみのパス (本チェックアウト側) で行うこと。Codemagic の Linux 環境では影響しない
+
+## Codemagic での初回ビルドで踏んだもの (2026-09-10)
+
+- **変数グループのアプリ許可**: `Application does not have access to variable group(s): google_play` でビルドが
+  始まらない。Team settings → Global variables and secrets → `google_play` の鉛筆 →
+  Application access で WSIBrowser を on にする。新しいアプリはここが全部 off のままになる
+- **compileSdk 37 のプラットフォーム未インストール**: Linux イメージに platform 37 が無く、
+  最初の `bundleRelease` が `Failed to find target with hash string 'android-37'` で落ちる。
+  SDK はその失敗中に入るので、続けて走る `assembleRelease` は成功してしまう。
+  対策としてビルド前に `sdkmanager --install` するステップを入れた
+- **ステップが失敗を見逃す**: Codemagic の script は途中のコマンドが失敗しても止まらず、
+  最後のコマンドの終了コードで判定される。複数コマンドを並べるステップには `set -e` を入れる
