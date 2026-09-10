@@ -2,8 +2,8 @@
 //   node tool/render_logo.mjs
 // Writes assets/brand/logo-1024.png (launcher icon source), logo-fg-1024.png
 // (adaptive-icon foreground: the artwork on a transparent canvas with safe
-// margins) and splash-icon-1024.png (white artwork on transparent, for the
-// splash screen). Re-run after editing the SVG.
+// margins), splash-icon-1024.png (white artwork and app name on transparent),
+// and its Android 12 safe-zone variant. Re-run after editing the SVG.
 import { createRequire } from 'node:module';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -30,6 +30,23 @@ function foreground(white) {
   return s;
 }
 
+/** Splash lockup with the app name directly below the logo. */
+function splashLockup({ android12 = false } = {}) {
+  let artwork = foreground(true)
+    .replace(/^<svg[^>]*>/, '')
+    .replace(/<\/svg>\s*$/, '');
+  if (android12) artwork = artwork.replace(/ filter="url\(#shadow\)"/g, '');
+  const transform = android12 ? 'translate(297 142) scale(0.42)' : 'translate(256 110) scale(0.5)';
+  const textY = android12 ? 650 : 674;
+  const fontSize = android12 ? 68 : 76;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+    <g transform="${transform}">${artwork}</g>
+    <text x="512" y="${textY}" text-anchor="middle" fill="#FFFFFF"
+      font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="700"
+      letter-spacing="1">WSI Browser</text>
+  </svg>`;
+}
+
 async function render(page, markup, out, { scale = 1, size = 1024 } = {}) {
   await page.setViewportSize({ width: size, height: size });
   const inner = markup.replace('viewBox="0 0 1024 1024" width="1024" height="1024"', `viewBox="0 0 1024 1024" width="${1024 * scale}" height="${1024 * scale}"`);
@@ -45,5 +62,6 @@ mkdirSync(brand, { recursive: true });
 await render(page, svg, join(brand, 'logo-1024.png'));
 // adaptive icon foreground: Android masks to the inner 66%, so scale the art to ~0.62
 await render(page, foreground(false), join(brand, 'logo-fg-1024.png'), { scale: 0.62 });
-await render(page, foreground(true), join(brand, 'splash-icon-1024.png'), { scale: 0.7 });
+await render(page, splashLockup(), join(brand, 'splash-icon-1024.png'));
+await render(page, splashLockup({ android12: true }), join(brand, 'splash-icon-android12-1024.png'));
 await browser.close();
