@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../l10n/generated/app_localizations.dart';
+import '../ui/text_prompt_dialog.dart';
 
 enum JsDialogType { alert, confirm, prompt }
 
@@ -125,29 +126,13 @@ class JsDialogs {
     final context = contextProvider();
     if (context == null || !context.mounted) return null;
     final l = AppLocalizations.of(context);
-    final controller = TextEditingController(text: req.defaultValue ?? '');
-    try {
-      return await showDialog<String>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(l.jsDialogTitle(req.origin)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(req.message),
-              const SizedBox(height: 12),
-              TextField(controller: controller, autofocus: true, onSubmitted: (v) => Navigator.of(ctx).pop(v)),
-            ],
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(null), child: Text(l.dialogCancel)),
-            FilledButton(onPressed: () => Navigator.of(ctx).pop(controller.text), child: Text(l.dialogOk)),
-          ],
-        ),
-      );
-    } finally {
-      controller.dispose();
-    }
+    return showTextPromptDialog(
+      context,
+      title: Text(l.jsDialogTitle(req.origin)),
+      message: req.message,
+      initialValue: req.defaultValue ?? '',
+      okLabel: l.dialogOk,
+      cancelLabel: l.dialogCancel,
+    );
   }
 }

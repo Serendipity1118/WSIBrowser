@@ -6,6 +6,7 @@ import '../app/app_scope.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../settings/host_settings.dart';
 import 'backup_page.dart';
+import 'text_prompt_dialog.dart';
 
 class HostSettingsPage extends StatelessWidget {
   const HostSettingsPage({super.key});
@@ -176,26 +177,19 @@ class HostSettingsPage extends StatelessWidget {
     TextInputType? keyboardType,
   }) async {
     final l = AppLocalizations.of(context);
-    final controller = TextEditingController(text: value);
-    try {
-      final result = await showDialog<String?>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(title),
-          content: TextField(controller: controller, keyboardType: keyboardType, autofocus: true, maxLines: keyboardType == TextInputType.number ? 1 : 3, minLines: 1),
-          actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(''), child: Text(l.settingsUseDefault)),
-            TextButton(onPressed: () => Navigator.of(ctx).pop(null), child: Text(l.dialogCancel)),
-            FilledButton(onPressed: () => Navigator.of(ctx).pop(controller.text), child: Text(l.dialogOk)),
-          ],
-        ),
-      );
-      if (result == null) return;
-      await onSave(result);
-      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.settingsSaved)));
-    } finally {
-      controller.dispose();
-    }
+    final result = await showTextPromptDialog(
+      context,
+      title: Text(title),
+      initialValue: value,
+      okLabel: l.dialogOk,
+      cancelLabel: l.dialogCancel,
+      keyboardType: keyboardType,
+      maxLines: keyboardType == TextInputType.number ? 1 : 3,
+      leadingActions: (ctx) => [TextButton(onPressed: () => Navigator.of(ctx).pop(''), child: Text(l.settingsUseDefault))],
+    );
+    if (result == null) return;
+    await onSave(result);
+    if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.settingsSaved)));
   }
 
   Future<void> _clearCookies(BuildContext context) async {

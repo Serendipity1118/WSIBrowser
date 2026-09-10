@@ -5,6 +5,7 @@ import '../l10n/generated/app_localizations.dart';
 import '../runtime/manifest.dart';
 import '../runtime/repository.dart';
 import '../runtime/runtime.dart';
+import 'text_prompt_dialog.dart';
 
 class PluginSettingsPage extends StatefulWidget {
   const PluginSettingsPage({super.key, required this.plugin});
@@ -82,23 +83,14 @@ class _PluginSettingsPageState extends State<PluginSettingsPage> {
           title: title,
           subtitle: Text([if (s.description != null) s.description!, '${value ?? ''}'].join('\n')),
           onTap: () async {
-            final controller = TextEditingController(text: value == null ? '' : '$value');
-            final result = await showDialog<String?>(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: title,
-                content: TextField(
-                  controller: controller,
-                  autofocus: true,
-                  keyboardType: s.type == 'number' ? const TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
-                ),
-                actions: [
-                  TextButton(onPressed: () => Navigator.of(ctx).pop(null), child: Text(l.dialogCancel)),
-                  FilledButton(onPressed: () => Navigator.of(ctx).pop(controller.text), child: Text(l.dialogOk)),
-                ],
-              ),
+            final result = await showTextPromptDialog(
+              context,
+              title: title,
+              initialValue: value == null ? '' : '$value',
+              okLabel: l.dialogOk,
+              cancelLabel: l.dialogCancel,
+              keyboardType: s.type == 'number' ? const TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
             );
-            controller.dispose();
             if (result == null) return;
             if (s.type == 'number') {
               final n = num.tryParse(result);
