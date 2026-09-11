@@ -22,6 +22,12 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
+		<!-- The app only uses HTTPS and the encryption the OS provides
+		     (WKWebView's TLS, Keychain via flutter_secure_storage), so it is
+		     exempt. Declaring it here skips the export compliance question on
+		     every TestFlight upload. -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 		<key>CFBundleDocumentTypes</key>
 		<array>
 			<dict>

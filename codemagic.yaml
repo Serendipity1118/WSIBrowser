@@ -72,7 +72,10 @@ workflows:
         distribution_type: app_store
         bundle_identifier: jp.serendipy.wsibrowser
       vars:
-        APP_ID: jp.serendipy.wsibrowser
+        BUNDLE_ID: jp.serendipy.wsibrowser
+        # Numeric App Store Connect app id for "WSI Browser", used to look up the
+        # latest TestFlight build number.
+        APP_STORE_APP_ID: 6810292242
     scripts:
       - name: Set up code signing settings on Xcode project
         script: |
@@ -84,10 +87,23 @@ workflows:
       - name: Install pods
         script: |
           cd apps/wsi_browser/ios && pod install --repo-update
+      - name: Determine build number
+        script: |
+          # TestFlight rejects a build number it has already seen, so take the
+          # latest and add one. The first build runs before anything is uploaded,
+          # so fall back to 0.
+          LATEST=$(app-store-connect get-latest-testflight-build-number \
+            "$APP_STORE_APP_ID" 2>/dev/null || true)
+          case "$LATEST" in
+            ''|*[!0-9]*) LATEST=0 ;;
+          esac
+          echo "BUILD_NUMBER=$((LATEST + 1))" >> "$CM_ENV"
       - name: Flutter build ipa
         script: |
+          set -e
           cd apps/wsi_browser
           flutter build ipa --release \
+            --build-number=$BUILD_NUMBER \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - apps/wsi_browser/build/ios/ipa/*.ipa
