@@ -4,16 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>プライバシーポリシー - WSI Browser</title>
-<link rel="stylesheet" href="/style.css">
 <style>
+  /* Self-contained: this page is served by GitHub Pages, not by the API worker,
+     so it cannot share the worker's stylesheet. */
+  :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #f5f6f8; --accent: #4688f1; --muted: #667; --rule: #d7dbe6; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #14161a; --muted: #aaa; --rule: #33373f; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif; }
   main { max-width: 44rem; margin: 0 auto; padding: 2rem 1rem 4rem; line-height: 1.8; }
-  h1 { margin-bottom: .25rem; }
-  .updated { color: #667; font-size: .9rem; margin-top: 0; }
-  h2 { margin-top: 2.5rem; }
+  h1 { margin-bottom: .25rem; font-size: 1.8rem; }
+  .updated { color: var(--muted); font-size: .9rem; margin-top: 0; }
+  h2 { margin-top: 2.5rem; font-size: 1.2rem; }
   ul { padding-left: 1.25rem; }
   li { margin: .4rem 0; }
-  hr { margin: 3rem 0 2rem; border: 0; border-top: 1px solid #d7dbe6; }
-  [lang="en"] { color: inherit; }
+  a { color: var(--accent); }
+  hr { margin: 3rem 0 2rem; border: 0; border-top: 1px solid var(--rule); }
 </style>
 </head>
 <body>
