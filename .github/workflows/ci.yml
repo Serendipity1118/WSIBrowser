@@ -84,4 +84,5 @@ jobs:
         working-directory: apps/wsi_browser
       - run: flutter test
         working-directory: apps/wsi_browser
-      # integration_test/samples_test.dart needs an Android emulator: see codemagic.yaml (android-integration)
+      # integration_test/samples_test.dart needs an Android emulator, so it runs on the
+      # development machine: flutter test integration_test/samples_test.dart -d <device>

@@ -106,7 +106,7 @@ apps/wsi_browser/android/key.properties
 
 ### 4. codemagic.yaml に android-release ワークフローを追加する (コード変更)
 
-既存の `android-debug` / `android-integration` は残し、新しく追加する。
+追加する。
 
 ```yaml
   android-release:
@@ -214,7 +214,8 @@ SA の JSON 自体は変更不要。Codemagic の `google_play` 変数グルー�
 - `flutter.targetSdkVersion` は Flutter 3.41 では 36。Play の要件は満たしている
 - Play Console の初回提出にはプライバシーポリシー URL、データセーフティ、コンテンツレーティングの入力が必要。
   内部テストだけなら一部は後回しにできるが、いずれ必要になる
-- iOS と違い `android-debug` ワークフローはそのまま残す。M3〜M5 の実機検証で使える
+- Codemagic にはリリース用の 2 つ (`ios-appstore` / `android-release`) だけを置く。debug ビルドと
+  結合テストは開発機で回す方が速く、ビルド時間も使わない
 
 ## ローカル検証の記録 (2026-09-10)
 

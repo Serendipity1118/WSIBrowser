@@ -50,4 +50,4 @@ SDK を更新したら `packages/wsi_sdk` で `npm run build` し、`dist/wsi-sd
 
 開発中のプラグインは `npx wsi-plugin dev-serve <dir>` で配信し、設定で開発者モードを ON にしてから `wsi://install?url=https://<PC>:8443/plugin.zip` を開く (Android エミュレーターからは 10.0.2.2)。
 
-iOS はローカルでビルドできない (Windows)。リポジトリルートの `codemagic.yaml` (ios-unsigned / ios-appstore) で Codemagic がビルドし TestFlight に配信する。
+iOS はローカルでビルドできない (Windows)。リポジトリルートの `codemagic.yaml` の `ios-appstore` で Codemagic がビルドし TestFlight に配信する。Android の `android-release` は署名済み AAB と APK を作り、Play の内部テストへ上げる。

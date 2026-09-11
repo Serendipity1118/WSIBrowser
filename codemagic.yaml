@@ -4,12 +4,18 @@
 # runs here. The Flutter version is pinned to the one used on the development
 # machine; bump it only after verifying locally.
 #
-#   ios-unsigned    : unsigned .ipa for smoke checks (no signing needed)
-#   ios-appstore    : signed build uploaded to TestFlight (App Store Connect
-#                     integration "Codemagic", automatic signing for
-#                     jp.serendipy.wsibrowser)
-#   android-debug   : debug APK for sideloading on test devices
-#   android-release : signed AAB + APK (upload key wsibrowser_upload, Play internal track)
+# Only the two release workflows live here. Everything else (debug builds,
+# integration tests) runs on the development machine, where it is faster and
+# does not cost build minutes.
+#
+#   ios-appstore    : signed .ipa uploaded to TestFlight (App Store Connect
+#                     integration "Codemagic", provisioning profile
+#                     wsibrowser_appstore, build number = latest TestFlight + 1)
+#   android-release : signed AAB + APK uploaded to the Play internal track
+#                     (upload key wsibrowser_upload, versionCode = latest Play + 1)
+#
+# Setup and the things that went wrong are in doc/codemagic-ios.md and
+# doc/codemagic-android.md.
 definitions:
   env_versions: &env_versions
     flutter: 3.41.4
@@ -34,32 +40,6 @@ definitions:
         flutter test
 
 workflows:
-  ios-unsigned:
-    name: iOS Unsigned Build
-    max_build_duration: 30
-    instance_type: mac_mini_m2
-    environment:
-      <<: *env_versions
-    scripts:
-      - *pub_get
-      - *gen
-      - *test
-      - name: Install CocoaPods
-        script: |
-          cd apps/wsi_browser/ios && pod install
-      - name: Build unsigned iOS app
-        script: |
-          cd apps/wsi_browser
-          flutter build ios --release --no-codesign
-      - name: Package IPA
-        script: |
-          cd apps/wsi_browser/build/ios/iphoneos
-          mkdir -p Payload
-          cp -r Runner.app Payload/
-          zip -r /tmp/WSIBrowser-unsigned.ipa Payload/
-    artifacts:
-      - /tmp/WSIBrowser-unsigned.ipa
-
   ios-appstore:
     name: iOS App Store Build
     max_build_duration: 120
@@ -113,24 +93,6 @@ workflows:
         auth: integration
         submit_to_testflight: true
         submit_to_app_store: false
-
-  android-debug:
-    name: Android Debug APK
-    max_build_duration: 30
-    instance_type: linux_x2
-    environment:
-      flutter: 3.41.4
-      java: 17
-    scripts:
-      - *pub_get
-      - *gen
-      - *test
-      - name: Build debug APK
-        script: |
-          cd apps/wsi_browser
-          flutter build apk --debug
-    artifacts:
-      - apps/wsi_browser/build/app/outputs/flutter-apk/app-debug.apk
 
   android-release:
     name: Android Release (AAB + APK)
@@ -202,29 +164,3 @@ workflows:
         credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
         submit_as_draft: false
-
-  # M1 / M2 integration test on an Android emulator (unverified on Codemagic; runs locally with
-  # `flutter test integration_test/samples_test.dart -d emulator-5554`). Trigger manually.
-  android-integration:
-    name: Android Integration Test (emulator)
-    max_build_duration: 60
-    instance_type: linux_x2
-    environment:
-      flutter: 3.41.4
-      java: 17
-    scripts:
-      - *pub_get
-      - *gen
-      - name: Start an emulator
-        script: |
-          cd $HOME/programs/android-sdk-macosx 2>/dev/null || true
-          sdkmanager --install "system-images;android-34;google_apis;x86_64" || true
-          echo no | avdmanager create avd -n wsi -k "system-images;android-34;google_apis;x86_64" --force
-          $ANDROID_SDK_ROOT/emulator/emulator -avd wsi -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect &
-          adb wait-for-device
-          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 2; done'
-      - name: Integration test
-        script: |
-          cd apps/wsi_browser
-          flutter test integration_test/samples_test.dart -d emulator-5554
-

@@ -9,7 +9,7 @@ TestFlight へ配信するまでの手順。開発機は Windows なので、iOS
 
 | 項目 | 決定 |
 | --- | --- |
-| ワークフロー | `ios-appstore` を直接使う (`ios-unsigned` はコンパイル確認用に残す) |
+| ワークフロー | `ios-appstore` のみ。Codemagic にはリリース用のワークフローだけを置く |
 | 署名 | App Store 配布プロファイルを Apple で手動作成し、Codemagic に取り込む |
 | ビルド番号 | TestFlight の最新ビルド番号 + 1 (初回は 1)。Android の Play 最新 + 1 と同じ方式 |
 | 輸出コンプライアンス | `ITSAppUsesNonExemptEncryption=false` を Info.plist に入れる。HTTPS と OS 標準の暗号しか使わないため適用外 |

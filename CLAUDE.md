@@ -26,7 +26,8 @@ packages/wsi_sdk/     SDK core (JS) + adapters (chrome, inappwebview, mock) + Pl
 packages/wsi_plugin_tools/  `wsi-plugin` CLI: create / validate / build / pack / dev-serve / publish
 plugins/_template     scaffold; plugins/samples (synced from WSI); banner-demo (P3); cruise-demo (P4, M2)
 tools/                sync_wsi_samples.ps1, check_no_firebase.ps1
-codemagic.yaml        iOS builds (no local iOS toolchain: the dev machine is Windows)
+codemagic.yaml        release builds only: ios-appstore (TestFlight) and android-release
+                      (Play internal). Debug builds and integration tests run locally.
 ```
 
 ## Commands
