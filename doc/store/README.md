@@ -18,7 +18,8 @@ Google Play と App Store の掲載に必要なものと、その置き場所。
 | `play-icon-512.png` | Google Play のアプリアイコン | 512 x 512 |
 | `play-feature-1024x500.png` | Google Play のフィーチャーグラフィック | 1024 x 500 |
 | `app-store-icon-1024.png` | App Store のアプリアイコン | 1024 x 1024 |
-| `screenshots/android-ja/*.png` | Play のスマートフォン用スクリーンショット (日本語、5 枚) | 1080 x 1920 |
+| `screenshots/android-ja/*.png` | Play のスマートフォン用 (日本語、5 枚) | 1080 x 1920 |
+| `screenshots/android-en/*.png` | Play のスマートフォン用 (英語、5 枚) | 1080 x 1920 |
 
 ### 画像の作り直し
 
@@ -68,7 +69,7 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 | --- | --- |
 | 名前、サブタイトル、キーワード、説明 | [listing-en.md](listing-en.md) と [listing-ja.md](listing-ja.md) |
 | アプリアイコン 1024 x 1024 | `app-store-icon-1024.png` |
-| スクリーンショット (6.9 インチと 6.5 インチ) | [screenshots.md](screenshots.md) |
+| スクリーンショット (6.9 インチと 6.5 インチ) | **未作成**。[screenshots.md](screenshots.md) を参照 |
 | プライバシーポリシー URL | Google Play と同じ <https://serendipity1118.github.io/WSIBrowser/privacy.html> |
 | App Privacy (Nutrition Label) | 「データを収集しません」を選ぶ |
 | 審査ノート | [review-notes.md](review-notes.md) の英語版 |

@@ -82,10 +82,39 @@ adb exec-out screencap -p > 01-start.png
 | `04-plugin-running.png` | Wikipedia の記事で Outline Panel が目次を生成している画面 |
 | `05-tabs.png` | タブ一覧 |
 
-使ったサンプルは Highlighter、Markdown Copy、Outline Panel、URL Expander の 4 つ。
-表示しているページは日本語版 Wikipedia の HTML の記事で、公開されている中立な内容。
+`screenshots/android-en/` に英語版が 5 枚ある。構成は同じだが 4 枚目だけ違う。
 
-英語版はまだ撮っていない。端末の言語を英語にして同じ流れを繰り返す。
+| ファイル | 内容 |
+| --- | --- |
+| `01-start.png` | スタートページ |
+| `02-import-consent.png` | インポートの確認 (Hello World、対象ドメインと権限) |
+| `03-plugins.png` | プラグイン一覧 |
+| `04-plugin-running.png` | 英語版 Wikipedia でプラグインのボタンが出ている画面 |
+| `05-tabs.png` | タブ一覧 |
+
+使ったサンプルは Highlighter、Markdown Copy、Outline Panel、URL Expander の 4 つ。
+表示しているページは Wikipedia の HTML の記事 (日本語版と英語版) で、公開されている中立な内容。
+
+### 英語版で気をつけた点
+
+**アプリの UI は英語になるが、プラグインの名前・説明・プラグインが描く UI は日本語のまま。**
+`plugin.json` の `description` は 1 つの文字列で、多言語に分かれていない。プラグインが
+ページに描く文言もプラグイン側のものなので、ホストの言語設定では変わらない。
+
+- `03-plugins.png` は説明文が日本語で残る。プラグインの作者が書いた文字列なので実物どおり
+- Outline Panel のパネル見出しは「目次 (40件)」と出る。英語版では見栄えが悪いので、
+  4 枚目は**パネルを開かず**、ページ上にプラグインのボタンが出ている画面にした
+
+英語圏向けに見栄えを整えたい場合は、サンプル側に英語の説明を持たせる必要がある。
+ただし `plugins/samples` は `tools/sync_wsi_samples.ps1` で WSI から同期しているので、
+直すなら WSI 側が先になる。
+
+## App Store 用
+
+**まだ無い。** Windows では iOS シミュレーターを動かせないため、Android の画面を
+リサイズして流用すると、ステータスバーや UI が実物と違って審査で弾かれる。
+TestFlight が入っている実機で撮るか、Codemagic の Mac でシミュレーターを回す。
+必要なサイズは 6.9 インチ (1290 x 2796) と 6.5 インチ (1242 x 2688)。
 
 ## 撮影の実務メモ (2026-09-11)
 
