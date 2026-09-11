@@ -14,7 +14,7 @@ Specs: [doc/要件定義.md](doc/要件定義.md) (requirements), [doc/実装プ
 - No site-specific selectors, URLs or logic in this repository. Put them in the private plugin repository.
 - `packages/wsi_sdk/dist/*` and the copies in `WebSystemInjection/src/sdk/wsi-sdk.js` and `apps/wsi_browser/assets/sdk/wsi-sdk-core.js` are generated. Edit `packages/wsi_sdk/src`, then `npm run build:sdk`, `npm run sync:wsi -w packages/wsi_sdk`, and copy `dist/wsi-sdk-inappwebview.js` to the Flutter assets.
 - Bump `plugin.json` `version` whenever a plugin ZIP is rebuilt; bump WSI's `manifest.json` when its bundle changes.
-- App icon and splash come from `apps/wsi_browser/assets/brand/logo.svg`: `node tool/render_logo.mjs` (Playwright Chromium) → `dart run flutter_launcher_icons` → `dart run flutter_native_splash:create`. Do not edit the generated mipmap / drawable / xcassets files by hand.
+- App icon and splash come from `apps/wsi_browser/assets/brand/logo.svg`: `node tool/render_logo.mjs` (Playwright Chromium) → `dart run flutter_launcher_icons` → `dart run flutter_native_splash:create`. Do not edit the generated mipmap / drawable / xcassets files by hand. Store icons (Google Play 512, App Store 1024) come from the same SVG via `node tool/render_store_icon.mjs` into `assets/brand/store/`; they are square and opaque because neither store supports transparency.
 - Commits are one per phase (see the plan); do not push unless asked.
 
 ## Layout
