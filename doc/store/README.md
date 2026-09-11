@@ -42,7 +42,7 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 | アプリアイコン 512 x 512 | `play-icon-512.png` |
 | フィーチャーグラフィック 1024 x 500 | `play-feature-1024x500.png` |
 | スマートフォンのスクリーンショット 2〜8 枚 | [screenshots.md](screenshots.md) |
-| プライバシーポリシー URL | <https://wsi-api.pokeplus-dev.workers.dev/privacy> (公開済み) |
+| プライバシーポリシー URL | <https://serendipity1118.github.io/WSIBrowser/privacy.html> (公開済み) |
 | データセーフティ | 下の表のとおり申告する |
 | コンテンツレーティング | アンケートに回答する |
 | ターゲット層と広告 | 13 歳以上、広告なし |
@@ -69,7 +69,7 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 | 名前、サブタイトル、キーワード、説明 | [listing-en.md](listing-en.md) と [listing-ja.md](listing-ja.md) |
 | アプリアイコン 1024 x 1024 | `app-store-icon-1024.png` |
 | スクリーンショット (6.9 インチと 6.5 インチ) | [screenshots.md](screenshots.md) |
-| プライバシーポリシー URL | Google Play と同じ <https://wsi-api.pokeplus-dev.workers.dev/privacy> |
+| プライバシーポリシー URL | Google Play と同じ <https://serendipity1118.github.io/WSIBrowser/privacy.html> |
 | App Privacy (Nutrition Label) | 「データを収集しません」を選ぶ |
 | 審査ノート | [review-notes.md](review-notes.md) の英語版 |
 | 年齢制限 | 17+ (制限のないウェブアクセスがあるため。ブラウザは通常この扱いになる) |
@@ -82,10 +82,14 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 
 ## プライバシーポリシーの公開
 
-本文は `apps/api/public/privacy.html`。`apps/api` の静的アセットなので、
-`cd apps/api && npm run deploy` で公開される。**末尾の `.html` は落ちる**ので、
-登録する URL は `/privacy` のほう。`/privacy.html` は 307 で `/privacy` に転送される。
+本文は `docs/privacy.html`。**GitHub Pages** (main ブランチの `/docs`) から公開している。
+main に push すれば数十秒で反映される。ビルド手順は無い。
 
-<https://wsi-api.pokeplus-dev.workers.dev/privacy> (2026-09-11 公開)
+<https://serendipity1118.github.io/WSIBrowser/privacy.html> (2026-09-11 公開)
 
-将来カスタムドメインに移すときは、両ストアに登録した URL も差し替えること。
+- リポジトリの文書は `doc/` だが、GitHub Pages の公開元は `docs/` である必要があるので別物
+- API の Worker (`apps/api`) からは配信していない。あちらのスタイルシートを参照できないため、
+  CSS はページ内に持たせてある
+- 設定は `gh api -X POST repos/Serendipity1118/WSIBrowser/pages -f "source[branch]=main"
+  -f "source[path]=/docs"` で有効にした
+- 将来カスタムドメインに移すときは、両ストアに登録した URL も差し替えること
