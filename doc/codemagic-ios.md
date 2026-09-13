@@ -13,7 +13,7 @@ TestFlight へ配信するまでの手順。開発機は Windows なので、iOS
 | 署名 | App Store 配布プロファイルを Apple で手動作成し、Codemagic に取り込む |
 | ビルド番号 | TestFlight の最新ビルド番号 + 1 (初回は 1)。Android の Play 最新 + 1 と同じ方式 |
 | 輸出コンプライアンス | `ITSAppUsesNonExemptEncryption=false` を Info.plist に入れる。HTTPS と OS 標準の暗号しか使わないため適用外 |
-| 配信 | TestFlight の内部テストグループ |
+| 配信 | TestFlight。`submit_to_testflight: true` で外部テストの審査 (Beta App Review) にも自動で提出する。内部テストグループへは審査なしで配れる |
 
 ## 使う識別子
 
@@ -106,6 +106,33 @@ TestFlight へ配信するまでの手順。開発機は Windows なので、iOS
 内部テストは Apple の審査なしで配信できる。社外の人に配る場合は外部テストになり、
 審査とプライバシーポリシーなどの入力が要る。
 
+### 6. TestFlight のテスト情報 (手動、2026-09-13 入力済み)
+
+`submit_to_testflight: true` は、アップロード後にビルドを外部テストの審査へ提出する。
+App Store Connect → WSI Browser → TestFlight → テスト情報
+(<https://appstoreconnect.apple.com/apps/6810292242/testflight/test-info>) が空だと、
+アップロードと処理は成功するのに最後の「App Store Connect distribution」だけが次のエラーで失敗する。
+
+```
+Failure: Complete test information is required to submit application WSI Browser build for external testing.
+App is missing required Beta App Information: Feedback Email.
+App is missing required Beta App Review Information: First Name, Last Name, Phone Number, Email.
+```
+
+入力した内容:
+
+| 欄 | 値 |
+| --- | --- |
+| ベータ版アプリの説明 (日本語) | 汎用ブラウザであること、テストしてほしいこと (通常のブラウズ、インポート時の権限確認、位置情報 / Face ID の OS ダイアログ) |
+| フィードバック用メールアドレス | develop@serendipy.jp |
+| プライバシーポリシーの URL | <https://serendipity1118.github.io/WSIBrowser/privacy.html> |
+| 使用許諾契約 | 空 (Apple の標準 EULA) |
+| 審査の連絡先 | 利用者本人の氏名と電話番号、メールは develop@serendipy.jp (個人情報なのでここには書かない) |
+| サインインが必要 | オフ |
+| メモ | [doc/store/review-notes.md](store/review-notes.md) の英語版 |
+
+入力後に ios-appstore を再実行し、distribution まで緑で完了した。
+
 ## 完了状況 (2026-09-11)
 
 | 手順 | 状態 |
@@ -117,6 +144,7 @@ TestFlight へ配信するまでの手順。開発機は Windows なので、iOS
 | ios-appstore ビルド | 成功 |
 | TestFlight へのアップロード | 完了 (0.1.0 (1)) |
 | 内部テストグループへの配信 | 完了 |
+| TestFlight のテスト情報 (外部テスト審査の提出) | 2026-09-13 入力、再実行で提出まで成功 |
 
 ## 踏んだもの
 

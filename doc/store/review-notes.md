@@ -54,10 +54,9 @@ and no third-party analytics.
 
 Backend
 
-The app talks to our own Cloudflare Workers endpoint for three things: policy
-values that plugins must obey (such as minimum intervals), update information for
-plugins the user already installed, and user-submitted feedback. No account is
-required to use the app.
+The app talks to our own Cloudflare Workers endpoint for two things: policy values
+that plugins must obey (such as minimum intervals) and update information for
+plugins the user already installed. No account is required to use the app.
 
 How to try it
 
@@ -112,9 +111,9 @@ WSI Browser は汎用のウェブブラウザです。特定サイト向けの�
 
 バックエンド
 
-自前の Cloudflare Workers に対して 3 つの通信を行います。プラグインが従うべき
-ポリシー値の取得、利用者が既に入れたプラグインの更新情報、利用者が送る
-フィードバックです。利用にアカウントは不要です。
+自前の Cloudflare Workers に対して 2 つの通信を行います。プラグインが従うべき
+ポリシー値の取得と、利用者が既に入れたプラグインの更新情報です。利用にアカウントは
+不要です。
 
 確認方法
 
