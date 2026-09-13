@@ -86,7 +86,7 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 本文は `docs/privacy.html`。**GitHub Pages** (main ブランチの `/docs`) から公開している。
 main に push すれば数十秒で反映される。ビルド手順は無い。
 
-<https://serendipity1118.github.io/WSIBrowser/privacy.html> (2026-09-11 公開)
+<https://serendipity1118.github.io/WSIBrowser/privacy.html> (2026-09-11 公開、2026-09-13 刷新: 位置情報、生体認証、端末キーなどプラグインが使える情報の表を追加)
 
 - リポジトリの文書は `doc/` だが、GitHub Pages の公開元は `docs/` である必要があるので別物
 - API の Worker (`apps/api`) からは配信していない。あちらのスタイルシートを参照できないため、

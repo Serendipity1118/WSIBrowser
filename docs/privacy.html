@@ -7,126 +7,216 @@
 <style>
   /* Self-contained: this page is served by GitHub Pages, not by the API worker,
      so it cannot share the worker's stylesheet. */
-  :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #f5f6f8; --accent: #4688f1; --muted: #667; --rule: #d7dbe6; }
-  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #14161a; --muted: #aaa; --rule: #33373f; } }
+  :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #f5f6f8; --card: #fff; --accent: #2a56c6; --muted: #5f6470; --rule: #d7dbe6; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eceef2; --bg: #14161a; --card: #1d2026; --accent: #8fb0ff; --muted: #a3a8b3; --rule: #33373f; } }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--fg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif; }
-  main { max-width: 44rem; margin: 0 auto; padding: 2rem 1rem 4rem; line-height: 1.8; }
-  h1 { margin-bottom: .25rem; font-size: 1.8rem; }
+  main { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem 4rem; line-height: 1.8; }
+  nav.lang { text-align: right; font-size: .9rem; }
+  h1 { margin: .5rem 0 .25rem; font-size: 1.8rem; line-height: 1.3; }
   .updated { color: var(--muted); font-size: .9rem; margin-top: 0; }
-  h2 { margin-top: 2.5rem; font-size: 1.2rem; }
+  h2 { margin-top: 2.5rem; font-size: 1.2rem; border-left: 4px solid var(--accent); padding-left: .6rem; line-height: 1.4; }
   ul { padding-left: 1.25rem; }
   li { margin: .4rem 0; }
   a { color: var(--accent); }
-  hr { margin: 3rem 0 2rem; border: 0; border-top: 1px solid var(--rule); }
+  hr { margin: 3.5rem 0 2rem; border: 0; border-top: 1px solid var(--rule); }
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .75rem; margin: 1.5rem 0; padding: 0; list-style: none; }
+  .summary li { margin: 0; background: var(--card); border: 1px solid var(--rule); border-radius: .6rem; padding: .8rem 1rem; line-height: 1.6; }
+  .summary strong { display: block; margin-bottom: .2rem; }
+  .table { overflow-x: auto; margin: 1rem 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 34rem; background: var(--card); font-size: .92rem; line-height: 1.6; }
+  th, td { border: 1px solid var(--rule); padding: .5rem .6rem; text-align: left; vertical-align: top; }
+  th { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
+  th:first-child { width: 10rem; }
+  th:last-child { width: 11rem; }
+  code { font-size: .88em; }
+  .note { color: var(--muted); font-size: .9rem; }
 </style>
 </head>
 <body>
 <main>
 
+<nav class="lang"><a href="#en">English</a></nav>
+
 <h1>プライバシーポリシー</h1>
-<p class="updated">WSI Browser／最終更新日 2026年9月11日</p>
+<p class="updated">WSI Browser／最終更新日 2026年9月13日</p>
 
-<p>WSI Browser (以下「本アプリ」) は、Serendipity (以下「当方」) が提供するウェブブラウザです。本アプリの取り扱いについて説明します。</p>
+<p>WSI Browser (以下「本アプリ」) は、Serendipity (以下「当方」) が提供するウェブブラウザです。利用者がプラグインを読み込むことで、特定のサイトに機能を追加できます。このページでは、本アプリと、本アプリ上で動くプラグインが情報をどう扱うかを説明します。</p>
 
-<h2>当方が収集する情報</h2>
+<ul class="summary">
+  <li><strong>当方は個人情報を収集しません</strong>アカウント、広告、アナリティクス、クラッシュレポートの仕組みはありません。</li>
+  <li><strong>データは端末の中に残ります</strong>閲覧データ、プラグインの設定や保存データは当方へ送信されません。</li>
+  <li><strong>プラグインへの提供は同意の範囲だけ</strong>位置情報や端末の識別子などは、読み込み時の同意や OS の許可がなければプラグインに渡りません。</li>
+  <li><strong>生体情報は誰にも渡りません</strong>顔や指紋のデータは OS が処理し、本アプリもプラグインも本人確認の成否だけを受け取ります。</li>
+</ul>
+
+<h2>1. 当方が収集する情報</h2>
 <p><strong>当方は、本アプリの利用者から個人情報を収集しません。</strong></p>
 <ul>
   <li>アカウント登録やログインはありません。</li>
   <li>広告用の識別子は取得しません。広告 SDK を組み込んでいません。</li>
   <li>利用状況の分析ツール (アナリティクス、クラッシュレポート) を組み込んでいません。</li>
+  <li>位置情報、端末の識別子、生体認証の結果などを当方のサーバーへ送る処理はありません。</li>
 </ul>
 
-<h2>端末に保存される情報</h2>
+<h2>2. 端末に保存される情報</h2>
 <p>次の情報は利用者の端末内にのみ保存され、当方へは送信されません。</p>
 <ul>
-  <li>閲覧履歴、ブックマーク、開いているタブ</li>
-  <li>ウェブサイトの Cookie、ローカルストレージなど、ブラウザが通常保持するデータ</li>
+  <li>ウェブサイトの Cookie、ローカルストレージ、キャッシュ、タブ内の閲覧履歴など、ブラウザが通常保持するデータ</li>
   <li>読み込んだプラグインの本体と、プラグインごとの設定および保存データ</li>
+  <li>プラグインが保管したログイン情報 (iOS は Keychain、Android は Keystore で暗号化して保存)</li>
+  <li>プラグインごとの端末キーを作るための値 (iOS は Keychain に保存)</li>
   <li>本アプリ自体の設定</li>
 </ul>
-<p>これらは本アプリを端末から削除すると消えます。閲覧データは本アプリの設定画面から個別に消去できます。</p>
+<p>これらは本アプリを端末から削除すると消えます。ただし iOS の Keychain に保存された値は、OS の仕様によりアプリを削除しても残ることがあります。Cookie は本アプリの設定画面から消去でき、プラグインのデータはプラグインを削除すると消えます。</p>
+<p>設定画面の「バックアップ」で書き出したファイルは、利用者が指定したパスワードで暗号化され、利用者が選んだ保存先に置かれます。当方へは送信されません。</p>
 
-<h2>通信先</h2>
+<h2>3. 通信先</h2>
 <p>本アプリはブラウザなので、利用者が開いたウェブサイトへ通信します。その通信内容と、各サイトによる情報の取り扱いは、それぞれのサイトの運営者に属します。</p>
-<p>これに加えて、読み込まれたプラグインが指定した URL へ通信することがあります。具体的には、プラグインが従うべき設定値の取得と、そのプラグインの更新有無の確認です。通信先はプラグインの製作者が指定したものであり、当方のサーバーとは限りません。プラグインを 1 つも読み込んでいない場合、この通信は発生しません。</p>
+<p>これに加えて、読み込まれたプラグインに関して次の通信が発生することがあります。</p>
+<ul>
+  <li>プラグインが従うべき設定値 (ポリシー) の取得と、プラグインの更新有無の確認。通信先はプラグインの製作者が指定したもので、当方のサーバーとは限りません。</li>
+  <li>プラグイン自身が行う通信。プラグインは、許可された範囲で製作者のサーバーなどへ通信することがあります。</li>
+</ul>
+<p>プラグインを 1 つも読み込んでいない場合、これらの通信は発生しません。</p>
 <p>当方のサーバーが受け取るのは、要求されたプラグインの識別子と、通信に伴ってサーバーへ自動的に届く技術的な情報 (IP アドレスなど) です。閲覧履歴や入力内容を受け取ることはありません。</p>
 
-<h2>プラグインについて</h2>
+<h2>4. プラグインについて</h2>
 <p>プラグインは利用者自身が選んで読み込むものです。本アプリにプラグインは同梱されておらず、当方はプラグインの配布も推奨も行いません。</p>
-<p>プラグインは、読み込む前に提示される対象サイトと権限の範囲でのみ動作します。ログイン情報の保管、ファイル、端末情報、クリップボード、タブ操作、ページ遷移の制御にあたる機能は、読み込み時の同意がなければ利用できません。</p>
-<p>ただし、プラグインが取得した情報をどのように扱うかは、そのプラグインの製作者に属します。<strong>信頼できる提供元のプラグインのみを読み込んでください。</strong></p>
+<p>プラグインは、読み込む前に提示される対象サイトと権限の範囲でのみ動作します。権限はプラグインの一覧画面でいつでも確認でき、プラグインを無効化または削除すると以後は利用されません。</p>
 
-<h2>端末の機能の利用</h2>
+<h3>プラグインが利用できる情報と機能</h3>
+<div class="table">
+<table>
+  <thead>
+    <tr><th>情報・機能</th><th>内容</th><th>利用の条件</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>端末の識別子と端末情報</td><td>端末 ID (Android の android_id、iOS の identifierForVendor)、プラグインごとに異なる端末キー、OS、機種</td><td>読み込み時の同意</td></tr>
+    <tr><td>現在地</td><td>緯度、経度、精度など。本アプリを使用している間だけ取得し、バックグラウンドでは取得しません</td><td>読み込み時の同意と、OS の位置情報の許可</td></tr>
+    <tr><td>ログイン情報の保管</td><td>プラグインが保存した ID とパスワード。そのプラグインだけが読めます</td><td>読み込み時の同意</td></tr>
+    <tr><td>クリップボード</td><td>クリップボードの読み取りと書き込み</td><td>読み込み時の同意</td></tr>
+    <tr><td>ファイル</td><td>利用者が選んだファイルの読み込みと、ファイルの保存</td><td>読み込み時の同意</td></tr>
+    <tr><td>タブ操作、ページ遷移の制御、サイトデータの消去</td><td>対象サイトのページを開く、遷移を止める、Cookie などを消す</td><td>読み込み時の同意</td></tr>
+    <tr><td>生体認証</td><td>Face ID、指紋、端末のパスコードによる本人確認の成否のみ。生体データそのものは OS が処理し、本アプリにもプラグインにも渡りません</td><td>権限の宣言と、その都度の本人確認操作</td></tr>
+    <tr><td>ネットワークとバッテリーの状態</td><td>接続の有無と種類 (Wi-Fi、モバイル回線など)、電池残量、充電状態、省電力モード</td><td>権限の宣言</td></tr>
+    <tr><td>アプリと言語の情報</td><td>本アプリのバージョン、端末の言語、タイムゾーン</td><td>なし</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">「読み込み時の同意」が必要なものは、プラグインを読み込む画面で利用者がチェックしない限り読み込めません。「権限の宣言」のものは、読み込む画面に一覧として表示されます。</p>
+<p>プラグインが取得した情報をどのように扱うか (製作者のサーバーへ送るかどうかを含む) は、そのプラグインの製作者に属します。<strong>信頼できる提供元のプラグインのみを読み込み、必要に応じて製作者の説明を確認してください。</strong></p>
+
+<h2>5. 端末の機能の利用</h2>
 <ul>
-  <li><strong>ネットワーク</strong>: ウェブページの読み込みに使います。</li>
-  <li><strong>カメラ</strong>: プラグインを QR コードから読み込むときにのみ使います。読み取った内容は端末内で処理され、当方へ送信されません。</li>
-  <li><strong>写真・ファイル</strong>: ファイルのダウンロード、およびファイルからプラグインを読み込むときに使います。</li>
+  <li><strong>ネットワーク</strong>: ウェブページとプラグインの読み込みに使います。</li>
+  <li><strong>カメラ・マイク</strong>: プラグインを QR コードから読み込むとき、およびウェブページのファイル選択で写真や動画を撮るときに使います。QR コードの読み取りは端末内で処理されます。</li>
+  <li><strong>写真・ファイル</strong>: ファイルのダウンロード、ウェブページやプラグインでのファイル選択、ファイルからのプラグインの読み込み、バックアップに使います。</li>
+  <li><strong>位置情報</strong>: 位置情報の権限を持つプラグインが現在地を求めたときにだけ使います。初回は OS の許可ダイアログが表示されます。</li>
+  <li><strong>Face ID・指紋</strong>: 生体認証の権限を持つプラグインが本人確認を求めたときにだけ使います。</li>
 </ul>
-<p>これらは該当する操作を行うときにのみ利用し、常時取得することはありません。</p>
+<p>これらは該当する操作や要求があったときにのみ利用し、常時取得することはありません。位置情報、カメラ、写真などの許可は、端末の設定アプリからいつでも取り消せます。</p>
 
-<h2>子どもの利用</h2>
+<h2>6. 子どもの利用</h2>
 <p>本アプリは子どもを対象としていません。当方は個人情報を収集しないため、子どもから個人情報を取得することもありません。</p>
 
-<h2>本ポリシーの変更</h2>
+<h2>7. 本ポリシーの変更</h2>
 <p>内容を変更する場合は、このページを更新し、最終更新日を改めます。</p>
 
-<h2>お問い合わせ</h2>
+<h2>8. お問い合わせ</h2>
 <p>ご質問は <a href="mailto:develop@serendipy.jp">develop@serendipy.jp</a> までご連絡ください。</p>
 
 <hr>
 
-<h1 lang="en">Privacy Policy</h1>
-<p class="updated" lang="en">WSI Browser / Last updated 11 September 2026</p>
+<div lang="en" id="en">
 
-<div lang="en">
+<h1>Privacy Policy</h1>
+<p class="updated">WSI Browser / Last updated 13 September 2026</p>
 
-<p>WSI Browser ("the app") is a web browser provided by Serendipity ("we"). This page explains how the app handles information.</p>
+<p>WSI Browser ("the app") is a web browser provided by Serendipity ("we"). By loading plugins, users can add features to specific sites. This page explains how the app, and the plugins running in it, handle information.</p>
 
-<h2>What we collect</h2>
+<ul class="summary">
+  <li><strong>We collect no personal information</strong>There is no account, advertising, analytics or crash reporting.</li>
+  <li><strong>Your data stays on your device</strong>Browsing data and plugin settings or stored data are never sent to us.</li>
+  <li><strong>Plugins get only what you allowed</strong>Location, device identifiers and similar data reach a plugin only with your consent at install time or the OS permission.</li>
+  <li><strong>Biometric data is never shared</strong>Face and fingerprint data are handled by the OS; the app and plugins only learn whether verification succeeded.</li>
+</ul>
+
+<h2>1. What we collect</h2>
 <p><strong>We do not collect personal information from users of the app.</strong></p>
 <ul>
   <li>There is no account and no sign-in.</li>
   <li>We do not read advertising identifiers. There is no advertising SDK.</li>
   <li>There is no analytics or crash-reporting SDK.</li>
+  <li>Nothing in the app sends your location, device identifiers or biometric results to our servers.</li>
 </ul>
 
-<h2>What stays on your device</h2>
+<h2>2. What stays on your device</h2>
 <p>The following is stored only on your device and is never sent to us.</p>
 <ul>
-  <li>Browsing history, bookmarks and open tabs</li>
-  <li>Cookies, local storage and the other data a browser normally keeps for a site</li>
+  <li>Cookies, local storage, cache, the history within a tab and the other data a browser normally keeps for a site</li>
   <li>The plugins you loaded, together with their settings and stored data</li>
+  <li>Sign-in details a plugin saved (encrypted in the iOS Keychain or the Android Keystore)</li>
+  <li>The value used to derive per-plugin device keys (kept in the Keychain on iOS)</li>
   <li>The app's own settings</li>
 </ul>
-<p>All of it is removed when you uninstall the app. Browsing data can also be cleared from the app's settings screen.</p>
+<p>All of it is removed when you uninstall the app, except that values in the iOS Keychain may remain after uninstalling because of how iOS works. Cookies can be cleared from the app's settings, and a plugin's data is removed when you delete the plugin.</p>
+<p>A backup exported from the settings screen is encrypted with a password you choose and saved where you choose. It is not sent to us.</p>
 
-<h2>Where the app connects</h2>
+<h2>3. Where the app connects</h2>
 <p>The app is a browser, so it connects to the websites you open. What those sites do with your information is governed by their own operators.</p>
-<p>In addition, a loaded plugin may cause the app to contact a URL that the plugin specifies: to read policy values the plugin must obey, and to check whether a newer version of that plugin exists. Those URLs are chosen by the plugin's author and are not necessarily ours. With no plugin loaded, neither request happens.</p>
+<p>In addition, loaded plugins may cause the following connections.</p>
+<ul>
+  <li>Reading policy values a plugin must obey and checking whether a newer version of that plugin exists. These URLs are chosen by the plugin's author and are not necessarily ours.</li>
+  <li>Requests the plugin itself makes, within its permissions, for example to its author's server.</li>
+</ul>
+<p>With no plugin loaded, none of these connections happen.</p>
 <p>What our own server receives is the identifier of the plugin being requested, plus the technical information any server receives with a request, such as an IP address. It does not receive your browsing history or anything you type.</p>
 
-<h2>About plugins</h2>
+<h2>4. About plugins</h2>
 <p>Plugins are chosen and loaded by you. None ship with the app, and we neither distribute nor endorse any plugin.</p>
-<p>A plugin runs only within the target sites and permissions shown to you before you install it. Anything touching stored credentials, files, device information, the clipboard, tab control or navigation control is unavailable unless you consented at install time.</p>
-<p>What a plugin does with what it obtains is up to its author. <strong>Only load plugins from a source you trust.</strong></p>
+<p>A plugin runs only within the target sites and permissions shown to you before you install it. You can review its permissions in the plugin list at any time, and a disabled or deleted plugin can no longer use them.</p>
 
-<h2>Device capabilities</h2>
+<h3>Information and features a plugin can use</h3>
+<div class="table">
+<table>
+  <thead>
+    <tr><th>Information / feature</th><th>What it is</th><th>Condition</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Device identifiers and details</td><td>Device ID (android_id on Android, identifierForVendor on iOS), a device key that differs for each plugin, OS and model</td><td>Your consent at install time</td></tr>
+    <tr><td>Current location</td><td>Latitude, longitude, accuracy and similar. Only while you are using the app, never in the background</td><td>Your consent at install time and the OS location permission</td></tr>
+    <tr><td>Stored sign-in details</td><td>An ID and password the plugin saved; only that plugin can read them</td><td>Your consent at install time</td></tr>
+    <tr><td>Clipboard</td><td>Reading and writing the clipboard</td><td>Your consent at install time</td></tr>
+    <tr><td>Files</td><td>Reading files you pick and saving files</td><td>Your consent at install time</td></tr>
+    <tr><td>Tab control, navigation control, clearing site data</td><td>Opening pages of its sites, stopping navigation, clearing cookies and similar</td><td>Your consent at install time</td></tr>
+    <tr><td>Biometric verification</td><td>Only whether Face ID, fingerprint or the device passcode verified you. Biometric data is handled by the OS and never reaches the app or the plugin</td><td>Declared permission, plus your action each time</td></tr>
+    <tr><td>Network and battery state</td><td>Whether and how you are connected (Wi-Fi, mobile and so on), battery level, charging state, low power mode</td><td>Declared permission</td></tr>
+    <tr><td>App and language details</td><td>The app's version, the device languages and time zone</td><td>None</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">A plugin that needs "consent at install time" cannot be installed unless you tick its permissions on the install screen. "Declared" permissions are listed on the same screen.</p>
+<p>What a plugin does with what it obtains, including whether it sends it to its author's server, is up to its author. <strong>Only load plugins from a source you trust, and check the author's explanation where needed.</strong></p>
+
+<h2>5. Device capabilities</h2>
 <ul>
-  <li><strong>Network</strong>: to load web pages.</li>
-  <li><strong>Camera</strong>: only when you load a plugin by scanning a QR code. The scan is processed on the device and is not sent to us.</li>
-  <li><strong>Photos and files</strong>: to download files, and to load a plugin from a file.</li>
+  <li><strong>Network</strong>: to load web pages and plugins.</li>
+  <li><strong>Camera and microphone</strong>: when you load a plugin by scanning a QR code, and when a web page's file picker takes a photo or video. QR codes are processed on the device.</li>
+  <li><strong>Photos and files</strong>: for downloads, file pickers in web pages and plugins, loading a plugin from a file, and backups.</li>
+  <li><strong>Location</strong>: only when a plugin with the location permission asks for the current position. The OS asks you the first time.</li>
+  <li><strong>Face ID and fingerprint</strong>: only when a plugin with the biometrics permission asks to verify you.</li>
 </ul>
-<p>Each is used only for the action in question, never continuously.</p>
+<p>Each is used only for the action or request in question, never continuously. You can revoke location, camera, photo and other permissions in the device's Settings app at any time.</p>
 
-<h2>Children</h2>
+<h2>6. Children</h2>
 <p>The app is not directed at children. Since we collect no personal information, we do not collect it from children either.</p>
 
-<h2>Changes</h2>
+<h2>7. Changes</h2>
 <p>If this policy changes we will update this page and revise the date above.</p>
 
-<h2>Contact</h2>
+<h2>8. Contact</h2>
 <p>Questions may be sent to <a href="mailto:develop@serendipy.jp">develop@serendipy.jp</a>.</p>
 
 </div>
