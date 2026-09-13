@@ -67,3 +67,8 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Theme.AppCompat for LaunchTheme: BiometricPrompt (local_auth) crashes on Android 8 without it.
+    implementation("androidx.appcompat:appcompat:1.7.1")
+}

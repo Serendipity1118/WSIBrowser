@@ -405,6 +405,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get permissionDesc_siteData => '대상 사이트의 쿠키와 사이트 데이터 삭제';
 
   @override
+  String get permissionDesc_location => '현재 위치 가져오기 (앱 사용 중에만)';
+
+  @override
+  String get permissionDesc_network => '네트워크 연결 상태 가져오기';
+
+  @override
+  String get permissionDesc_battery => '배터리 잔량과 충전 상태 가져오기';
+
+  @override
+  String get permissionDesc_biometrics => '생체 인증으로 본인 확인';
+
+  @override
   String get settingsWorkerTabLimit => '워커 탭 상한';
 
   @override

@@ -4,6 +4,7 @@
 export const PERMISSIONS = Object.freeze([
   'storage', 'fetch', 'credentials', 'device', 'share', 'files', 'clipboard',
   'wakeLock', 'pip', 'blockResources', 'tabs', 'pages', 'menu', 'navigation', 'policy', 'siteData',
+  'location', 'network', 'battery', 'biometrics',
 ]);
 
 export const RUN_AT = Object.freeze(['document_start', 'document_end', 'document_idle']);

@@ -405,6 +405,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get permissionDesc_siteData => '清除目标站点的 Cookie 和站点数据';
 
   @override
+  String get permissionDesc_location => '获取当前位置 (仅在使用应用时)';
+
+  @override
+  String get permissionDesc_network => '获取网络连接状态';
+
+  @override
+  String get permissionDesc_battery => '获取电池电量和充电状态';
+
+  @override
+  String get permissionDesc_biometrics => '通过生物识别验证身份';
+
+  @override
   String get settingsWorkerTabLimit => 'Worker 标签页上限';
 
   @override

@@ -11,7 +11,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../app/app_scope.dart';
+import '../bridge_ops/app_ops.dart';
+import '../bridge_ops/biometrics_ops.dart';
 import '../bridge_ops/block_resources_ops.dart';
+import '../bridge_ops/location_ops.dart';
+import '../bridge_ops/network_battery_ops.dart';
 import '../bridge_ops/site_data_ops.dart';
 import '../bridge_ops/credentials_ops.dart';
 import '../bridge_ops/fetch_ops.dart';
@@ -80,6 +84,12 @@ class PluginRuntime {
     registerPipOps(registry, PipChannel());
     registerBlockResourcesOps(registry, resourceBlocker);
     registerSiteDataOps(registry);
+    // app-only information (app info, locale, location, network, battery, biometrics)
+    registerAppOps(registry);
+    registerLocationOps(registry);
+    registerNetworkOps(registry, bridge.emit);
+    registerBatteryOps(registry, bridge.emit);
+    registerBiometricsOps(registry);
   }
 
   /// WSI.navigation.intercept (F-01-3, P4-08): ask every running worker whose

@@ -1,5 +1,6 @@
 // Small native features (F-09, P5-03 .. P5-08):
 //   device.id / device.info   android_id / identifierForVendor, OS, model
+//   device.key                per-plugin device key (HMAC of a device secret)
 //   share                     share sheet for text, url, files (base64 or text data)
 //   files.save / files.pick   app Downloads directory + share sheet, file picker
 //   clipboard.write / read
@@ -7,11 +8,14 @@
 //   pip.enter / exit / isSupported  Android Picture in Picture via MainActivity
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:android_id/android_id.dart';
+import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -49,8 +53,17 @@ Future<File> _writeTemp(String name, Uint8List bytes) async {
 
 // ---- device ------------------------------------------------------------------
 
-void registerDeviceOps(OpRegistry registry) {
+const String kDeviceSecretKey = 'device/secret';
+
+/// WSI.device.key(): HMAC-SHA256(secret, pluginId) as 64 hex chars. The same
+/// plugin always gets the same key on one device; different plugins get
+/// unrelated keys, so plugins cannot correlate a user through it.
+String deviceKeyFor(String secret, String pluginId) =>
+    Hmac(sha256, utf8.encode(secret)).convert(utf8.encode('wsi-browser/device-key/v1/$pluginId')).toString();
+
+void registerDeviceOps(OpRegistry registry, {FlutterSecureStorage? storage, Future<String?> Function()? androidId}) {
   final info = DeviceInfoPlugin();
+  final secure = storage ?? const FlutterSecureStorage();
 
   Future<String> deviceId() async {
     if (Platform.isAndroid) return (await const AndroidId().getId()) ?? '';
@@ -58,7 +71,26 @@ void registerDeviceOps(OpRegistry registry) {
     return '';
   }
 
+  // Android: android_id (survives reinstall, changes on factory reset).
+  // iOS / fallback: a random secret in the Keychain, this device only
+  // (usually survives reinstall, unlike identifierForVendor).
+  Future<String> deviceSecret() async {
+    if (androidId != null || Platform.isAndroid) {
+      final id = androidId != null ? await androidId() : await const AndroidId().getId();
+      if (id != null && id.isNotEmpty) return id;
+    }
+    const options = IOSOptions(accessibility: KeychainAccessibility.first_unlock_this_device);
+    final existing = await secure.read(key: kDeviceSecretKey, iOptions: options);
+    if (existing != null && existing.isNotEmpty) return existing;
+    final random = Random.secure();
+    final secret = base64UrlEncode(List<int>.generate(32, (_) => random.nextInt(256)));
+    await secure.write(key: kDeviceSecretKey, value: secret, iOptions: options);
+    return secret;
+  }
+
   registry.register('device.id', permission: 'device', (call) async => deviceId());
+
+  registry.register('device.key', permission: 'device', (call) async => deviceKeyFor(await deviceSecret(), call.pluginId));
 
   registry.register('device.info', permission: 'device', (call) async {
     if (Platform.isAndroid) {

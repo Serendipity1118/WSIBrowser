@@ -21,7 +21,8 @@ lib/
                           worker_manager (Headless ワーカー), tab_controller (WSI.tabs), resource_blocker,
                           backup, runtime (ファサード)
   bridge_ops/             registry + storage / fetch / log / ui / settings / policy / menu / runtime / tabs /
-                          credentials / native (device, share, files, clipboard, wakeLock, pip) / block_resources。
+                          credentials / native (device, share, files, clipboard, wakeLock, pip) / block_resources /
+                          app (app.info, locale) / location / network_battery (+ session_fanout) / biometrics。
                           新機能は 1 ファイル追加
   settings/               host_settings.dart
   db/                     database.dart (drift スキーマ v1), open_database.dart

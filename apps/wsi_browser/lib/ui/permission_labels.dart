@@ -34,6 +34,14 @@ String permissionLabel(AppLocalizations l, String permission) {
       return l.permissionDesc_policy;
     case 'siteData':
       return l.permissionDesc_siteData;
+    case 'location':
+      return l.permissionDesc_location;
+    case 'network':
+      return l.permissionDesc_network;
+    case 'battery':
+      return l.permissionDesc_battery;
+    case 'biometrics':
+      return l.permissionDesc_biometrics;
     default:
       return permission;
   }

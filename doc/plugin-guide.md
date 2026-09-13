@@ -75,7 +75,7 @@ export function run(WSI, ctx) {
 | `policy` | サーバー配信の値。取得失敗時は前回値 → `defaults` |
 | `updateUrl` | 更新チェック先。`{ version, zipUrl, notes }` を返す URL |
 
-権限: `storage` `fetch` `credentials` `device` `share` `files` `clipboard` `wakeLock` `pip` `blockResources` `tabs` `pages` `menu` `navigation` `policy` `siteData`。`credentials` `files` `device` `clipboard` `tabs` `navigation` `siteData` はインポート時に利用者の同意チェックが必要。
+権限: `storage` `fetch` `credentials` `device` `share` `files` `clipboard` `wakeLock` `pip` `blockResources` `tabs` `pages` `menu` `navigation` `policy` `siteData` `location` `network` `battery` `biometrics`。`credentials` `files` `device` `clipboard` `tabs` `navigation` `siteData` `location` はインポート時に利用者の同意チェックが必要。
 
 `npx wsi-plugin validate` が要件定義の検証表どおりに検査する。
 
@@ -120,6 +120,18 @@ WSI.device.id() / info();  WSI.share({ text, url, files });  WSI.files.save(name
 WSI.clipboard.write(text) / read();  WSI.wakeLock.acquire() / release();  WSI.pip.enter() / exit() / isSupported()
 WSI.blockResources({ images: true, media: true, urls: ['/ads/'] })
 await WSI.siteData.clear({ cookies: true, storage: true })   // 自分の domains の Cookie とサイトデータだけ消す (アカウント切替用)
+// アプリでしか取れない情報
+await WSI.device.key()    // このプラグイン専用の端末キー (16 進 64 文字)。サーバーで端末を見分けるならこちら
+await WSI.app.info()      // { name, packageName, version, buildNumber, os }   権限不要
+await WSI.locale.get()    // { languages, language, region, appLanguage, timeZone, timeZoneOffsetMinutes }   権限不要
+await WSI.location.permission() / request()   // { status: 'granted'|'denied'|'deniedForever'|'unknown', serviceEnabled }
+await WSI.location.getCurrent({ accuracy: 'high'|'balanced'|'low', timeout: 15000, maxAge: 0 })   // { latitude, longitude, accuracy, altitude, heading, speed, timestamp }
+await WSI.network.status()   // { online, types: ['wifi', 'mobile', ...] }
+const off = WSI.network.onChange((s) => {})   // 解除は off()
+await WSI.battery.status()   // { level, state: 'charging'|'full'|'discharging'|'connectedNotCharging'|'unknown', lowPowerMode }
+WSI.battery.onChange((s) => {})
+await WSI.biometrics.status()   // { supported, enrolled, types: ['face', 'fingerprint', ...] }
+await WSI.biometrics.authenticate({ reason: 'ログイン情報を表示します', biometricOnly: false })   // { success, reason? }  ページ / プラグインページのみ
 ```
 
 注意点:
@@ -130,6 +142,10 @@ await WSI.siteData.clear({ cookies: true, storage: true })   // 自分の domain
 - `tabs.navigate` は WebView を作り直す (iOS の loadRequest 無視、Android Headless の 2 回目 loadUrl 不発への対策)。ページ側の状態は残らない
 - 背面移行でワーカーは `onSuspend` を受ける。進捗は `WSI.storage` に保存し、`onResume` で続きから再開する。iOS のバックグラウンド実行は延長しない
 - 値の制限 (最小間隔など) はコードに埋め込まず `WSI.policy` から読む
+- `WSI.device.key()` はプラグインごとに値が変わるので、プラグインをまたいだ利用者の突き合わせはできない。ただし Android では `android_id` を元にしているため、`WSI.device.id()` を取れるプラグインは計算上ほかのプラグインのキーも導ける。iOS の元値は Keychain にあり、アプリを消しても通常は残る (端末の初期化で変わる)
+- `WSI.location.getCurrent` は失敗 (位置情報オフ、拒否、タイムアウト) を `Error` で返す。`maxAge` (ミリ秒) を渡すと、その範囲内の前回位置があれば測位せずに返す
+- `WSI.network.onChange` / `WSI.battery.onChange` は最初のリスナー登録でホストが監視を始め、最後の解除で止める。同じ状態の連続通知は間引かれる
+- `WSI.biometrics.authenticate` はキャンセルや失敗でも throw せず `{ success: false, reason }` を返す (`reason` は `userCanceled`、`noBiometricsEnrolled`、`temporaryLockout` など)
 
 ## 5. 開発サイクル
 

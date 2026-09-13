@@ -69,6 +69,10 @@
 		<string>Web ページのファイル選択で写真を撮るために使います</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Web ページのファイル選択で写真を選ぶために使います</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>現在地を使うプラグインに、許可した場合だけ位置情報を渡すために使います</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>プラグインが本人確認を求めたときに Face ID で確認するために使います</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Web ページのファイル選択で動画を撮るために使います</string>
 		<key>CFBundleVersion</key>

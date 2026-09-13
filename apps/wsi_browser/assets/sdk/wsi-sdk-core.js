@@ -334,7 +334,12 @@
       remove: (profile) => unwrap("credentials.remove", { profile }),
       list: () => unwrap("credentials.list", {})
     };
-    WSI.device = { id: () => unwrap("device.id", {}), info: () => unwrap("device.info", {}) };
+    WSI.device = {
+      id: () => unwrap("device.id", {}),
+      info: () => unwrap("device.info", {}),
+      // same value for this plugin on this device, unrelated between plugins
+      key: () => unwrap("device.key", {})
+    };
     WSI.share = (options) => unwrap("share", options || {});
     WSI.files = {
       save: (name, data, options) => unwrap("files.save", { name, data, ...options || {} }),
@@ -351,6 +356,34 @@
     WSI.navigation = {
       intercept: (cb) => events.on("navigation.intercept", cb, { reply: true })
     };
+    WSI.app = { info: () => unwrap("app.info", {}) };
+    WSI.locale = { get: () => unwrap("locale.get", {}) };
+    WSI.location = {
+      permission: () => unwrap("location.permission", {}),
+      request: () => unwrap("location.request", {}),
+      getCurrent: (options) => unwrap("location.getCurrent", options || {})
+    };
+    WSI.network = { status: () => unwrap("network.status", {}), onChange: watched("network", "network.change") };
+    WSI.battery = { status: () => unwrap("battery.status", {}), onChange: watched("battery", "battery.change") };
+    WSI.biometrics = {
+      status: () => unwrap("biometrics.status", {}),
+      authenticate: (options) => unwrap("biometrics.authenticate", typeof options === "string" ? { reason: options } : options || {})
+    };
+    function watched(family, event) {
+      return (cb) => {
+        if (typeof cb !== "function") return () => {
+        };
+        const off = events.on(event, cb);
+        if (events.count(event) === 1) call(`${family}.watch`, {});
+        let removed = false;
+        return () => {
+          if (removed) return;
+          removed = true;
+          off();
+          if (events.count(event) === 0) call(`${family}.unwatch`, {});
+        };
+      };
+    }
   }
   function createEventBus() {
     const listeners = /* @__PURE__ */ new Map();

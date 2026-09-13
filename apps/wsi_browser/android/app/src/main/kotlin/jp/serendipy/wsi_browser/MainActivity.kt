@@ -5,15 +5,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Rational
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 /**
  * Picture in Picture for WSI.pip (F-09, P5-08). The whole Flutter surface
  * (the active WebView) goes into the PiP window; exit brings the task back.
+ *
+ * A FragmentActivity because local_auth (WSI.biometrics) shows BiometricPrompt.
  */
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
     private val channelName = "jp.serendipy.wsibrowser/pip"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

@@ -405,6 +405,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get permissionDesc_siteData => '対象サイトの Cookie とサイトデータの消去';
 
   @override
+  String get permissionDesc_location => '現在地の取得 (アプリ使用中のみ)';
+
+  @override
+  String get permissionDesc_network => 'ネットワーク接続状態の取得';
+
+  @override
+  String get permissionDesc_battery => 'バッテリー残量と充電状態の取得';
+
+  @override
+  String get permissionDesc_biometrics => '生体認証による本人確認';
+
+  @override
   String get settingsWorkerTabLimit => 'ワーカーのタブ上限';
 
   @override

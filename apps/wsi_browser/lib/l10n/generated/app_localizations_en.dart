@@ -411,6 +411,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Clear cookies and site data of its sites';
 
   @override
+  String get permissionDesc_location =>
+      'Get your current location (while the app is in use)';
+
+  @override
+  String get permissionDesc_network => 'Read the network connection state';
+
+  @override
+  String get permissionDesc_battery => 'Read battery level and charging state';
+
+  @override
+  String get permissionDesc_biometrics => 'Verify you with biometrics';
+
+  @override
   String get settingsWorkerTabLimit => 'Worker tab limit';
 
   @override

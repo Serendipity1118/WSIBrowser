@@ -828,6 +828,30 @@ abstract class AppLocalizations {
   /// **'対象サイトの Cookie とサイトデータの消去'**
   String get permissionDesc_siteData;
 
+  /// No description provided for @permissionDesc_location.
+  ///
+  /// In ja, this message translates to:
+  /// **'現在地の取得 (アプリ使用中のみ)'**
+  String get permissionDesc_location;
+
+  /// No description provided for @permissionDesc_network.
+  ///
+  /// In ja, this message translates to:
+  /// **'ネットワーク接続状態の取得'**
+  String get permissionDesc_network;
+
+  /// No description provided for @permissionDesc_battery.
+  ///
+  /// In ja, this message translates to:
+  /// **'バッテリー残量と充電状態の取得'**
+  String get permissionDesc_battery;
+
+  /// No description provided for @permissionDesc_biometrics.
+  ///
+  /// In ja, this message translates to:
+  /// **'生体認証による本人確認'**
+  String get permissionDesc_biometrics;
+
   /// No description provided for @settingsWorkerTabLimit.
   ///
   /// In ja, this message translates to:

@@ -54,7 +54,7 @@ test('runAt / display / menu type / permissions are enumerated', () => {
   assert.ok(validateManifest({ ...v2(), pages: { s: { file: 'pages/settings.html', display: 'popup' } } }, exists).some((e) => e.includes('display')));
   assert.ok(validateManifest({ ...v2(), menu: [{ id: 'x', label: 'x', type: 'link' }] }, exists).some((e) => e.includes('menu[0].type')));
   assert.ok(validateManifest({ ...v2(), permissions: ['root'] }, exists).some((e) => e.includes('permissions[0] is unknown')));
-  assert.equal(PERMISSIONS.length, 16);
+  assert.equal(PERMISSIONS.length, 20);
 });
 
 test('cross references: menu.page -> pages, pages/menu/policy need their permission', () => {

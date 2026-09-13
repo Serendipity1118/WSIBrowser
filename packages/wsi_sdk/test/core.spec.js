@@ -265,6 +265,45 @@ test.describe('v2 API (WSI Browser hosts only)', () => {
     expect(state.calls.find((c) => c.op === 'toast').payload).toEqual({ message: 'hi', duration: 1000 });
   });
 
+  test('app-only information ops and onChange watch / unwatch', async ({ page }) => {
+    await loadCore(page);
+    await page.evaluate(() => {
+      globalThis.__wsiMock.callResponses['device.key'] = 'abc';
+      globalThis.__wsiMock.callResponses['biometrics.authenticate'] = { success: false, reason: 'userCanceled' };
+    });
+    await run(page, {
+      pluginId: 'info', token: 'tInfo', permissions: ['device', 'location', 'network', 'battery', 'biometrics'],
+      code: `
+        window.__k = WSI.device.key();
+        WSI.app.info(); WSI.locale.get();
+        WSI.location.permission(); WSI.location.request(); WSI.location.getCurrent({ accuracy: 'low', maxAge: 60000 });
+        WSI.network.status(); WSI.battery.status(); WSI.biometrics.status();
+        window.__b = WSI.biometrics.authenticate('ログインのため');
+        window.__net = [];
+        const off1 = WSI.network.onChange((s) => window.__net.push(s));
+        const off2 = WSI.network.onChange(() => {});
+        window.__off = () => { off1(); off1(); off2(); };
+        WSI.battery.onChange(() => {});
+      `,
+    });
+    expect(await page.evaluate(() => window.__k)).toBe('abc');
+    expect(await page.evaluate(() => window.__b)).toEqual({ success: false, reason: 'userCanceled' });
+    await page.evaluate(() => globalThis.__wsiEmit('tInfo', 'network.change', { online: false, types: [] }));
+    expect(await page.evaluate(() => window.__net)).toEqual([{ online: false, types: [] }]);
+    await page.evaluate(() => window.__off());
+
+    const state = await mock(page);
+    const ops = state.calls.map((c) => c.op);
+    expect(ops).toEqual(expect.arrayContaining([
+      'device.key', 'app.info', 'locale.get', 'location.permission', 'location.request', 'location.getCurrent',
+      'network.status', 'battery.status', 'biometrics.status', 'biometrics.authenticate', 'battery.watch',
+    ]));
+    expect(ops.filter((o) => o === 'network.watch')).toHaveLength(1);
+    expect(ops.filter((o) => o === 'network.unwatch')).toHaveLength(1);
+    expect(state.calls.find((c) => c.op === 'location.getCurrent').payload).toEqual({ accuracy: 'low', maxAge: 60000 });
+    expect(state.calls.find((c) => c.op === 'biometrics.authenticate').payload).toEqual({ reason: 'ログインのため' });
+  });
+
   test('host events reach the right plugin instance through __wsiEmit and reply-style listeners answer', async ({ page }) => {
     await loadCore(page);
     await run(page, { pluginId: 'a', token: 'tokA', code: 'window.__a = []; WSI.settings.onChange((c) => window.__a.push(c)); WSI.runtime.onMessage((m, s) => { window.__a.push([m, s]); return "reply-from-a"; });' });
