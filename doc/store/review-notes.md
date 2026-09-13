@@ -1,7 +1,9 @@
 # 審査ノート
 
-Google Play の「アプリのアクセス権」欄と App Store Connect の「App Review Information」
-の Notes に貼る文面。**特定サイトの名前を出さない。**
+App Store Connect の「App Review Information」の Notes に貼る文面。**特定サイトの名前を出さない。**
+Google Play には審査ノートを貼る欄が無い (「アプリのアクセス権」はログインが必要な場合の欄で、
+WSI Browser は「特別なアクセス権なし」なので使わない)。Play から問い合わせが来たら下の日本語版と
+「想定される指摘と答え」で返答する。
 
 プラグイン方式は審査で誤解されやすい。「利用者が持ち込む ZIP を読み込む」形は、
 実行コードのダウンロードや審査回避に見えることがある。何が起きるのかを先に説明しておく。
@@ -66,7 +68,7 @@ https://github.com/Serendipity1118/WSIBrowser (see doc/plugin-guide.md and the
 plugins/samples directory).
 ```
 
-## 日本語 (Google Play の「アプリのアクセス権」など、日本語で聞かれた場合)
+## 日本語 (Google Play から日本語で問い合わせが来た場合など)
 
 ```
 WSI Browser は汎用のウェブブラウザです。特定サイト向けの動作はアプリ自体には
