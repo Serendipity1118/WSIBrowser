@@ -15,7 +15,7 @@ Pick a file, enter a URL, scan a QR code, or share one in from another app. Befo
 
 About permissions
 
-A plugin can only use what it declared up front. Beyond the basics such as storage, network access and page manipulation, anything that touches stored credentials, files, device information, the clipboard, tab control or navigation control needs your explicit consent at install time. The app refuses calls you did not consent to.
+A plugin can only use what it declared up front. Beyond the basics such as storage, network access and page manipulation, anything that touches stored credentials, files, device information, your location, the clipboard, tab control or navigation control needs your explicit consent at install time. Location also needs the OS permission and is only read while you use the app. A plugin that uses biometrics only learns whether verification succeeded. The app refuses calls you did not consent to.
 
 The target sites are declared by the plugin as well. On any other site the plugin does nothing at all.
 

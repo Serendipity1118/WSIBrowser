@@ -63,6 +63,22 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 決めるものであり、アプリ自身が利用者のデータを送るわけではない。詳しくは
 [review-notes.md](review-notes.md) を参照。
 
+#### 位置情報・生体認証の追加後も「収集しない」とする理由 (2026-09-13)
+
+P5 追加で `ACCESS_FINE_LOCATION` / `ACCESS_COARSE_LOCATION` / `USE_BIOMETRIC`
+(iOS は `NSLocationWhenInUseUsageDescription` / `NSFaceIDUsageDescription`) を入れたが、申告は変えない。
+
+- データセーフティの「収集」は端末の外へ送ることを指す。アプリも当方のサーバーも
+  位置情報、端末 ID、端末キー、生体認証の結果を受け取らない (端末内で処理して、同意済みのプラグインに渡すだけ)
+- プラグインが外部へ送る場合、それは利用者が選んで読み込んだ第三者のコンテンツの通信で、
+  ブラウザ上のウェブサイトが Geolocation API を使うのと同じ扱い。プライバシーポリシーの表で利用者に明示している
+- 生体データそのものは OS が処理し、アプリにも届かない
+- バックグラウンド位置情報は使わないので、Play の位置情報の権限申告 (バックグラウンド) は不要。
+  geolocator の前景サービスも manifest から外してあるので、前景サービスの申告も不要
+
+審査で指摘された場合は、[review-notes.md](review-notes.md) の「想定される指摘と答え」で答える。
+方針を変えて当方のサーバーへ送るようにした場合は、両ストアの申告とプライバシーポリシーをすぐ直すこと。
+
 ## App Store に必要なもの
 
 | 項目 | 状態 |
@@ -71,7 +87,7 @@ Google Play は透過部分を黒く塗り、App Store Connect は透過を含�
 | アプリアイコン 1024 x 1024 | `app-store-icon-1024.png` |
 | スクリーンショット (6.9 インチと 6.5 インチ) | **未作成**。[screenshots.md](screenshots.md) を参照 |
 | プライバシーポリシー URL | Google Play と同じ <https://serendipity1118.github.io/WSIBrowser/privacy.html> |
-| App Privacy (Nutrition Label) | 「データを収集しません」を選ぶ |
+| App Privacy (Nutrition Label) | 「データを収集しません」を選ぶ (位置情報と Face ID も当方へ送らないので同じ。上の「収集しないとする理由」を参照) |
 | 審査ノート | [review-notes.md](review-notes.md) の英語版 |
 | 年齢制限 | 17+ (制限のないウェブアクセスがあるため。ブラウザは通常この扱いになる) |
 
@@ -159,3 +175,7 @@ main に push すれば数十秒で反映される。ビルド手順は無い。
 ### 残っていること
 
 - App Store Connect への登録。スクリーンショットが未作成
+- 2026-09-13 の権限追加 (位置情報、生体認証) を含むビルドを出すとき:
+  Play Console の詳しい説明 (日英) を `paste/description-*.txt` で貼り直す。
+  審査ノートに追記した「位置情報と生体認証」の段落も貼り直す。
+  プライバシーポリシーの URL は変わらない (本文は刷新済み)

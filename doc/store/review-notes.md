@@ -30,9 +30,19 @@ Permissions
 
 Each plugin declares the capabilities it needs. Storage, network access and page
 manipulation are the basics. Anything more sensitive (stored credentials, files,
-device information, clipboard, tab control, navigation control) requires the user
-to tick a consent box at install time. At runtime the app checks every bridge call
-against the declared and consented permissions and rejects the rest.
+device information, location, clipboard, tab control, navigation control) requires
+the user to tick a consent box at install time. At runtime the app checks every
+bridge call against the declared and consented permissions and rejects the rest.
+
+Location and Face ID
+
+The app asks for location (when in use only) and Face ID / biometrics only on behalf
+of a plugin the user installed and consented to. Location is requested the moment
+such a plugin asks for the current position; the app never tracks location in the
+background and has no background location permission. Biometric prompts return
+only success or failure to the plugin, and the prompt names the plugin that asked.
+Neither location nor biometric results are sent to our servers. Without such a
+plugin, neither permission dialog ever appears.
 
 What we do not do
 
@@ -79,9 +89,18 @@ WSI Browser は汎用のウェブブラウザです。特定サイト向けの�
 権限
 
 プラグインは必要な機能を事前に宣言します。保存領域、通信、ページ操作は基本的な
-ものです。ログイン情報の保管、ファイル、端末情報、クリップボード、タブ操作、
+ものです。ログイン情報の保管、ファイル、端末情報、現在地、クリップボード、タブ操作、
 ページ遷移の制御については、読み込み時に利用者の同意チェックが必要です。実行時も
 毎回、宣言と同意の範囲かをアプリ側で検査し、範囲外は拒否します。
+
+位置情報と生体認証
+
+位置情報 (アプリ使用中のみ) と生体認証は、利用者が同意して読み込んだプラグインが
+求めたときにだけ使います。位置情報はプラグインが現在地を求めた時点で OS の許可を
+求め、バックグラウンドでの取得は行いません (バックグラウンド位置情報の権限も
+ありません)。生体認証はプラグインに成否だけを返し、ダイアログには求めたプラグインの
+名前を表示します。どちらも当方のサーバーへは送信しません。該当するプラグインが
+なければ、これらの許可ダイアログは表示されません。
 
 行っていないこと
 
@@ -110,6 +129,9 @@ https://github.com/Serendipity1118/WSIBrowser で公開しています
 | 実行コードを後からダウンロードしているのでは | プラグインは WebView 内で動くウェブコンテンツで、アプリのコードは変わらない。ブラウザがウェブページの JavaScript を実行するのと同じ範囲 |
 | 審査を回避して機能を追加しているのでは | アプリの機能はプラグインの有無に関わらず同じ。プラグインが増やせるのはページ側の見た目と操作であり、アプリのネイティブ機能は増えない |
 | 利用者が危険なプラグインを入れられるのでは | 読み込み前に対象サイトと権限を提示して同意を求め、実行時も宣言と同意の範囲で検査する。対象サイト外では動かない |
+| 位置情報の権限を使う機能が見当たらない | 位置情報の権限を持つプラグインが `WSI.location` を呼んだときにだけ使う。アプリ単体では使わない。バックグラウンド位置情報は宣言していない (geolocator の前景サービスも manifest から除去済み) |
+| Face ID / USE_BIOMETRIC の用途は | 生体認証の権限を持つプラグインが `WSI.biometrics.authenticate` を呼んだときの本人確認。プラグインには成否だけを返す |
+| 位置情報を収集しているのでは (データセーフティ / App Privacy) | アプリも当方のサーバーも位置情報を受け取らない。端末内で処理し、利用者が同意したプラグインへ渡すだけ。プラグインの通信先は利用者が選んだプラグインの製作者に属する (ブラウザでウェブサイトが Geolocation API を使うのと同じ扱い) |
 | アカウント情報が必要か | 不要。審査用のテストアカウントは要らない |
 
 ## テストアカウント
