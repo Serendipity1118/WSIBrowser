@@ -1,0 +1,27 @@
+:root { color-scheme: light dark; --fg: #1f2328; --bg: #f6f7f9; --card: #fff; --muted: #5f6470; --rule: #d9dde5; --accent: #2a56c6; --error: #c62828; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg: #eceef2; --bg: #15171b; --card: #1f2227; --muted: #a3a8b3; --rule: #353a42; --accent: #8fb0ff; --error: #ff8a80; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif; }
+main { max-width: 40rem; margin: 0 auto; padding: 16px 16px 48px; }
+h1 { font-size: 20px; margin: 4px 0 4px; }
+h2 { font-size: 16px; margin: 0 0 4px; }
+h2 code { font-size: 12px; color: var(--muted); font-weight: normal; }
+.lead, .hint { color: var(--muted); font-size: 13px; margin: 4px 0 8px; line-height: 1.6; }
+section { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; margin-top: 12px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+button { min-height: 44px; padding: 0 16px; border: none; border-radius: 999px; background: var(--accent); color: #fff; font-size: 14px; }
+@media (prefers-color-scheme: dark) { button { color: #0d1b3d; } }
+button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+button:disabled { opacity: .5; }
+.fields { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 8px 0; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+label.wide { flex: 1 1 100%; }
+label.toggle { flex-direction: row; align-items: center; min-height: 44px; color: var(--fg); font-size: 14px; }
+input, select { min-height: 40px; font-size: 15px; padding: 4px 8px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--fg); }
+input[type="checkbox"] { min-height: auto; width: 20px; height: 20px; }
+input[type="number"] { width: 8.5rem; }
+pre { margin: 8px 0 0; padding: 8px 10px; max-height: 18rem; overflow: auto; background: var(--bg); border-radius: 8px; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-all; }
+pre:empty { display: none; }
+pre.error { border-left: 3px solid var(--error); }

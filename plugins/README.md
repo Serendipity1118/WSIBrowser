@@ -8,6 +8,7 @@
 | `samples/` | Chrome 版 WSI の samples を `tools/sync_wsi_samples.ps1` で取り込んだもの (契約テスト用。手で編集しない) |
 | `banner-demo/` | example.com にバナーを出す。sheet の設定ページ、メニュー (page / toggle / separator / action)、WSI.settings、runtime.sendMessage、自己診断の検証用 (P3) |
 | `cruise-demo/` | ワーカーが 3 ページを順に巡回して見出しを集める。tabs / onDialog / suspend-resume / navigation.intercept / 結果ページの検証用 (P4, M2) |
+| `system-info-demo/` | アプリでしか取れない情報 (device.key、app、locale、location、network、battery、biometrics) を画面のボタンで 1 つずつ呼んで戻り値を表示する。実機検証用 (P5-11〜15) |
 
 ## プラグインの内部規約
 

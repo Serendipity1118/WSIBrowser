@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Info Demo</title>
+<link rel="stylesheet" href="info.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>端末とアプリの情報</h1>
+    <p class="lead">アプリでしか取れない情報の API を 1 つずつ呼び、戻り値をそのまま表示します。</p>
+    <p class="actions">
+      <button id="all" type="button">権限不要と取得系をまとめて実行</button>
+      <button id="close" type="button" class="secondary">閉じる</button>
+    </p>
+  </header>
+
+  <section>
+    <h2>端末 <code>device</code></h2>
+    <p class="hint">device.key はこのプラグイン専用です。2 回押して同じ値になること、別のプラグインでは違う値になることを確認します。</p>
+    <p class="actions">
+      <button data-run="device.id" type="button">id()</button>
+      <button data-run="device.info" type="button">info()</button>
+      <button data-run="device.key" type="button">key()</button>
+    </p>
+    <pre id="out-device"></pre>
+  </section>
+
+  <section>
+    <h2>アプリと言語 <code>app</code> <code>locale</code></h2>
+    <p class="hint">権限を宣言しなくても使えます。</p>
+    <p class="actions">
+      <button data-run="app.info" type="button">app.info()</button>
+      <button data-run="locale.get" type="button">locale.get()</button>
+    </p>
+    <pre id="out-app"></pre>
+  </section>
+
+  <section>
+    <h2>位置情報 <code>location</code></h2>
+    <p class="hint">未決定なら getCurrent / request で OS の許可ダイアログが出ます。位置情報を OFF にすると getCurrent はエラーになります。</p>
+    <div class="fields">
+      <label>精度
+        <select id="accuracy">
+          <option value="high">high</option>
+          <option value="balanced">balanced</option>
+          <option value="low">low</option>
+        </select>
+      </label>
+      <label>timeout (ms) <input id="timeout" type="number" value="15000" min="1000" step="1000"></label>
+      <label>maxAge (ms) <input id="maxAge" type="number" value="0" min="0" step="1000"></label>
+    </div>
+    <p class="actions">
+      <button data-run="location.permission" type="button">permission()</button>
+      <button data-run="location.request" type="button">request()</button>
+      <button data-run="location.getCurrent" type="button">getCurrent()</button>
+    </p>
+    <pre id="out-location"></pre>
+  </section>
+
+  <section>
+    <h2>ネットワーク <code>network</code></h2>
+    <p class="hint">「変化を監視」を ON にして機内モードや Wi-Fi を切り替えると、届いた変化が新しい順に表示されます。</p>
+    <p class="actions">
+      <button data-run="network.status" type="button">status()</button>
+      <label class="toggle"><input id="watch-network" type="checkbox"> 変化を監視</label>
+    </p>
+    <pre id="out-network"></pre>
+  </section>
+
+  <section>
+    <h2>バッテリー <code>battery</code></h2>
+    <p class="hint">「変化を監視」を ON にして充電ケーブルを抜き差しすると、充電状態の変化が届きます (残量だけの変化は届きません)。</p>
+    <p class="actions">
+      <button data-run="battery.status" type="button">status()</button>
+      <label class="toggle"><input id="watch-battery" type="checkbox"> 変化を監視</label>
+    </p>
+    <pre id="out-battery"></pre>
+  </section>
+
+  <section>
+    <h2>生体認証 <code>biometrics</code></h2>
+    <p class="hint">ダイアログの先頭にプラグイン名が付きます。キャンセルしてもエラーにならず、success: false と reason が返ります。</p>
+    <div class="fields">
+      <label class="wide">理由 <input id="reason" type="text" maxlength="200" value="動作確認のため本人確認をします"></label>
+      <label class="toggle"><input id="biometricOnly" type="checkbox"> 生体認証のみ (パスコード不可)</label>
+    </div>
+    <p class="actions">
+      <button data-run="biometrics.status" type="button">status()</button>
+      <button data-run="biometrics.authenticate" type="button">authenticate()</button>
+    </p>
+    <pre id="out-biometrics"></pre>
+  </section>
+
+  <section>
+    <h2>このプラグインの権限</h2>
+    <pre id="out-permissions"></pre>
+  </section>
+</main>
+<script src="info.js"></script>
+</body>
+</html>

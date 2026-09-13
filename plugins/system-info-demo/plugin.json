@@ -1,0 +1,20 @@
+{
+  "formatVersion": 2,
+  "id": "system-info-demo",
+  "name": "System Info Demo",
+  "version": "0.1.0",
+  "description": "アプリでしか取れない情報の API (device.key、app、locale、location、network、battery、biometrics) を画面で試す検証用",
+  "author": "WSI Team",
+  "domains": ["example.com"],
+  "scripts": { "main": "dist/main.js", "runAt": "document_idle" },
+  "background": "dist/worker.js",
+  "pages": {
+    "info": { "file": "pages/info.html", "display": "fullscreen" }
+  },
+  "menu": [
+    { "id": "info", "label": "端末とアプリの情報", "type": "page", "page": "info" },
+    { "id": "notify", "label": "接続と充電の変化を通知", "type": "toggle", "checked": false }
+  ],
+  "permissions": ["storage", "pages", "menu", "device", "location", "network", "battery", "biometrics"],
+  "config": {}
+}
