@@ -14,6 +14,28 @@ function isNarrow() {
   return window.innerWidth < BOTTOM_SHEET_MAX_WIDTH;
 }
 
+/** Fixed/sticky site chrome often sits above the panel close button (missav etc.). */
+function avoidSiteHeaderOverlap(panel, closeBtn) {
+  if (isNarrow()) return;
+  const r = closeBtn.getBoundingClientRect();
+  const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  if (!hit || hit === closeBtn || closeBtn.contains(hit)) return;
+
+  let el = hit;
+  while (el && el !== document.documentElement) {
+    const st = getComputedStyle(el);
+    if (st.position === 'fixed' || st.position === 'sticky') {
+      const bottom = Math.ceil(el.getBoundingClientRect().bottom);
+      if (bottom > 0) {
+        panel.style.top = `${bottom}px`;
+        panel.style.height = `calc(100vh - ${bottom}px)`;
+        return;
+      }
+    }
+    el = el.parentElement;
+  }
+}
+
 /**
  * @param {object} host { log }
  * @param {object} options { title, width, position: 'right'|'left', content, onOpen, onClose }
@@ -25,7 +47,7 @@ export function createPanel(host, options = {}) {
 
   const base = {
     position: 'fixed',
-    zIndex: '2147483646',
+    zIndex: '2147483647',
     background: '#fff',
     display: 'flex',
     flexDirection: 'column',
@@ -77,7 +99,8 @@ export function createPanel(host, options = {}) {
     fontWeight: 'bold',
     flexShrink: '0',
   });
-  header.textContent = options.title || '';
+  const titleEl = document.createElement('span');
+  titleEl.textContent = options.title || '';
 
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
@@ -91,9 +114,14 @@ export function createPanel(host, options = {}) {
     minHeight: '44px',
     cursor: 'pointer',
     color: 'inherit',
+    position: 'relative',
+    zIndex: '1',
   });
 
-  const onResize = () => applyLayout();
+  const onResize = () => {
+    applyLayout();
+    avoidSiteHeaderOverlap(panel, closeBtn);
+  };
   window.addEventListener('resize', onResize);
 
   const close = () => {
@@ -102,6 +130,7 @@ export function createPanel(host, options = {}) {
     if (typeof options.onClose === 'function') options.onClose();
   };
   closeBtn.addEventListener('click', close);
+  header.appendChild(titleEl);
   header.appendChild(closeBtn);
 
   const body = document.createElement('div');
@@ -116,6 +145,8 @@ export function createPanel(host, options = {}) {
   panel.appendChild(header);
   panel.appendChild(body);
   (document.body || document.documentElement).appendChild(panel);
+
+  requestAnimationFrame(() => avoidSiteHeaderOverlap(panel, closeBtn));
 
   if (typeof options.onOpen === 'function') options.onOpen();
   host.log('Panel added');
