@@ -1,5 +1,13 @@
 # WSIBrowser
 
+> **このリポジトリは [Serendipity1118/wsi](https://github.com/Serendipity1118/wsi)（private）に統合済みです（2026-09-23）。**
+> 以後の開発は `wsi` で行います。ここは記録として残しているだけで、更新しません。
+> コミット履歴も `wsi` に取り込んであります（`apps/wsi_browser`、`apps/api`、`packages/`、`plugins/` など）。
+>
+> - プライバシーポリシーの最新版：<https://legal.wsibrowser.com/privacy>
+> - このリポジトリの GitHub Pages（`docs/privacy.html`）は、旧 URL を知っている方のために残しています
+> - Codemagic のビルドは `wsi` リポジトリのアプリに移行済み
+
 **WSI Browser** — Web System Injection のスマートフォン版 (iOS / Android)。
 
 Chrome 拡張版 [WebSystemInjection](https://github.com/Serendipity1118/WebSystemInjection) と同じプラグイン形式・SDK を、flutter_inappwebview ベースの自前ブラウザで動かす汎用ホストです。サイト固有の機能はすべてプラグイン (ZIP) として別配布し、アプリ本体はプラグインの種類を知りません。
